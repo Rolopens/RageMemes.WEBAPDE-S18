@@ -1,0 +1,70 @@
+p{
+    margin-bottom: 0rem;
+}
+.home-navbar{
+    background-color:#3E3E3B;
+    color: #4C586F;
+}
+
+body{
+    background-color: #4C586F;
+}
+
+.whitewash-text{
+    color:#EBECED ;
+}
+
+.whitewash-text:hover{
+    color:#CBC5C1;
+}
+
+#main-content{
+  
+  width:600px;
+  margin: 0 auto;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: "Helvetica Neue", sans-serif;
+  font-size: 1.2rem;
+    
+}
+
+.main-container{
+    background-color:#CBC5C1;
+    padding:50px;
+    margin-top: 75px;
+    border-radius: 10px;
+}
+
+.upload-step{
+    color: #3E3E3B;
+    margin:30px 5px;
+}
+.navbar{
+    display: block;
+}
+
+.right-floater{
+    float: right;
+}
+
+.input-width{
+    width: 250px;
+}
+
+.form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.checkbox-size, .radio-size{
+    width: 18px;
+    height: 18px;
+}
+
+h1 {
+    margin-top:20px;
+}

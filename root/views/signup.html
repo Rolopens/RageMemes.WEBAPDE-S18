@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>Sign Up</title>
+        <!-- Bootstrap core CSS -->
+        <link href="css/bootstrap.css" rel="stylesheet">
+        <!-- Custom styles for this template -->
+        <link href="css/login-signup.css" rel="stylesheet">
+    </head>
+   
+    <body>
+        <!--navbar-->
+        <nav class="fixed-top navbar navbar-expand-lg home-navbar reverse-order">
+            <a class="navbar-brand whitewash-text" href="home">
+                <img src="res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                RageMemes
+            </a>
+            <input class="searchbar" type="search" placeholder="Search">
+            <button class="btn btn-primary" type="submit"><img src="res/search.png" width="20" height="20s  "></button>
+        </nav>
+        <!--signup conttents-->
+        <div class="container mt-5">
+            <form id="login" class="form-format" action="loggedInHome.html">
+                <h1>Create an account!</h1>
+                <img class="mb-4" src="res/signup.png" alt="" width="72" height="72">
+                <label for="inputPassword" class="sr-only input-width">Username</label>
+                <input type="text" id="inputUsername" class="form-control input-width" placeholder="Username" required autofocus>
+                <label for="inputEmail" class="sr-only input-width">Email address</label>
+                <input type="email" id="inputEmail" class="form-control input-width" placeholder="Email address" required>
+                <label for="inputPassword" class="sr-only input-width">Password</label>
+                <input type="password" id="inputPassword" class="form-control input-width" placeholder="Password" required>
+                <input type="password" id="inputPassword" class="form-control input-width" placeholder="Confirm password" required><br>
+                <label for="inputPassword" class="sr-only input-width">Short description</label>
+                <input type="text" id="inputDescription" class="form-control input-width" placeholder="Short description of you"><br>
+                <button class="btn btn-lg btn-success btn-block input-width" type="submit" >Sign up</button>
+            
+                <div class="checkbox mb-3 mt-4">
+                    <a href="login">Have an account? Log in!</a>
+                </div>
+                <p class="mt-5 mb-3 text-muted">&copy; RageMemes by Michiko Go, Miggy Llamas, Rolo Peña 2018</p>
+            </form>
+        </div>
+    </body>
+</html>

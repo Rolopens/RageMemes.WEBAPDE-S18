@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Home: Wholesome Tag</title>
+        <!-- Bootstrap core CSS -->
+        <link href="css/bootstrap.css" rel="stylesheet">
+        <!--Bootstrap JS-->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+        <!-- Custom styles for this template -->
+        <link href="css/home.css" rel="stylesheet">
+    </head>
+
+    <body> 
+        <!--navbar-->
+        <nav class="fixed-top navbar navbar-expand-lg home-navbar reverse-order">
+            <!--RageMemes text-->
+            <a class="navbar-brand whitewash-text" href="home">
+                <img src="/res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                RageMemes
+            </a>
+            <input class="searchbar" type="search" placeholder="Search">
+            <button class="btn btn-primary" type="submit"><img src="/res/search.png" width="20" height="20s  "></button>
+            <!--login-->
+            <a class="nav-link whitewash-text right-floater" href="login">Login<span class="sr-only">(current)</span></a>
+            <!--signup-->
+            <a class="nav-link whitewash-text right-floater" href="signup">Sign Up<span class="sr-only">(current)</span></a>
+            <!--tags-->
+            <div class="collapse navbar-collapse right-floater" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle whitewash-text" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Search by Tags
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <!--anime-tag-->
+                            <a class="dropdown-item" href="anime-tag">#Anime</a>
+                            <!--classic-tag-->
+                            <a class="dropdown-item" href="classic-tag">#Classic</a>
+                            <!--dank-tag-->
+                            <a class="dropdown-item" href="dank-tag">#Dank</a>
+                            <!--pinoy-tag-->
+                            <a class="dropdown-item" href="pinoy-tag">#Pinoy</a>
+                            <!--wholesome-tag-->
+                            <a class="dropdown-item" href="wholesome-tag">#Wholesome</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>  
+        <!--Main Content-->
+        <div id="main-content">
+            <div class="meme-container">
+                <h1 class="display-4" style="text-align: left; color:#3E3E3B;">RageMemes</h1>
+                <p style="text-align: left; color:#3E3E3B;" class = "lead">Viewing posts tagged "Wholesome".</p>
+            </div>
+            <!--3-->
+            <div class="meme-container">
+                <div class="meme-post">
+                    <h1 class="post-title"><a href="view-meme-3">Because I'm the size of a whole family...</a></h1>
+                    <a href="view-meme-3"><img src="res/meme3.jpg" class="img-thumbnail"></a>
+                </div>
+            </div>
+            <!--4-->
+            <!-- <div class="meme-container">
+                <div class="meme-post">
+                    <h1 class="post-title"><a href="viewMeme/viewMeme4.html">I wish I had his dance skills...</a></h1>
+                    <img src="res/meme4.gif" class="img-thumbnail">
+                </div>
+            </div> -->
+            <div style="display:block; float: right; margin-bottom: 30px; margin-top: 30px;">
+                <button type="button" class="btn btn-secondary">View More</button>
+            </div>
+        </div>
+    </body>
+</html>
