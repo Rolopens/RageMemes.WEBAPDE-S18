@@ -4,7 +4,17 @@ const bodyparser = require('body-parser');
 const session = require('express-session');
 const hbs = require('hbs');
 const cookieparser = require('cookie-parser');
+const mongoose = require('mongoose');
 //const {user} = require("./model/user.js");
+
+//connecting to mongoos database
+//Promise Library
+mongoose.Promise = global.Promise;
+
+//connect to the database
+mongoose.connect("mongodb://localhost:27017/memesdata", {
+    useNewUrlParser: true 
+});
 
 const app = express();
 //app.set('view engine', 'hbs');
