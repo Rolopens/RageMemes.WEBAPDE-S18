@@ -13,7 +13,7 @@ app.set('view engine', 'html');
 app.use(express.static('public'));
 
 const urlencoder = bodyparser.urlencoded({
-    extend: false
+    extended: true
 })
 
 app.listen(3000, ()=>{
