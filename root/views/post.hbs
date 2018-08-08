@@ -3,15 +3,15 @@
     <head>
         <script src="jquery-3.3.1.js"></script>
         
-        <title>Home</title>
+        <title>{{title}}</title>
         <!-- Bootstrap core CSS -->
-        <link href="css/bootstrap.css" rel="stylesheet">
+        <link href="../css/bootstrap.css" rel="stylesheet">
         <!--Bootstrap JS-->
-        <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <!-- Custom styles for this template -->
-        <link href="css/home.css" rel="stylesheet">
+        <link href="../css/viewMeme.css" rel="stylesheet">
         
         <!-- <style>
         </style> -->
@@ -79,7 +79,7 @@
     </head>
     
     <body>
-         <!--navbar-->
+        <!--navbar-->
         <nav class="fixed-top navbar navbar-expand-lg home-navbar reverse-order">
             <!--RageMemes text-->
             <a class="navbar-brand whitewash-text" href="home">
@@ -117,20 +117,27 @@
         </nav>
          <!--Main content-->
         <div id="main-content">
-            <div class="meme-container">
-                <h1 class="display-4" style="text-align: left; color:#3E3E3B;" id="homeTitle">RageMemes</h1>
-                <!-- <p style="text-align: left; color:#3E3E3B;" class="lead">You've entered the public meme zone.</p> -->
-            </div>
-            {{#each posts}}
-            <div>
-                <div class="meme-container">
-                    <div class="meme-post">
-                        <h1 class="post-title"><a href="profile-view-meme-1">{{title}}</a></h1>
-                        <a data-id="{{_id}}"><img src="/res/meme1.jpg" class="img-thumbnail"></a> <!--change image later-->
+            <div class="container meme-container">
+                <div class="meme-post">
+                    <img src="../res/meme1.jpg" class="image">
+                    <h1 class="display-4" style="text-align: center; color:#3E3E3B;">{{title}}</h1>
+                    <div class="details">
+                        <h2 class="description">{{description}}</h2>
+                        <!--posted by user-->
+                        <h3 class="author">
+                            Posted by 
+                            <a href="tzuyu-profile">{{username}}</a> 
+                            on {{date}}
+                        </h3>
+                        <!--tag-->
+                        <h3 class="tags">
+                            {{#each tags}} 
+                                {{this}},
+                            {{/each}}
+                        </h3>
                     </div>
                 </div>
             </div>
-            {{/each}}
         </div>
         
     </body>

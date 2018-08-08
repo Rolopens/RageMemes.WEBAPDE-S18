@@ -112,3 +112,7 @@ body{
 .searchbar:focus{
     outline: none;
 }
+
+#homeTitle{
+    font-family: "Gill Sans MT", sans-serif;
+}
