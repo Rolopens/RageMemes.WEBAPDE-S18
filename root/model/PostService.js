@@ -17,7 +17,7 @@ function getPublicMemes(req, res) {
         }
     }), (err)=>{
         res.render("error.hbs")
-    });
+    }
 }
 
 function getPrivatelySharedMemes(user, req, res) {
@@ -38,5 +38,5 @@ function getPrivatelySharedMemes(user, req, res) {
         }
     }), (err)=>{
         res.render("error.hbs")
-    });
+    };
 }

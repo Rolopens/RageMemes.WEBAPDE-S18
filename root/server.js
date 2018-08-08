@@ -57,6 +57,17 @@ app.post("/signingUp", urlencoder, (req, res)=>{
     
 })
 
+app.get('/tag', (req, res)=>{
+    console.log("GET/");
+    
+    res.render("animeTagged.hbs",{
+        tagTitle: "Viewing posts tagged Anime"
+    }, err=>{
+        console.log(err);
+    })
+//    res.sendFile(path.join(__dirname, '/views/index1.html'));
+})
+
 app.listen(3000, ()=>{
     console.log("Listening to port 3000");
 })

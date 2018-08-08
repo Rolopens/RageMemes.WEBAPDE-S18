@@ -1,13 +1,13 @@
 // create mongoose document tag
 const mongoose = require("mongoose");
+var Schema = mongoose.Schema;
 
-var tagSchema = mongoose.Schema({
-    user: String, 
-    post: String,
+var TagSchema = new Schema({
+    name:{type: String, required: true}
 })
 
-var tag = mongoose.model('Tag', postSchema);
+var Tag = mongoose.model('Tag', TagSchema);
 
 module.exports = {
-    tag
+    Tag
 }
