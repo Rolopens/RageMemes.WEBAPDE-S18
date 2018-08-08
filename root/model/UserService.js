@@ -1,4 +1,12 @@
-const Post = require("../model/Post.js")
+const User = require("../model/User.js")
+
+function addUser(user){
+    user.save().then((doc)=>{
+        res.sendFile(path.join(__dirname, '/views/index.html'));
+    }, (err)=>{
+        console.log(err);
+    })
+}
 
 function getPublicMemes(req, res) {
     Post.find({
@@ -16,14 +24,14 @@ function getPublicMemes(req, res) {
             })
         }
     }), (err)=>{
-        res.render("error.hbs")
+        res.render("errror.hbs")
     });
 }
 
 function getPrivatelySharedMemes(user, req, res) {
     Post.find({
-        public:false,
-        permittedUsers:'Mina' // this is a test
+        public:false
+        
     }).then((results)=>{
         var user = req.session.user;
         if(user) {
@@ -37,6 +45,6 @@ function getPrivatelySharedMemes(user, req, res) {
             })
         }
     }), (err)=>{
-        res.render("error.hbs")
+        res.render("errror.hbs")
     });
 }
