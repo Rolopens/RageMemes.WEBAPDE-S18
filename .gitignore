@@ -1,1 +1,11 @@
 mongodbdata/
+*.wt
+*.wt
+*.wt
+*.2018-08-07T15-49-33Z-00000
+mongodbdata/WiredTiger.wt
+*.turtle
+*.lock
+*.0000000006
+*.wt
+*.wt
