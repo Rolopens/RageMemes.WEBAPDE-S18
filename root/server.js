@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 
 // defined in model
 const {Post} = require("./model/Post.js");
+const {User} = require("./model/User.js");
 
 // create server, etc.
 const app = express();
@@ -29,23 +30,32 @@ mongoose.connect("mongodb://localhost:27017/memesdata", {
     useNewUrlParser: true 
 });
 
-app.get("/", (req, res)=>{    
-    // get all meme posts
-    var Posts = Post.find().then((posts)=>{
-        resp.render("index.hbs", {
-            posts
-        });
-    },()=>{
-        resp.render("index.hbs");  
-    });
-});
+//app.get("/", (req, res)=>{    
+//    // get all meme posts
+//    var Posts = Post.find().then((posts)=>{
+//        res.render("index.hbs", {
+//            posts
+//        });
+//    },()=>{
+//        res.render("index.hbs");  
+//    });
+//});
 
-
-
-
-
-
-
+app.post("/signingUp", urlencoder, (req, res)=>{
+    var username = req.body.uname;
+    var password = req.body.pword;
+    var email = req.body.email;
+    
+    var user = new User({
+        username, password, email
+    })
+    user.save().then((doc)=>{
+        res.redirect("/");
+    }, (err)=>{
+        console.log(err);
+    })
+    
+})
 
 app.listen(3000, ()=>{
     console.log("Listening to port 3000");
@@ -53,7 +63,7 @@ app.listen(3000, ()=>{
 /*-----------------------------------Default-----------------------------------*/
 app.get('/', (req, res)=>{
     console.log("GET/");
-    res.sendFile(path.join(__dirname, '/views/index.html'));
+    res.sendFile(path.join(__dirname, '/views/index1.html'));
 })
 /*------------------------------------Home-------------------------------------*/
 app.get('/home', (req, res)=>{
