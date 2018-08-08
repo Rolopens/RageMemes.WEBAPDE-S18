@@ -73,17 +73,17 @@ app.get("/authenticate", urlencoder, (req, res)=>{
     User.findOne({
         email, password
     }).then((user)=>{
-//        res.redirict("loggedInHome.hbs", {
-//            user
-//        })
-        res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
+        res.render("indexLoggedIn.hbs", {
+            user
+        })
+//        res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
     })
 })
 
 app.get('/tag', (req, res)=>{
     console.log("GET/");
     
-    res.render("animeTagged.hbs",{
+    res.render("tag.hbs",{
         tagTitle: "Viewing posts tagged Anime"
     }, err=>{
         console.log(err);
@@ -95,7 +95,8 @@ app.get('/tag', (req, res)=>{
 /*-----------------------------------Default-----------------------------------*/
 app.get('/', (req, res)=>{
     console.log("GET/");
-    res.sendFile(path.join(__dirname, '/views/index1.html'));
+    res.render("index.hbs");
+    //res.sendFile(path.join(__dirname, '/views/index1.html'));
 })
 /*------------------------------------Home-------------------------------------*/
 app.get('/home', (req, res)=>{
