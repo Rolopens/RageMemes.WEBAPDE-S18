@@ -1,5 +1,32 @@
 const Post = require("../model/Post.js")
 
+function addPost(post) {
+    post.save().then(()=>{
+        console.log("Uploaded Meme");
+        res.redirect("/");
+    }, (err)=>{
+        console.log(err);
+    })
+}
+
+function editPost(post){
+    Post.findOneAndUpdate({
+        _id: post._id
+    }, post).then(()=>{
+        console.log("Update Success!")
+        resp.redirect("/");
+    })
+}
+
+function deletPost(post){
+    Post.remove({
+        _id: post._id
+    }).then(()=>{
+        console.log("Deleted!")
+        resp.redirect("/");
+    })
+}
+
 function getPublicMemes(req, res) {
     Post.find({
         public:true

@@ -49,12 +49,35 @@ app.post("/signingUp", urlencoder, (req, res)=>{
     var user = new User({
         username, password, email
     })
-    user.save().then((doc)=>{
-        res.redirect("/");
-    }, (err)=>{
-        console.log(err);
-    })
     
+    User.findOne({ 
+        $or: [ { username: user.username}, { email: user.email } ] 
+        }).then((existingUser)=>{
+        if(existingUser){
+            console.log("invalid username");
+            res.sendFile(path.join(__dirname, '/views/signup.html'));
+        }
+        else{
+            user.save().then((doc)=>{
+            res.redirect("/"); 
+        })
+        } 
+    });
+    
+})
+
+app.get("/authenticate", urlencoder, (req, res)=>{
+    var password = req.body.pword;
+    var email = req.body.email;
+    
+    User.findOne({
+        email, password
+    }).then((user)=>{
+//        res.redirict("loggedInHome.hbs", {
+//            user
+//        })
+        res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
+    })
 })
 
 app.get('/tag', (req, res)=>{
@@ -68,9 +91,7 @@ app.get('/tag', (req, res)=>{
 //    res.sendFile(path.join(__dirname, '/views/index1.html'));
 })
 
-app.listen(3000, ()=>{
-    console.log("Listening to port 3000");
-})
+
 /*-----------------------------------Default-----------------------------------*/
 app.get('/', (req, res)=>{
     console.log("GET/");
@@ -79,7 +100,7 @@ app.get('/', (req, res)=>{
 /*------------------------------------Home-------------------------------------*/
 app.get('/home', (req, res)=>{
     console.log("GET/ index.html");
-    res.sendFile(path.join(__dirname, '/views/index.html'));
+    res.sendFile(path.join(__dirname, '/views/index1.html'));
 })
 /*------------------------------------Login------------------------------------*/
 app.get('/login', (req, res)=>{
@@ -365,3 +386,6 @@ app.get('/tzuyu-view-profile', (req, res)=>{
     res.sendFile(path.join(__dirname, "/views/viewUser.html"));
 })
 
+app.listen(3000, ()=>{
+    console.log("Listening to port 3000");
+})
