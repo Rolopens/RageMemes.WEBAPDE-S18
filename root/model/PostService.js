@@ -7,6 +7,7 @@ function addPost(post) {
     }, (err)=>{
         console.log(err);
     })
+//    var query = post.save();
 }
 
 function editPost(post){
@@ -16,6 +17,7 @@ function editPost(post){
         console.log("Update Success!")
         resp.redirect("/");
     })
+//    var query = Post.findOneAndUpdate({_id:post._id}, post)
 }
 
 function deletePost(post){
@@ -25,6 +27,7 @@ function deletePost(post){
         console.log("Deleted!")
         resp.redirect("/");
     })
+//    var query = Post.remove({_id:post._id})
 }
 
 function getPublicMemes(req, res) {
@@ -45,6 +48,8 @@ function getPublicMemes(req, res) {
     }), (err)=>{
         res.render("error.hbs")
     }
+    // var query = Post.find({public: true});
+    // return query
 }
 
 function getPrivatelySharedMemes(user, req, res) {
@@ -66,6 +71,8 @@ function getPrivatelySharedMemes(user, req, res) {
     }), (err)=>{
         res.render("error.hbs")
     };
+    // var query = Post.find({public: false, permittedUser: user.username});
+    // return query
 }
 
 function getMyMemes(user, req, res) {
@@ -86,4 +93,6 @@ function getMyMemes(user, req, res) {
     }), (err)=>{
         res.render("error.hbs")
     };
+    // var query = Post.find({public: false, permittedUser: req.session.user.username});
+    // return query
 }

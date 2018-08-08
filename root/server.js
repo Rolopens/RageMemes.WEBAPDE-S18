@@ -46,15 +46,17 @@ mongoose.connect("mongodb://localhost:27017/memesdata", {
 //    });
 //});
 
-//var post = new Post({
-//        title: "Test2",
-//        description: "HelloWorld1",
-//        user: "Rolopens",
-//        tags: ["Anime", "Dank"],
-//        public: true
-//    })
-//    
-//    post.save().then();
+var post = new Post({
+        title: "Test2",
+        description: "HelloWorld1",
+        user: "Rolopens",
+        tags: ["Anime", "Dank"],
+        public: true
+    })
+    
+    post.save().then();
+
+//Post.remove({title: "Test2"}).then();
 
 app.post("/signingUp", urlencoder, (req, res)=>{
     var username = req.body.uname;
@@ -91,9 +93,19 @@ app.post("/authenticate", urlencoder, (req, res)=>{
         if(user){
             console.log(user.username);
             req.session.user = user;
-            res.render("indexLoggedIn.hbs", {
-            user
-        })
+            
+            Post.find({
+                public : true
+            }).then((results)=>{
+               res.render("indexLoggedIn.hbs", {
+                   user: req.session.user,
+                   results
+               }); 
+            }, ()=>{
+                res.render("error.hbs");
+            })
+            
+            
 //        res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
         }
         else{
@@ -182,7 +194,7 @@ app.get('/', (req, res)=>{
 /*------------------------------------Home-------------------------------------*/
 app.get('/home', (req, res)=>{
     console.log("GET/");
-    res.render("index.hbs");
+    res.redirect("/");
 })
 /*------------------------------------Login------------------------------------*/
 app.get('/login', (req, res)=>{
@@ -306,17 +318,32 @@ app.get('/error-private-post', (req, res)=>{
 /*------------------------------User Home Page---------------------------------*/
 app.post('/user-home', urlencoder, (req, res)=>{
     console.log("POST/ indexLoggedIn");
-    res.render("indexLoggedIn.hbs", {
-        user: req.session.user
-    });
+    Post.find({
+        public : true
+    }).then((results)=>{
+       res.render("indexLoggedIn.hbs", {
+           user: req.session.user,
+           results
+       }); 
+    }, ()=>{
+        res.render("error.hbs");
+    })
+    
     //res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
 })
 
 app.get('/user-home', urlencoder, (req, res)=>{
     console.log("POST/ indexLoggedIn");
-    res.render("indexLoggedIn.hbs", {
-        user: req.session.user
-    });
+    Post.find({
+        public : true
+    }).then((results)=>{
+       res.render("indexLoggedIn.hbs", {
+           user: req.session.user,
+           results
+       }); 
+    }, ()=>{
+        res.render("error.hbs");
+    })
     //res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
 })
 
