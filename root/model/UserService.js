@@ -1,4 +1,12 @@
-const Post = require("../model/Post.js")
+const User = require("../model/User.js")
+
+function addUser(user){
+    user.save().then((doc)=>{
+        res.sendFile(path.join(__dirname, '/views/index.html'));
+    }, (err)=>{
+        console.log(err);
+    })
+}
 
 function getPublicMemes(req, res) {
     Post.find({
