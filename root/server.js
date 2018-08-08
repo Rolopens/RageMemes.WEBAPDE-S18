@@ -370,8 +370,14 @@ app.get('/user-upload', (req, res)=>{
 })
 /*--------------------------------User Memes-----------------------------------*/
 app.get('/user-profile', (req,res)=>{
-    console.log('GET/ viewMeme/MinasMemes.html');
-    res.sendFile(path.join(__dirname, "/views/viewMeme/MinasMemes.html"));
+//    console.log('GET/ viewMeme/MinasMemes.html');
+//    res.sendFile(path.join(__dirname, "/views/viewMeme/MinasMemes.html"));
+    Post.find({user: req.session.user.username}).then((results)=>{
+        res.render("UserProfilePrivate.hbs", {
+            results,
+            user: req.session.user
+        })
+    })
 })
 /*--------------------------------Login Tags-----------------------------------*/
 app.get('/anime-tag-login', (req, res)=>{

@@ -1,9 +1,7 @@
-<!-- "C:\Program Files\MongoDB\Server\4.0\bin\mongod.exe" -dbpath mongodbdata -->
-<html>
+<!doctype html>
+<html lang="en">
     <head>
-        <script src="jquery-3.3.1.js"></script>
-        
-        <title>My Profile</title>
+        <title>Home</title>
         <!-- Bootstrap core CSS -->
         <link href="../css/bootstrap.css" rel="stylesheet">
         <!--Bootstrap JS-->
@@ -13,10 +11,8 @@
         <!-- Custom styles for this template -->
         <link href="../css/home.css" rel="stylesheet"> 
         <link href="../css/viewMeme.css" rel="stylesheet">
-        
-        <!-- <style>
-        </style> -->
-        
+        <script> document.getElementById("date").innerHTML = Date();</script>
+        <!--uploading-->
         <script>
             function previewFile() {
                 var preview = document.querySelector('img[id=preview]');
@@ -37,84 +33,23 @@
             }
             previewFile();
         </script>
-        
-        <!-- <script>
-            $(document).ready(function(){
-                //when the user clicks on button.delete
-                $("button.delete").click(function(){
-                    //get attr data-id
-                    var id = $(this).attr("data-id");
-                    
-                    //assign to input#deleteid
-                    $("input#deleteid").val(id);
-                    
-                    //submit form#deleteticket
-                    $("form[action=deleteticket]").submit();
-                });
-                
-                //when the user clicks on button.edit
-                $("button.edit").click(function(){
-                    var id = $(this).attr("data-id");
-                    $("input#viewid").val(id);
-                    $("form[action=viewticket]").submit();
-                });
-                
-                $("input[value=Add]").click(function(e){
-                    e.preventDefault(); //prevents refreshing of page
-                    //use ajax to send form instead
-                    $.ajax({
-                        url: "addticket",
-                        method: "post",
-                        data: {
-                            event: $("input[name=event]").val(),
-                            category: $("input[name=category]").val(),
-                            price: $("input[name=price]").val()
-                        },
-                        success: function(newdoc){
-                            console.log(newdoc);
-                            
-                            //create div for newdoc
-                            var div = document.createElement("div");
-                            div.innerHTML += "Event: " + newdoc.event + "<br>"
-                            div.innerHTML += "Price: " + newdoc.price + " PHP <br>"
-                            div.innerHTML += "Category: " + newdoc.category + "<br>"
-                            
-                            var buttonedit = document.createElement("button");
-                            $(buttonedit).addClass("edit");
-                            $(buttonedit).attr("data-id", newdoc._id);
-                            $(buttonedit).text("Edit");
-                            
-                            var buttondelete = document.createElement("button");
-                            $(buttondelete).addClass("delete");
-                            $(buttondelete).attr("data-id", newdoc._id);
-                            $(buttondelete).text("Delete");
-                            
-                            $(div).append(buttonedit);
-                            $(div).append(buttondelete);
-                            
-                            $("div.content").append(div);
-                        }
-                    });
-                })
-            });
-        </script> -->
     </head>
-    
+
     <body>
-         <!--navbar-->
+        <!--navbar-->
         <nav class="fixed-top navbar navbar-expand-lg home-navbar reverse-order">
             <a class="navbar-brand whitewash-text" href="user-home">
                 <img src="res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 RageMemes
             </a>
             <input class="searchbar" type="search" placeholder="Search">
-            <button class="btn btn-primary" type="submit"><img src="res/search.png" width="20" height="20s  "></button>
+            <button class="btn btn-primary" type="submit"><img src="res/search.png" width="20" height="20s"></button>
             <!--logout-->
             <a class="nav-link whitewash-text right-floater" href="home">Logout<span class="sr-only">(current)</span></a>
             <div class="collapse navbar-collapse right-floater" id="navbarNavDropdown">
                 <!--navbar-->
                 <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown ">
                         <a class="nav-link dropdown-toggle whitewash-text" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Search by Tags
                         </a>
@@ -134,31 +69,24 @@
                 </ul>
             </div>
         </nav>
-        
-        
-        
-         <!--User info-->
+        <!--User Icon-->
         <div id="main-content1">
             <div class="meme-container">
-                <img src="../res/TwiceMina.jpg" class="avatar"> <!-- change this later --> <br>
-                <div>Hi, {{user.username}}!</div>
-<!--                <p style="text-align: center; color:#3E3E3B;" class = "lead"></p>-->
+                <img src="../res/TwiceMina.jpg" class="avatar">
+                <!--Mina Myoui-->
                 <a href="" style="text-align: center; color:#3E3E3B;" class="lead" data-toggle="modal" data-target="#modalQuickUploadForm">Instant upload</a>
-                <!-- <a href="user-upload" style="text-align: center; color:#3E3E3B;" class="lead">Upload form</a>
-                <a href="user-profile" style="text-align: center; color:#3E3E3B;" class="lead">My memes</a> -->
+                <a href="user-upload" style="text-align: center; color:#3E3E3B;" class="lead">Upload form</a>
+                <a href="user-profile" style="text-align: center; color:#3E3E3B;" class="lead">My memes</a>
             </div>
+
         </div>
-        
-        
-        
-         <!--Main content-->
+        <!--Main Content-->
         <div id="main-content">
             <div class="meme-container">
                 <h1 class="display-4" style="text-align: left; color:#3E3E3B;">RageMemes</h1>
+
                 <p style="text-align: left; color:#3E3E3B;" class="lead">Welcome, {{user.username}}! Memes you've uploaded...</p>
             </div>
-            
-            
 
             <div class="modal fade" id="modalQuickUploadForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -216,21 +144,42 @@
                     </div>
                 </div>
             </div>
-            
-            
-            
-            {{#each results}}
-            <div>
-                <div class="meme-container">
-                    <div class="meme-post">
-                        <h1 class="post-title"><a href="profile-view-meme-1">{{title}}</a></h1> <!--fix ahref -->
-                        <a data-id="{{_id}}"><img src="/res/meme1.jpg" class="img-thumbnail"></a> <!--change image later-->
-                    </div>
-                </div>                
+            <!--test-->
+            <div id="uploaded">
             </div>
-            {{/each}}
+            <!--3-->
+            <div class="meme-container">
+                <div class="meme-post">
+                    <h1 class="post-title"><a href="profile-view-meme-3">Because I'm the size of a whole family...</a></h1>
+                    <a href="profile-view-meme-3"><img src="../res/meme3.jpg" class="img-thumbnail"></a>
+
+                </div>
+            </div>
+            <!--4-->
+            <div class="meme-container">
+                <div class="meme-post">
+                    <h1 class="post-title"><a href="profile-view-meme-4">I wish I had his dance skills...</a></h1>
+                    <div class="alert alert-danger" role="alert">
+                        Private
+                    </div>
+                    <a href="profile-view-meme-4"><img src="../res/meme4.gif" class="img-thumbnail"></a>
+
+                </div>
+            </div>
+            <!--5-->
+            <div class="meme-container">
+                <div class="meme-post">
+                    <h1 class="post-title"><a href="profile-view-meme-5">Some men leave with great treasures, and others do not make it out alive.</a></h1>
+                    <div class="alert alert-danger" role="alert">
+                        Private
+                    </div>
+                    <a href="profile-view-meme-5"><img src="../res/meme5.jpg" class="img-thumbnail"></a>
+
+                </div>
+            </div>
+            <div style="display:block; float: right; margin-bottom: 30px; margin-top: 30px;">
+                <button type="button" class="btn btn-secondary">View More</button>
+            </div>
         </div>
-        
     </body>
 </html>
-
