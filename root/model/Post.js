@@ -4,13 +4,13 @@ var Schema = mongoose.Schema;
 
 var PostSchema = new Schema({
     title : { type : String, required : true },
-    image: Buffer, // not sure what the proper image type is
+    image : Buffer, // not sure what the proper image type is
     description : { type : String, required : true },
-    user: String,
-    tags: [String],
-    date: { type: Date, default: Date.now },
-    public: Boolean,
-    permittedUsers: [String]
+    user : String,
+    tags : [String],
+    date : { type: Date, default: Date.now },
+    public : Boolean,
+    permittedUsers : [String]
 })
 
 var Post = mongoose.model("Post", PostSchema);

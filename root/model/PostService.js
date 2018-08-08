@@ -67,3 +67,23 @@ function getPrivatelySharedMemes(user, req, res) {
         res.render("error.hbs")
     };
 }
+
+function getMyMemes(user, req, res) {
+    Post.find({
+        user: 'Mina' // this is a test. user.username?
+    }).then((results)=>{
+        var user = req.session.user;
+        if(user) {
+            res.render("userProfilePrivate.hbs", {
+                results
+            })
+        }
+        /* else {
+            res.render(".hbs",{
+                results
+            })
+        } */
+    }), (err)=>{
+        res.render("error.hbs")
+    };
+}
