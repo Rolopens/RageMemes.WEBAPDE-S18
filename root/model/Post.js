@@ -1,7 +1,8 @@
 // create mongoose document posts 
 const mongoose = require("mongoose");
+var Schema = mongoose.Schema;
 
-var PostSchema = mongoose.Schema({
+var PostSchema = new Schema({
     title : { type : String, required : true },
     image: Buffer, // not sure what the proper image type is
     description : { type : String, required : true },

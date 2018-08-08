@@ -5,7 +5,8 @@ const session = require('express-session');
 const hbs = require('hbs');
 const cookieparser = require('cookie-parser');
 const mongoose = require('mongoose');
-//const {user} = require("./model/user.js");
+
+
 
 //connecting to mongoos database
 //Promise Library
@@ -16,9 +17,12 @@ mongoose.connect("mongodb://localhost:27017/memesdata", {
     useNewUrlParser: true 
 });
 
+const {Post} = require("./model/Post.js");
+const {User} = require("./model/User.js");
+
 const app = express();
-//app.set('view engine', 'hbs');
-app.set('view engine', 'html');
+app.set('view engine', 'hbs');
+//app.set('view engine', 'html');
 // Calling public folder for the .ccs files
 app.use(express.static('public'));
 
@@ -26,9 +30,25 @@ const urlencoder = bodyparser.urlencoded({
     extended: true
 })
 
-app.listen(3000, ()=>{
-    console.log("Listening to port 3000");
+app.post("/loggedInHome", urlencoder, (req, res)=>{
+    var username = req.body.uname
+    var password = req.body.pword
+    var email = req.body.email
+    var user = new User({
+        username, password, email
+    });
+    
+    user.save().then((doc)=>{
+        //console.log("Added " + doc);
+        res.sendFile(path.join(__dirname, '/views/index.html'));
+    }, (err)=>{
+        console.log(err);
+    })
+    
 })
+
+
+
 /*-----------------------------------Default-----------------------------------*/
 app.get('/', (req, res)=>{
     console.log("GET/");
@@ -322,4 +342,9 @@ app.get('/tzuyu-view-profile', (req, res)=>{
     console.log("GET/ viewUser.html");
     res.sendFile(path.join(__dirname, "/views/viewUser.html"));
 })
+
+app.listen(3000, ()=>{
+    console.log("Listening to port 3000");
+})
+
 

@@ -1,9 +1,10 @@
 // create mongoose document posts 
 const mongoose = require("mongoose");
-var Post = require("mongoose").model("Post")
-var PostSchema = Post.schema
+var Schema = mongoose.Schema;
+var Post = require("../model/Post.js");
+var PostSchema = Post.Post.schema;
 
-var UserSchema = mongoose.Schema({
+var UserSchema = new Schema({
     username: {
         type: String,
         required: true,
