@@ -16,14 +16,14 @@ function getPublicMemes(req, res) {
             })
         }
     }), (err)=>{
-        res.render("errror.hbs")
+        res.render("error.hbs")
     });
 }
 
 function getPrivatelySharedMemes(user, req, res) {
     Post.find({
-        public:false
-        
+        public:false,
+        permittedUsers:'Mina' // this is a test
     }).then((results)=>{
         var user = req.session.user;
         if(user) {
@@ -37,6 +37,6 @@ function getPrivatelySharedMemes(user, req, res) {
             })
         }
     }), (err)=>{
-        res.render("errror.hbs")
+        res.render("error.hbs")
     });
 }
