@@ -16,7 +16,7 @@ var UserSchema = new Schema({
         trim : true
     }, 
     email : String,
-    avatar : Buffer, // not sure what the proper image type is
+    //avatar : Buffer, // not sure what the proper image type is
     briefDescription : String,
     posts : [PostSchema],
     sharedPosts : [PostSchema] // redundant to permittedUsers in postSchema?
