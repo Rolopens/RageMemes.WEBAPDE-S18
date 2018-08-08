@@ -16,6 +16,11 @@ const app = express();
 const urlencoder = bodyparser.urlencoded({
     extended: true
 })
+
+//sessions and cookies
+app.use(cookieparser());
+app.use(session({secret : "MCO2", resave: true, saveUninitialized : true}));
+
 // calling public folder for the .ccs files
     // app.use(express.static('public'));
 app.use(express.static(__dirname + "/public"));
@@ -40,6 +45,16 @@ mongoose.connect("mongodb://localhost:27017/memesdata", {
 //        res.render("index.hbs");  
 //    });
 //});
+
+//var post = new Post({
+//        title: "Test2",
+//        description: "HelloWorld1",
+//        user: "Rolopens",
+//        tags: ["Anime", "Dank"],
+//        public: true
+//    })
+//    
+//    post.save().then();
 
 app.post("/signingUp", urlencoder, (req, res)=>{
     var username = req.body.uname;
@@ -66,17 +81,24 @@ app.post("/signingUp", urlencoder, (req, res)=>{
     
 })
 
-app.get("/authenticate", urlencoder, (req, res)=>{
+app.post("/authenticate", urlencoder, (req, res)=>{
     var password = req.body.pword;
     var email = req.body.email;
     
     User.findOne({
         email, password
     }).then((user)=>{
-        res.render("indexLoggedIn.hbs", {
+        if(user){
+            console.log(user.username);
+            req.session.user = user;
+            res.render("indexLoggedIn.hbs", {
             user
         })
 //        res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
+        }
+        else{
+            res.sendFile(path.join(__dirname, '/views/login.html'));
+        }
     })
 })
 
@@ -92,16 +114,75 @@ app.get('/tag', (req, res)=>{
 })
 
 
+
+app.post("/UploadMeme", urlencoder, (req, res)=>{
+//    var title = req.body.title;
+//    var description = req.body.description;
+//    var tags = [];
+//    
+//    var anime = req.body.tag1.value;
+//    var classic = req.body.tag2.checked;
+//    var dank = req.body.tag3.checked;
+//    var pinoy = req.body.tag4.checked;
+//    var wholesome = req.body.tag5.checked;
+//    if(anime == true){
+//        tags.append("Anime");
+//    }
+//    if(classic == true){
+//        tags.append("Classic");
+//    }
+//    if(dank == true){
+//        tags.append("Dank");
+//    }
+//    if(pinoy == true){
+//        tags.append("Pinoy");
+//    }
+//    if(wholesome == true){
+//        tags.append("Wholesome");
+//    }
+//    
+//    var public = req.body.Private.checked;
+//    if(public == true){
+//        public = false;
+//    }
+//    else{
+//        public = true;
+//    }
+//    
+//    var post = new Post({
+//        title,
+//        description,
+//        user: req.session.user.username,
+//        tags,
+//        public
+//    })
+//    
+//    post.save().then(()=>{
+//        res.sendFile(path.join(__dirname, "/views/viewMeme/MinasMemes.html"));
+//    })
+})
+
+
 /*-----------------------------------Default-----------------------------------*/
 app.get('/', (req, res)=>{
     console.log("GET/");
-    res.render("index.hbs");
+    Post.find({
+        public : true
+    }).then((results)=>{
+       res.render("index.hbs", {
+           results
+       }); 
+    }, ()=>{
+        res.render("index.hbs");
+    })
+    
+    
     //res.sendFile(path.join(__dirname, '/views/index1.html'));
 })
 /*------------------------------------Home-------------------------------------*/
 app.get('/home', (req, res)=>{
-    console.log("GET/ index.html");
-    res.sendFile(path.join(__dirname, '/views/index1.html'));
+    console.log("GET/");
+    res.render("index.hbs");
 })
 /*------------------------------------Login------------------------------------*/
 app.get('/login', (req, res)=>{
@@ -224,13 +305,21 @@ app.get('/error-private-post', (req, res)=>{
 /************************************MINA***************************************/
 /*------------------------------User Home Page---------------------------------*/
 app.post('/user-home', urlencoder, (req, res)=>{
-    console.log("POST/ loggedInHome.html");
-    res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
+    console.log("POST/ indexLoggedIn");
+    res.render("indexLoggedIn.hbs", {
+        user: req.session.user
+    });
+    //res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
 })
-app.get('/user-home', (req, res)=>{
-    console.log("POST/ loggedInHome.html");
-    res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
+
+app.get('/user-home', urlencoder, (req, res)=>{
+    console.log("POST/ indexLoggedIn");
+    res.render("indexLoggedIn.hbs", {
+        user: req.session.user
+    });
+    //res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
 })
+
 /*------------------------(ERROR_HTML)Minas Profile----------------------------*/
 app.get('/mina-view-profile', (req, res)=>{
     console.log("GET/ viewMeme/ErrorHtml/MinasProfile.html");

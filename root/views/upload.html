@@ -70,7 +70,7 @@
         <!--Main Content-->
         <div id="main-content">
             <div class="container main-container">
-                <form class="input-types" action="user-home">
+                <form class="input-types" action="UploadMeme" method="post">
                     <img src="res/uploading.gif" class="img-thumbnail">
                     <h1 class="display-4" style="text-align: center; color:#3E3E3B;">Got a <i>dank</i> meme?</h1>
                     <h4 style="text-align: center; color:#3E3E3B;" class="lead">Show it to the world! Upload it here.</h4>
@@ -83,27 +83,28 @@
                     <hr class="my-4">
                     <!--Add Title-->
                     <p>Title</p>
-                    <input type="text" class="form-control input-width" placeholder="Enter title" required>
+                    <input type="text" name="title "class="form-control input-width" placeholder="Enter title" required>
                     <hr class="my-4">
                     <!--Add Description-->
                     <p>Description</p>
-                    <input type="text" class="form-control input-width" placeholder="Enter description">
+                    <input type="text" name="description" class="form-control input-width" placeholder="Enter description">
                     <hr class="my-4">
                     <!--Add Tags-->
                     <p>Tags</p>
-                    <input class="checkbox-size" name="tag" value="#Anime" style="vertical-align: middle; margin: 2px;" type="checkbox">#Anime<br>
-                    <input class="checkbox-size" name="tag" value="#Classic" style="vertical-align: middle; margin: 2px;" type="checkbox">#Classic<br>
-                    <input class="checkbox-size" name="tag" value="#Dank" style="vertical-align: middle; margin: 2px;" type="checkbox">#Dank<br>
-                    <input class="checkbox-size" name="tag" value="#Pinoy" style="vertical-align: middle; margin: 2px;" type="checkbox">#Pinoy<br>
-                    <input class="checkbox-size" ame="tag" value="#Wholesome" style="vertical-align: middle; margin: 2px;" type="checkbox">#Wholesome<br>
+                    <input class="checkbox-size" name="tag1" value="#Anime" style="vertical-align: middle; margin: 2px;" type="checkbox">#Anime<br>
+                    <input class="checkbox-size" name="tag2" value="#Classic" style="vertical-align: middle; margin: 2px;" type="checkbox">#Classic<br>
+                    <input class="checkbox-size" name="tag3" value="#Dank" style="vertical-align: middle; margin: 2px;" type="checkbox">#Dank<br>
+                    <input class="checkbox-size" name="tag4" value="#Pinoy" style="vertical-align: middle; margin: 2px;" type="checkbox">#Pinoy<br>
+                    <input class="checkbox-size" name="tag5" value="#Wholesome" style="vertical-align: middle; margin: 2px;" type="checkbox">#Wholesome<br>
                     <hr class="my-4">
                     <!--Allow to set to private or public-->
                     <p>Viewing options</p>
-                    <input class="radio-size" name="Publicity" style="vertical-align: middle; margin: 2px;" type="radio">Private<br>
+                    <input class="radio-size" id="Private" name="Publicity" style="vertical-align: middle; margin: 2px;" type="radio">Private<br>
                     <input class="radio-size" name="Publicity" style="vertical-align: middle; margin: 2px;" type="radio">Public<br>
                     <hr class="my-4">
                     <!--Submit-->
-                    <button class="btn btn-lg btn-success btn-block" type="button" data-toggle="modal" data-target="#exampleModal">Up and Out!</button>
+                    <button class="btn btn-lg btn-success btn-block" type="submit" >Up and Out!</button>
+<!--                    data-toggle="modal" data-target="#exampleModal"-->
                 </form>
 
 
@@ -121,7 +122,7 @@
                                 Do you want to upload your dank meme?
                             </div>
                             <div class="modal-footer">
-                                <form action="user-home">
+                                <form action="UploadMeme" method="post">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Not yet...</button>
                                     <button type="submit" class="btn btn-primary">Yes!</button>
                                 </form>

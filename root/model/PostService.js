@@ -18,7 +18,7 @@ function editPost(post){
     })
 }
 
-function deletPost(post){
+function deletePost(post){
     Post.remove({
         _id: post._id
     }).then(()=>{
