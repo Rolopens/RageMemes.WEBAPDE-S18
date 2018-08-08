@@ -6,6 +6,7 @@ const session = require('express-session');
 const hbs = require('hbs');
 const cookieparser = require('cookie-parser');
 const mongoose = require('mongoose');
+const crypto = require("crypto");
 
 // defined in model
 const {Post} = require("./model/Post.js");
@@ -46,25 +47,26 @@ mongoose.connect("mongodb://localhost:27017/memesdata", {
 //    });
 //});
 
-var post = new Post({
-        title: "Test2",
-        description: "HelloWorld1",
-        user: "Rolopens",
-        tags: ["Anime", "Dank"],
-        public: true
-    })
-    
-    post.save().then();
+//var post = new Post({
+//        title: "Test2",
+//        description: "HelloWorld1",
+//        user: "Rolopens",
+//        tags: ["Anime", "Dank"],
+//        public: true
+//    })
+//    
+//    post.save().then();
 
 //Post.remove({title: "Test2"}).then();
 
 app.post("/signingUp", urlencoder, (req, res)=>{
     var username = req.body.uname;
     var password = req.body.pword;
+    var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
     var email = req.body.email;
     
     var user = new User({
-        username, password, email
+        username, password: hashedpassword, email
     })
     
     User.findOne({ 
@@ -85,10 +87,11 @@ app.post("/signingUp", urlencoder, (req, res)=>{
 
 app.post("/authenticate", urlencoder, (req, res)=>{
     var password = req.body.pword;
+    var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
     var email = req.body.email;
     
     User.findOne({
-        email, password
+        email, password: hashedpassword
     }).then((user)=>{
         if(user){
             console.log(user.username);
