@@ -180,6 +180,7 @@ app.post("/UploadMeme", urlencoder, (req, res)=>{
 
 /*-----------------------------------Default-----------------------------------*/
 app.get('/', (req, res)=>{
+    req.session.user = null;
     console.log("GET/");
     Post.find({
         public : true
@@ -237,8 +238,15 @@ app.get('/wholesome-tag', (req, res)=>{
 
 /*--------------------------------View Meme------------------------------------*/
 app.get('/view-meme-1', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1.html"));
+//    console.log("GET/ viewMeme/viewMeme1.html");
+//    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1.html"));
+    Post.findOne({title: "Test2"}).then((post)=>{
+        res.render("post.hbs", {
+            post,
+            user: req.session.user
+        })
+    })
+        
 })
 
 app.get('/view-meme-2', (req, res)=>{
@@ -392,8 +400,14 @@ app.get('/wholesome-tag-login', (req, res)=>{
 })
 /*----------------------------User View Meme-----------------------------------*/
 app.get('/profile-view-meme-1', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme1-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1-1.html"));
+//    console.log("GET/ viewMeme/viewMeme1-1.html");
+//    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1-1.html"));
+    Post.findOne({title: "Test2"}).then((post)=>{
+        res.render("post.hbs", {
+            post,
+            user: req.session.user
+        })
+    })
 })
 
 app.get('/profile-view-meme-2', (req, res)=>{
