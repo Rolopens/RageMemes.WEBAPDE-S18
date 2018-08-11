@@ -107,10 +107,12 @@
                 <img src="res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 RageMemes
             </a>
+<!--
             <input class="searchbar" type="search" placeholder="Search">
             <button class="btn btn-primary" type="submit"><img src="res/search.png" width="20" height="20s  "></button>
+-->
             <!--logout-->
-            <a class="nav-link whitewash-text right-floater" href="home">Logout<span class="sr-only">(current)</span></a>
+            <a class="nav-link whitewash-text right-floater" href="home">Log out<span class="sr-only">(current)</span></a>
             <div class="collapse navbar-collapse right-floater" id="navbarNavDropdown">
                 <!--navbar-->
                 <ul class="navbar-nav">
@@ -142,7 +144,9 @@
             <div class="meme-container">
                 <img src="../res/TwiceMina.jpg" class="avatar"> <!-- change this later --> <br>
                 <div>Hi, {{user.username}}!</div>
+                <div><small>{{user.briefDescription}}</small></div><hr>
 <!--                <p style="text-align: center; color:#3E3E3B;" class = "lead"></p>-->
+                <a href="user-profile" style="text-align: center; color:#3E3E3B;" class="lead">My memes</a>
                 <a href="" style="text-align: center; color:#3E3E3B;" class="lead" data-toggle="modal" data-target="#modalQuickUploadForm">Instant upload</a>
                 <!-- <a href="user-upload" style="text-align: center; color:#3E3E3B;" class="lead">Upload form</a>
                 <a href="user-profile" style="text-align: center; color:#3E3E3B;" class="lead">My memes</a> -->
@@ -154,8 +158,8 @@
          <!--Main content-->
         <div id="main-content">
             <div class="meme-container">
-                <h1 class="display-4" style="text-align: left; color:#3E3E3B;">RageMemes</h1>
-                <p style="text-align: left; color:#3E3E3B;" class="lead">Welcome, {{user.username}}! Memes you've uploaded...</p>
+                <h1 class="display-4" style="text-align: left; color:#3E3E3B;" id="homeTitle">RageMemes</h1>
+                <p style="text-align: left; color:#3E3E3B;" class="lead" id="homeTitle">Welcome, {{user.username}}! Memes you've uploaded...</p>
             </div>
             
             
@@ -188,7 +192,7 @@
                                 <label data-error="wrong" data-success="right" for="defaultForm-title">Viewing options</label><br>
                                 <input class="radio-size" name="Publicity" style="vertical-align: middle; margin: 2px;" type="radio" required>Private<br>
                                 <input class="radio-size" name="Publicity" style="vertical-align: middle; margin: 2px;" type="radio" required>Public<br><br>
-                                <button class="btn btn-default" type="submit">Upload</button>
+                                <button class="btn btn-default" type="submit">Up and Out!</button>
                             </form>
                         </div>
                         <script>
@@ -218,6 +222,9 @@
             </div>
             
             
+            <!--test-->
+            <div id="uploaded">
+            </div>
             
             {{#each results}}
             <div>

@@ -64,9 +64,10 @@ app.post("/signingUp", urlencoder, (req, res)=>{
     var password = req.body.pword;
     var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
     var email = req.body.email;
+    var briefDescription = req.body.briefDescription;
     
     var user = new User({
-        username, password: hashedpassword, email
+        username, password: hashedpassword, email, briefDescription
     })
     
     User.findOne({ 
@@ -516,14 +517,52 @@ app.get('/profile-view-meme-17', (req, res)=>{
 
 /***********************************TZUYU***************************************/
 /*---------------------(ERROR_HTML)Error Not Logined---------------------------*/
-app.get('/tzuyu-profile', (req, res)=>{
-    console.log("GET/ viewMeme/ErrorHtml/ErrorNotLogged.html");
-    res.sendFile(path.join(__dirname, "/views/ErrorHtml/ErrorNotLogged.html"));
+app.get('/tzuyu-profile', urlencoder, (req, res)=>{
+//    console.log(req.body.owner)
+//    var owner = req.body.owner.value
+//    
+//    Post.find({user: owner}).then((results)=>{
+//        User.findOne({username: owner}).then((user2)=>{
+//            res.render("userProfilePublic.hbs", {
+//            user1: req.session.user,
+//            results,
+//            user2
+//            })
+//        })
+//        
+//    })
+    if(req.session.user){
+        res.render("userProfilePublic.hbs",{
+            user1: req.session.user
+        })
+    }else{
+        res.render("userProfilePublic.hbs")
+    }
+//    res.sendFile(path.join(__dirname, "/views/ErrorHtml/ErrorNotLogged.html"));
 })
 
-app.get('/tzuyu-view-profile', (req, res)=>{
+app.get('/tzuyu-view-profile', urlencoder, (req, res)=>{
+//    console.log(req.body.owner)
+//    var owner = req.body.owner.value
+//    Post.find({user: owner}).then((results)=>{
+//        User.findOne({username: owner}).then((user2)=>{
+//            res.render("userProfilePublic.hbs", {
+//            user1: req.session.user,
+//            results,
+//            user2
+//            })
+//        })
+//        
+//    })
     console.log("GET/ viewUser.html");
-    res.sendFile(path.join(__dirname, "/views/viewUser.html"));
+    if(req.session.user){
+        res.render("userProfilePublic.hbs",{
+            user1: req.session.user
+        })
+    }else{
+        res.render("userProfilePublic.hbs")
+    }
+//    res.sendFile(path.join(__dirname, "/views/viewUser.html"));
 })
 
 app.listen(3000, ()=>{

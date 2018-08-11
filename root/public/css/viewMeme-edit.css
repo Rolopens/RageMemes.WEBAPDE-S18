@@ -33,7 +33,7 @@ body{
   margin: 0 auto;
   padding: 0px;
   box-sizing: border-box;
-  font-family: "Helvetica Neue", sans-serif;
+    font-family: "Gill Sans MT", sans-serif;
   font-size: 1.2rem;
 }
 
@@ -68,7 +68,7 @@ body{
     width:15%;
     padding: 0px;
     box-sizing: border-box;
-    font-family: "Helvetica Neue", sans-serif;
+    font-family: "Gill Sans MT", sans-serif;
     font-size: 1.2rem;
     position:fixed;   
 }

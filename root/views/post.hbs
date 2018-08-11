@@ -93,11 +93,11 @@
                 RageMemes
             </a>
             {{/if}}
-            <input class="searchbar" type="search" placeholder="Search">
-            <button class="btn btn-primary" type="submit"><img src="/res/search.png" width="20" height="20s  "></button>
+            <!-- <input class="searchbar" type="search" placeholder="Search">
+            <button class="btn btn-primary" type="submit"><img src="/res/search.png" width="20" height="20s  "></button> -->
             
             {{#if user}}
-            <a class="nav-link whitewash-text right-floater" href="home">Logout<span class="sr-only">(current)</span></a>
+            <a class="nav-link whitewash-text right-floater" href="home">Log out<span class="sr-only">(current)</span></a>
             {{else}}
             <!--login-->
             <a class="nav-link whitewash-text right-floater" href="login">Login<span class="sr-only">(current)</span></a>
@@ -114,15 +114,15 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <!--anime-tag-->
-                            <a class="dropdown-item" href="anime-tag">#Anime</a>
+                            <a class="dropdown-item" href="anime-tag">#Anime</a> <!--fix link-->
                             <!--classic-tag-->
-                            <a class="dropdown-item" href="classic-tag">#Classic</a>
+                            <a class="dropdown-item" href="classic-tag">#Classic</a> <!--fix link-->
                             <!--dank-tag-->
-                            <a class="dropdown-item" href="dank-tag">#Dank</a>
+                            <a class="dropdown-item" href="dank-tag">#Dank</a> <!--fix link-->
                             <!--pinoy-tag-->
-                            <a class="dropdown-item" href="pinoy-tag">#Pinoy</a>
+                            <a class="dropdown-item" href="pinoy-tag">#Pinoy</a> <!--fix link-->
                             <!--wholesome-tag-->
-                            <a class="dropdown-item" href="wholesome-tag">#Wholesome</a>
+                            <a class="dropdown-item" href="wholesome-tag">#Wholesome</a> <!--fix link-->
                         </div>
                     </li>
                 </ul>
@@ -142,26 +142,30 @@
         <div id="main-content">
             <div class="container meme-container">
                 <div class="meme-post">
-                    <img src="../res/meme1.jpg" class="image">
-                    <h1 class="display-4" style="text-align: center; color:#3E3E3B;">{{post.title}}</h1>
+                    <img src="../res/meme1.jpg" class="image"> <!--fix link-->
+                    <h1 class="display-4" style="text-align: left; color:#3E3E3B;">{{post.title}}</h1>
                     <div class="details">
                         <h2 class="description">{{post.description}}</h2>
                         <!--posted by user-->
                         <h3 class="author">
                             Posted by 
-                            <a href="tzuyu-profile">{{post.user}}</a> 
+                            <a href="tzuyu-profile" value="{{post.user}}">{{post.user}}</a> <!--fix link-->
                             on {{post.date}}
+                            <input type="hidden" name="owner" value="{{post.user}}">
                         </h3>
                         <!--tag-->
                         <h3 class="tags">
+                            Tags:
                             {{#each post.tags}} 
-                                {{this}},
+                                <br>
+                                {{this}}
                             {{/each}}
                         </h3>
                     </div>
                 </div>
             </div>
         </div>
+        
         
     </body>
 </html>
