@@ -1,5 +1,6 @@
 // create mongoose document posts 
 const mongoose = require("mongoose");
+const dateOnly = require("mongoose-dateonly")(mongoose);
 var Schema = mongoose.Schema;
 
 var PostSchema = new Schema({
@@ -8,7 +9,7 @@ var PostSchema = new Schema({
     description : { type : String, required : true },
     user : String,
     tags : [String],
-    date : { type: Date, default: Date.now },
+    date : { type: dateOnly, default: Date.now },
     public : Boolean,
     permittedUsers : [String]
 })
