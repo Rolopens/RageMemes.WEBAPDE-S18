@@ -20,8 +20,10 @@
                 <img src="/res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 RageMemes
             </a>
+<!--
             <input class="searchbar" type="search" placeholder="Search">
             <button class="btn btn-primary" type="submit"><img src="/res/search.png" width="20" height="20s  "></button>
+-->
             <!--login-->
             <a class="nav-link whitewash-text right-floater" href="login">Login<span class="sr-only">(current)</span></a>
             <!--signup-->
@@ -31,7 +33,7 @@
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown ">
                         <a class="nav-link dropdown-toggle whitewash-text" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Search by Tags
+                        Searched Tag: {{tagTitle}}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <!--anime-tag-->
@@ -51,10 +53,6 @@
         </nav>
         <!--Main Content-->
         <div id="main-content">
-            <div class="meme-container">
-                <h1 class="display-4" style="text-align: left; color:#3E3E3B;">RageMemes</h1>
-                <p style="text-align: left; color:#3E3E3B;" class="lead">{{tagTitle}}</p>
-            </div>
             <!--Post-->
             {{#each post}}
             <div class="meme-container">

@@ -23,9 +23,9 @@ var UserSchema = new Schema({
         dropDups : true
     }
     //avatar : Buffer, // not sure what the proper image type is
-    briefDescription : String,
-    posts : [PostSchema],
-    sharedPosts : [PostSchema] // redundant to permittedUsers in postSchema?
+//    briefDescription : String,
+//    posts : [PostSchema],
+//    sharedPosts : [PostSchema] // redundant to permittedUsers in postSchema?
 })
 
 var User = mongoose.model("User", UserSchema);
