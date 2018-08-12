@@ -97,14 +97,16 @@
             <button class="btn btn-primary" type="submit"><img src="/res/search.png" width="20" height="20s  "></button> -->
             
             {{#if user}}
+            <!--logout-->
             <a class="nav-link whitewash-text right-floater" href="home">Log out<span class="sr-only">(current)</span></a>
+            <!--Upload Meme-->
+            <a class="nav-link whitewash-text right-floater" href="user-upload">Upload Meme<span class="sr-only">(current)</span></a>
             {{else}}
             <!--login-->
             <a class="nav-link whitewash-text right-floater" href="login">Login<span class="sr-only">(current)</span></a>
             <!--signup-->
             <a class="nav-link whitewash-text right-floater" href="signup">Sign up<span class="sr-only">(current)</span></a>
             {{/if}}
-            
             <!--tags-->
             <div class="collapse navbar-collapse right-floater" id="navbarNavDropdown">
                 <ul class="navbar-nav">
@@ -132,17 +134,18 @@
         {{#if user}}
         <div id="main-content1">
             <div class="meme-container">
-                <img src="res/TwiceMina.jpg" class="avatar">
+                <img src="res/TwiceMina.jpg" class="avatar"><!--change image later-->
+                <div>Hi, {{user.username}}!</div><hr>
                 <!--Mina Myoui-->
-                <a href="user-upload" style="text-align: center; color:#3E3E3B;" class="lead">Upload form</a>
                 <a href="user-profile" style="text-align: center; color:#3E3E3B;" class="lead">My memes</a>
+<!--                <a href="user-upload" style="text-align: center; color:#3E3E3B;" class="lead">Upload form</a>-->
             </div>
         </div>
         {{/if}}
         <div id="main-content">
             <div class="container meme-container">
                 <div class="meme-post">
-                    <img src="../res/meme1.jpg" class="image"> <!--fix link-->
+                    <img src="../res/meme1.jpg" class="image img-thumbnail"> <!--fix link-->
                     <h1 class="display-4" style="text-align: left; color:#3E3E3B;">{{post.title}}</h1>
                     <div class="details">
                         <h2 class="description">{{post.description}}</h2>

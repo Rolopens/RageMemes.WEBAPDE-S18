@@ -47,10 +47,12 @@
             <button class="btn btn-primary" type="submit"><img src="res/search.png" width="20" height="20s"></button>
 -->
             <!--logout-->
-            
             <a class="nav-link whitewash-text right-floater" href="home">Logout<span class="sr-only">(current)</span></a>
+             <!--Upload Meme-->
+            <a class="nav-link whitewash-text right-floater" href="user-upload">Upload Meme<span class="sr-only">(current)</span></a>
+            <!--navbar-->
             <div class="collapse navbar-collapse right-floater" id="navbarNavDropdown">
-                <!--navbar-->
+                
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown ">
                         <a class="nav-link dropdown-toggle whitewash-text" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -77,17 +79,23 @@
             <div class="meme-container">
                 <img src="../res/TwiceMina.jpg" class="avatar">
                 <!--Mina Myoui-->
-                <a href="" style="text-align: center; color:#3E3E3B;" class="lead" data-toggle="modal" data-target="#modalQuickUploadForm">Instant upload</a>
-                <a href="user-upload" style="text-align: center; color:#3E3E3B;" class="lead">Upload form</a>
-                <a href="user-profile" style="text-align: center; color:#3E3E3B;" class="lead">My memes</a>
+                <a href="user-profile" style="text-align: center; color:#3E3E3B;" class="lead">My Memes</a>
+                <a href="" style="text-align: center; color:#3E3E3B;" class="lead" data-toggle="modal" data-target="#modalQuickUploadForm">Instant Upload</a>
             </div>
 
         </div>
         <!--Main Content-->
         <div id="main-content">
+             <!--We need an if else statement if there is memes "Memes you've uploaded.." else "No memes uploaded"-->
+            {{#if user.post}}
             <div class="meme-container">
-                <p style="text-align: left; color:#3E3E3B;" class="lead">Welcome, {{user.username}}! Memes you've uploaded...</p>
+                <p style="text-align: left; color:#3E3E3B;" class="lead" id="homeTitle">Welcome, {{user.username}}! Memes you've uploaded...</p>
             </div>
+            {{else}}
+            <div class="meme-container">
+                <p style="text-align: left; color:#3E3E3B;" class="lead" id="homeTitle">Welcome, {{user.username}}! No memes uploaded...</p>
+            </div>
+            {{/if}}
 
             <div class="modal fade" id="modalQuickUploadForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
