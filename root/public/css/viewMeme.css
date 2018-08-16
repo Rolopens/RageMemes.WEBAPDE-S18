@@ -21,33 +21,35 @@ body{
 }
 
 .meme-post{
-/*    display: flex;*/
-    align-content: center;
-    justify-content: center;
-    align-items: center;
+    display: flex;
+    align-content: left;
+    justify-content: left;
+    align-items: left;
     flex-direction: column;
 }
 
 #main-content{
-  width:60%;
-  margin: 0 auto;
-  padding: 0px;
-  box-sizing: border-box;
+    width:45%;
+    margin: 0 auto;
+    padding: 0px;
+    box-sizing: border-box;
     font-family: "Gill Sans MT", sans-serif;
-  font-size: 1.2rem;
+    font-size: 1.2rem;
 }
 
 .meme-container{
     background-color:#EBECED;
-    padding:50px;
+    padding:25px;
     margin-top: 75px;
+    margin-bottom: 10px;
     display: flex;
     align-content: center;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin-bottom: 10px;
     border-radius: 10px;
+    overflow: auto;
+    min-width: 400px;
 }
 
 .post-title{
@@ -79,6 +81,12 @@ body{
     border-radius: 50%;
 }
 
+.avatar2{
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+}
+
 .flex-element{
     display: flex;
     align-content: center;
@@ -86,6 +94,15 @@ body{
     align-items: center;
 }
 
+.meme-post .image {
+    margin-bottom:10px;
+    width: 640px;
+    max-width: 100%;
+    /*
+    transition: transform .2s;
+    box-shadow: 10px 10px;
+    max-width: 90%; */
+}
 
 /* new styles start here */
 
@@ -94,43 +111,47 @@ body{
     font-size: 30px;
 }*/
 
-.meme-post .image {
-    transition: transform .2s;
-    margin-bottom:25px;
-/*    box-shadow: 10px 10px;*/
-    max-width: 700px;
+.meme-post .image:hover {
+    /* transform: scale(1.01); */ /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 
-.meme-post .image:hover {
-    transform: scale(1.01); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+table {
+    border-top: 1px solid #c3bcbc;
+    margin:30px 0px 20px 0px; /*TRBL*/
+    width:100%;
+}
+
+th {
+    height:20px;
 }
 
 .meme-post h1{
-    margin: 0px 10px;
-    text-shadow: 2px 2px #cecece;
+    font-size:50px;
+    text-shadow: 1px 1px #cecece;
 }
 
 .meme-post .title{
-    text-align:center;
+    /* text-align:center; */
 }
 
 .details{
-    margin:0px 10px;
-    padding:0px;
+    margin:0px 0px;
+    padding:0px 0px;
+    align-content:left;
 }
 
 .details h2{
-    font-size:18px;
+    font-size:15px;
     color:#655e5e;
 }
 
 .details h3{
-    font-size:16px;
+    font-size:15px;
     color:#918585;
 }
 
 .details .description{
-    margin:8px 0px;
+    margin:5px 5px 10px 5px;
 }
 
 .editable-input{
@@ -152,3 +173,11 @@ body{
 .searchbar:focus{
     outline: none;
 }
+
+.fixed-top{
+    font-family: "Gill Sans MT", sans-serif;
+}
+
+ span.icon {
+  font-family: 'Glyphicons Halflings';
+} 

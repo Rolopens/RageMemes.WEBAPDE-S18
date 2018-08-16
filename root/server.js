@@ -49,7 +49,7 @@ mongoose.connect("mongodb://localhost:27017/memesdata", {
 
 //var post = new Post({
 //        title: "Test2",
-//        description: "HelloWorld1",
+//        description: "Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows. Some pilots get picked and become television programs. Some don't, become nothing. She starred in one of the ones that became nothing.",
 //        user: "Rolopens",
 //        tags: ["Anime", "Dank"],
 //        public: true
@@ -57,66 +57,9 @@ mongoose.connect("mongodb://localhost:27017/memesdata", {
 //    
 //    post.save().then();
 
-//Post.remove({title: "Test2"}).then();
+// Post.remove({title: "Test2"}).then();
 
-app.post("/signingUp", urlencoder, (req, res)=>{
-    var username = req.body.uname;
-    var password = req.body.pword;
-    var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
-    var email = req.body.email;
-    var briefDescription = req.body.briefDescription;
-    
-    var user = new User({
-        username, password: hashedpassword, email, briefDescription
-    })
-    
-    User.findOne({ 
-        $or: [ { username: user.username}, { email: user.email } ] 
-        }).then((existingUser)=>{
-        if(existingUser){
-            console.log("invalid username");
-            res.sendFile(path.join(__dirname, '/views/signup.html'));
-        }
-        else{
-            user.save().then((doc)=>{
-            res.redirect("/"); 
-        })
-        } 
-    });
-    
-})
 
-app.post("/authenticate", urlencoder, (req, res)=>{
-    var password = req.body.pword;
-    var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
-    var email = req.body.email;
-    
-    User.findOne({
-        email, password: hashedpassword
-    }).then((user)=>{
-        if(user){
-            console.log(user.username);
-            req.session.user = user;
-            
-            Post.find({
-                public : true
-            }).then((results)=>{
-               res.render("indexLoggedIn.hbs", {
-                   user: req.session.user,
-                   results
-               }); 
-            }, ()=>{
-                res.render("error.hbs");
-            })
-            
-            
-//        res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
-        }
-        else{
-            res.sendFile(path.join(__dirname, '/views/login.html'));
-        }
-    })
-})
 
 app.get('/tag', (req, res)=>{
     console.log("GET/");
@@ -179,6 +122,11 @@ app.post("/UploadMeme", urlencoder, (req, res)=>{
 })
 
 
+
+
+/* this is where everything i'm touching is */
+
+
 /*-----------------------------------Default-----------------------------------*/
 app.get('/', (req, res)=>{
     req.session.user = null;
@@ -192,9 +140,6 @@ app.get('/', (req, res)=>{
     }, ()=>{
         res.render("index.hbs");
     })
-    
-    
-    //res.sendFile(path.join(__dirname, '/views/index1.html'));
 })
 /*------------------------------------Home-------------------------------------*/
 app.get('/home', (req, res)=>{
@@ -204,13 +149,94 @@ app.get('/home', (req, res)=>{
 /*------------------------------------Login------------------------------------*/
 app.get('/login', (req, res)=>{
     console.log("GET/ login.html");
-    res.sendFile(path.join(__dirname, '/views/login.html'));
+    res.sendFile(path.join(__dirname, '/views/login.html')); //static
 })
-/*-----------------------------------Sign-Up-----------------------------------*/
+app.post("/authenticate", urlencoder, (req, res)=>{
+    var password = req.body.pword;
+    var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
+    var email = req.body.email;
+    
+    User.findOne({
+        email, password: hashedpassword
+    }).then((user)=>{
+        if(user){
+            console.log(user.username);
+            req.session.user = user;
+            
+            Post.find({
+                public : true
+            }).then((results)=>{
+               res.render("indexLoggedIn.hbs", {
+                   user: req.session.user,
+                   results
+               }); 
+            }, ()=>{
+                res.render("error.hbs");
+            })
+            
+            
+//        res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
+        }
+        else{
+            res.sendFile(path.join(__dirname, '/views/login.html'));
+        }
+    })
+})
+/*-----------------------------------Sign up-----------------------------------*/
 app.get('/signup', (req,res)=>{
     console.log("GET/ signup.html");
-    res.sendFile(path.join(__dirname, '/views/signup.html'));
+    res.sendFile(path.join(__dirname, '/views/signup.html')); //static
 })
+app.post("/signingUp", urlencoder, (req, res)=>{
+    var username = req.body.uname;
+    var password = req.body.pword;
+    var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
+    var email = req.body.email;
+    var briefDescription = req.body.briefDescription;
+    
+    var user = new User({
+        username, password: hashedpassword, email, briefDescription
+    })
+    
+    User.findOne({ 
+        $or: [ { username: user.username}, { email: user.email } ] 
+        }).then((existingUser)=>{
+        if(existingUser){
+            console.log("invalid username");
+            res.sendFile(path.join(__dirname, '/views/signup.html'));
+        }
+        else{
+            user.save().then((doc)=>{
+            res.redirect("/"); 
+        })
+        } 
+    });
+})
+/*-----------------------------------Viewing individual posts-----------------------------------*/
+app.get('/meme/:id', (req, res)=>{
+    console.log("GET/ ID accessed: " + req.params.id);
+//    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1.html"));
+     Post.findOne({_id: req.params.id}).then((post)=>{
+        res.render("post.hbs", {
+            post,
+            user: req.session.user
+        })
+    })
+        
+})
+
+
+
+/* old stuff below /*
+
+
+
+
+
+
+
+
+
 /*------------------------------------Tags-------------------------------------*/
 app.get('/anime-tag', (req, res)=>{
     console.log("GET/ animeTagged.html");
@@ -237,6 +263,25 @@ app.get('/wholesome-tag', (req, res)=>{
     res.sendFile(path.join(__dirname, "/views/wholesomeTagged.html"));
 })
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*OLD*/
+
+
+
 /*--------------------------------View Meme------------------------------------*/
 app.get('/view-meme-1', (req, res)=>{
 //    console.log("GET/ viewMeme/viewMeme1.html");
@@ -249,7 +294,6 @@ app.get('/view-meme-1', (req, res)=>{
     })
         
 })
-
 app.get('/view-meme-2', (req, res)=>{
     console.log("GET/ viewMeme/viewMeme2.html");
     res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme2.html"));

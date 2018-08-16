@@ -1,5 +1,6 @@
 body{
-    background-image: url(../res/background.png);
+    /* background-image: url(../res/background.png); */
+    background-image: url(../res/wallpaper.png);
     background-attachment: fixed;
     background-size: cover;
 
@@ -13,9 +14,11 @@ body{
 }
 
 .container{
-    margin: 0px;
+    margin-top: 75px;
+    padding-top: 50px;
     background-color: #EBECED;
     border-right-color: #CBC5C1;
+    border-radius: 10px;
 }
 
 .input-width{
@@ -92,6 +95,7 @@ body{
 .navbar{
     display: block;
     padding: 0.5rem 1rem;
+    margin-bottom:75px;
 }
 
 .credits{

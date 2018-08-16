@@ -10,7 +10,6 @@ body{
 
     display: flex;
     flex-direction: row;
-
 }
 
 .whitewash-text{
@@ -30,16 +29,16 @@ body{
 }
 
 #main-content{
-  width:60%;
-  margin: 0 auto;
-  padding: 0px;
-  box-sizing: border-box;
+    width:45%;
+    margin: 0 auto;
+    padding: 0px;
+    box-sizing: border-box;
     font-family: "Gill Sans MT", sans-serif;
-  font-size: 1.2rem;
+    font-size: 1.2rem;
 }
 
 .meme-container{
-    background-color:#EBECED;
+    /* background-color:#EBECED;
     padding:50px;
     margin-top: 75px;
     display: flex;
@@ -48,7 +47,21 @@ body{
     align-items: center;
     flex-direction: column;
     margin-bottom: 10px;
+    border-radius: 10px; */
+    
+    
+    background-color:#EBECED;
+    padding:25px;
+    margin-top: 75px;
+    margin-bottom: 10px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     border-radius: 10px;
+    overflow: auto;
+    min-width: 400px;
 }
 
 .post-title{
@@ -66,13 +79,12 @@ body{
 
 #main-content1{
     margin-left: 30px;
-  width:15%;
-  padding: 0px;
-  box-sizing: border-box;
+    width:15%;
+    padding: 0px;
+    box-sizing: border-box;
     font-family: "Gill Sans MT", sans-serif;
-  font-size: 1.2rem;
+    font-size: 1.2rem;
     position:fixed;
-    
 }
 
 .avatar{
@@ -86,6 +98,29 @@ body{
     align-content: center;
     justify-content: center;
     align-items: center;
+}
+
+.meme-post h1{
+    font-size:50px;
+    text-shadow: 1px 1px #cecece;
+}
+
+.meme-post a:link {
+    color:#3E3E3B;
+}
+
+.meme-post a:hover {
+    color:#4d4d47;
+}
+
+.meme-post .image {
+    margin-bottom:10px;
+    width: 640px;
+    max-width: 100%;
+    /*
+    transition: transform .2s;
+    box-shadow: 10px 10px;
+    max-width: 90%; */
 }
 
 .email{
@@ -114,5 +149,9 @@ body{
 }
 
 #homeTitle{
+    font-family: "Gill Sans MT", sans-serif;
+}
+
+.fixed-top{
     font-family: "Gill Sans MT", sans-serif;
 }

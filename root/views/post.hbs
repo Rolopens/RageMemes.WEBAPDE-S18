@@ -1,10 +1,11 @@
 <!-- "C:\Program Files\MongoDB\Server\4.0\bin\mongod.exe" -dbpath mongodbdata -->
 <html>
     <head>
-        <script src="jquery-3.3.1.js"></script>
+        <script src="/jquery-3.3.1.js"></script>
         
         <title>{{post.title}}</title>
         <!-- Bootstrap core CSS -->
+        <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
         <link href="../css/bootstrap.css" rel="stylesheet">
         <!--Bootstrap JS-->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -12,6 +13,7 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <!-- Custom styles for this template -->
         <link href="../css/viewMeme.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         
         <!-- <style>
         </style> -->
@@ -82,13 +84,13 @@
         <!--navbar-->
         <nav class="fixed-top navbar navbar-expand-lg home-navbar reverse-order">
             {{#if user}}
-            <a class="navbar-brand whitewash-text" href="user-home">
+            <a class="navbar-brand whitewash-text" href="/user-home">
                 <img src="res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 RageMemes
             </a>
             {{else}}
             <!--RageMemes text-->
-            <a class="navbar-brand whitewash-text" href="home">
+            <a class="navbar-brand whitewash-text" href="/home">
                 <img src="/res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 RageMemes
             </a>
@@ -97,16 +99,14 @@
             <button class="btn btn-primary" type="submit"><img src="/res/search.png" width="20" height="20s  "></button> -->
             
             {{#if user}}
-            <!--logout-->
-            <a class="nav-link whitewash-text right-floater" href="home">Log out<span class="sr-only">(current)</span></a>
-            <!--Upload Meme-->
-            <a class="nav-link whitewash-text right-floater" href="user-upload">Upload Meme<span class="sr-only">(current)</span></a>
+            <a class="nav-link whitewash-text right-floater" href="/home">Log out<span class="sr-only">(current)</span></a>
             {{else}}
             <!--login-->
-            <a class="nav-link whitewash-text right-floater" href="login">Login<span class="sr-only">(current)</span></a>
+            <a class="nav-link whitewash-text right-floater" href="/login">Login<span class="sr-only">(current)</span></a>
             <!--signup-->
-            <a class="nav-link whitewash-text right-floater" href="signup">Sign up<span class="sr-only">(current)</span></a>
+            <a class="nav-link whitewash-text right-floater" href="/signup">Sign up<span class="sr-only">(current)</span></a>
             {{/if}}
+            
             <!--tags-->
             <div class="collapse navbar-collapse right-floater" id="navbarNavDropdown">
                 <ul class="navbar-nav">
@@ -116,15 +116,15 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <!--anime-tag-->
-                            <a class="dropdown-item" href="anime-tag">#Anime</a> <!--fix link-->
+                            <a class="dropdown-item" href="/anime-tag">#Anime</a> <!--fix link-->
                             <!--classic-tag-->
-                            <a class="dropdown-item" href="classic-tag">#Classic</a> <!--fix link-->
+                            <a class="dropdown-item" href="/classic-tag">#Classic</a> <!--fix link-->
                             <!--dank-tag-->
-                            <a class="dropdown-item" href="dank-tag">#Dank</a> <!--fix link-->
+                            <a class="dropdown-item" href="/dank-tag">#Dank</a> <!--fix link-->
                             <!--pinoy-tag-->
-                            <a class="dropdown-item" href="pinoy-tag">#Pinoy</a> <!--fix link-->
+                            <a class="dropdown-item" href="/pinoy-tag">#Pinoy</a> <!--fix link-->
                             <!--wholesome-tag-->
-                            <a class="dropdown-item" href="wholesome-tag">#Wholesome</a> <!--fix link-->
+                            <a class="dropdown-item" href="/wholesome-tag">#Wholesome</a> <!--fix link-->
                         </div>
                     </li>
                 </ul>
@@ -134,39 +134,58 @@
         {{#if user}}
         <div id="main-content1">
             <div class="meme-container">
-                <img src="res/TwiceMina.jpg" class="avatar"><!--change image later-->
-                <div>Hi, {{user.username}}!</div><hr>
+                <img src="res/TwiceMina.jpg" class="avatar">
                 <!--Mina Myoui-->
-                <a href="user-profile" style="text-align: center; color:#3E3E3B;" class="lead">My memes</a>
-<!--                <a href="user-upload" style="text-align: center; color:#3E3E3B;" class="lead">Upload form</a>-->
+                <a href="/user-upload" style="text-align: center; color:#3E3E3B;" class="lead">Upload form</a>
+                <a href="/user-profile" style="text-align: center; color:#3E3E3B;" class="lead">My memes</a>
             </div>
         </div>
         {{/if}}
         <div id="main-content">
             <div class="container meme-container">
                 <div class="meme-post">
-                    <img src="../res/meme1.jpg" class="image img-thumbnail"> <!--fix link-->
                     <h1 class="display-4" style="text-align: left; color:#3E3E3B;">{{post.title}}</h1>
+                    <img src="../res/meme1.jpg" class="image"> <!--fix link-->
                     <div class="details">
                         <h2 class="description">{{post.description}}</h2>
                         <!--posted by user-->
-                        <h3 class="author">
+                        <!-- <h3 class="author">
                             Posted by 
-                            <a href="tzuyu-profile" value="{{post.user}}">{{post.user}}</a> <!--fix link-->
+                            <a href="tzuyu-profile" value="{{post.user}}">{{post.user}}</a>
                             on {{post.date}}
                             <input type="hidden" name="owner" value="{{post.user}}">
-                        </h3>
-                        <!--tag-->
-                        <h3 class="tags">
-                            Tags:
-                            {{#each post.tags}} 
-                                {{this}},
-                            {{/each}}
-                        </h3>
+                        </h3> -->
+                        
+                        <table border="0">
+                            <tr>
+                                <td rowspan="5"><img src="res/TwiceMina.jpg" class="avatar2"></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><a href="/tzuyu-profile" value="{{post.user}}">{{post.user}}</a> <!--fix link--></td>
+                            </tr>
+                            <tr>
+                                <td>{{post.date}}</td>
+                            </tr>
+                            <tr>                                
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h3 class="tags">
+                                         <i class="fa fa-tags"></i> {{#each post.tags}}
+                                        {{this}}{{#unless @last}},{{/unless}}
+                                        {{/each}}
+                                    </h3>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+        
+        
     </body>
 </html>
 
