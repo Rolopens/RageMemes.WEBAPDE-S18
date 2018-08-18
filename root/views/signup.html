@@ -5,6 +5,28 @@
         <link href="css/bootstrap.css" rel="stylesheet">
         <!-- Custom styles for this template -->
         <link href="css/login-signup.css" rel="stylesheet">
+    
+        <script>
+            function previewFile() {
+                var preview = document.querySelector('img[id=preview]');
+                var file = document.querySelector('input[type=file]').files[0];
+                var reader = new FileReader();
+
+                reader.onloadend = function() {
+                    preview.src = reader.result;
+                    preview.width = 250;
+                    preview.height = 250;
+                    preview.style.display = "block";
+                }
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = "";
+                }
+            }
+            previewFile();
+        </script>
+        
     </head>
    
     <body>
@@ -21,9 +43,11 @@
         </nav>
         <!--signup contents-->
         <div class="container">
-            <form id="login" class="form-format" action="signingup" method="post">
+            <form id="login" class="form-format" action="signingup" method="post" enctype="multipart/form-data">
                 <h1>Create an account!</h1>
-                <img class="mb-4" src="res/signup.png" alt="" width="72" height="72">
+<!--                <img class="mb-4" src="res/signup.png" alt="" width="72" height="72">-->
+                <input type="file" name="img" id="uploadProfilePic" onchange="previewFile()" accept="image/x-png,image/tiff,image/jpeg">
+                <img src="" id="preview" class="img-thumbnail" style="display: none;">
                 <label for="inputPassword" class="sr-only input-width">Username</label>
                 <input type="text" name="uname" id="inputUsername" class="form-control input-width" placeholder="Username" required autofocus>
                 <label for="inputEmail" class="sr-only input-width">Email address</label>
@@ -33,6 +57,7 @@
                 <input type="password" id="inputPassword" class="form-control input-width" placeholder="Confirm password" required><br>
                 <label for="inputPassword" class="sr-only input-width">Short description</label>
                 <input type="text" name="briefDescription" id="inputDescription" class="form-control input-width" placeholder="Short description of you"><br>
+<!--      <input type="submit" value="Upload">-->
                 <button class="btn btn-lg btn-success btn-block input-width" type="submit" >Sign up</button>
             
                 <div class="checkbox mb-3 mt-4">

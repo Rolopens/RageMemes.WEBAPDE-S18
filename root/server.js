@@ -8,6 +8,10 @@ const cookieparser = require('cookie-parser');
 const mongoose = require('mongoose');
 const crypto = require("crypto");
 
+// upload
+const multer = require("multer")
+const fs = require("fs")
+
 // defined in model
 const {Post} = require("./model/Post.js");
 const {User} = require("./model/User.js");
@@ -16,6 +20,16 @@ const {User} = require("./model/User.js");
 const app = express();
 const urlencoder = bodyparser.urlencoded({
     extended: true
+})
+
+
+const UPLOAD_PATH = path.resolve(__dirname, "resources");
+const upload = multer({
+  dest: UPLOAD_PATH,
+  limits: {
+    fileSize : 10000000,
+    files : 2
+  }
 })
 
 //sessions and cookies
@@ -187,15 +201,19 @@ app.get('/signup', (req,res)=>{
     console.log("GET/ signup.html");
     res.sendFile(path.join(__dirname, '/views/signup.html')); //static
 })
-app.post("/signingUp", urlencoder, (req, res)=>{
+app.post("/signingUp", urlencoder, upload.single("img"), (req, res)=>{
+  console.log(req.body.title)
+  console.log(req.file.filename)
     var username = req.body.uname;
     var password = req.body.pword;
     var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
     var email = req.body.email;
+    var filename = req.file.filename;
+    var originalfilename = req.file.originalname;
     var briefDescription = req.body.briefDescription;
     
     var user = new User({
-        username, password: hashedpassword, email, briefDescription
+        username, password: hashedpassword, email, filename, originalfilename, briefDescription
     })
     
     User.findOne({ 
@@ -224,6 +242,36 @@ app.get('/meme/:id', (req, res)=>{
     })
         
 })
+/*-----------------------------------Rendering-----------------------------------*/
+app.get("/photo/:id", (req, res)=>{
+  console.log(req.params.id)
+//  Post.findOne({_id: req.params.id}).then((doc)=>{
+    fs.createReadStream(path.resolve(UPLOAD_PATH, req.params.id)).pipe(res)
+//  }, (err)=>{
+//    console.log(err)
+//    res.sendStatus(404)
+//  })
+})
+
+///*-----------------------------------Uploading-----------------------------------*/
+//app.post("/upload", upload.single("img"),(req, res)=>{
+//  console.log(req.body.title)
+//  console.log(req.file.filename)
+//
+//  // multer saves the actual image, and we save the filepath into our DB
+//  var p = new Post({
+//      title : req.body.title,
+//      filename : req.file.filename,
+//      originalfilename : req.file.originalname
+//    })
+//
+//  p.save().then((doc)=>{
+//      res.render("post.hbs", {
+//        title : doc.title,
+//        id : doc._id
+//      })
+//    })
+//})
 
 
 
