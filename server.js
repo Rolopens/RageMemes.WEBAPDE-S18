@@ -50,7 +50,7 @@ mongoose.Promise = global.Promise;
 //    useNewUrlParser: true 
 //});
 
-mongoose.connect("mongodb://admin, r12345@ds123822.com:23822/ragememes", {
+mongoose.connect("mongodb://admin:r12345@ds123822.com:23822/ragememes", {
     useNewUrlParser: true 
 });
 
