@@ -46,6 +46,10 @@ app.set("view-engine", "hbs");
 mongoose.Promise = global.Promise;
 
 // connect to the database
+//mongoose.connect("mongodb://localhost:27017/memesdata", {
+//    useNewUrlParser: true 
+//});
+
 mongoose.connect("mongodb://admin, r12345@ds123822.com:23822/ragememes", {
     useNewUrlParser: true 
 });
