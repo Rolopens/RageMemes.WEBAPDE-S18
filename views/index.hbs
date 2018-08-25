@@ -1,17 +1,17 @@
 <!-- "C:\Program Files\MongoDB\Server\4.0\bin\mongod.exe" -dbpath mongodbdata -->
 <html lang="en">
     <head>
-        <script src="jquery-3.3.1.js"></script>
+        <script src="/jquery-3.3.1.js"></script>
         
         <title>RageMemes</title>
         <!-- Bootstrap core CSS -->
-        <link href="css/bootstrap.css" rel="stylesheet">
+        <link href="/css/bootstrap.css" rel="stylesheet">
         <!--Bootstrap JS-->
         <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <!-- Custom styles for this template -->
-        <link href="css/home.css" rel="stylesheet">
+        <link href="/css/home.css" rel="stylesheet">
         
         <script>
             function publicCheck() {
@@ -54,9 +54,11 @@
                 <img src="/res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 RageMemes
             </a>
-            <!--Search-->           
-            <input class="searchbar" type="search" placeholder="Search">
-            <button class="btn btn-primary" type="submit"><img src="/res/search.png" width="20" height="20s"></button>
+            <!--Search-->
+            <form id="searchTag" action="/search" method="post">           
+                <input class="searchbar" type="text" name="searchInput" placeholder="Search a tag..." value="{{searchInput}}" required>
+                <button class="btn btn-primary" type="submit" id="search-button"><img src="/res/search.png" width="20" height="20s"></button>
+            </form>
             <!--User dropdown-->
             {{#if user}}
             <div class="dropdown">
@@ -153,6 +155,17 @@
                     </div>
                 </div>
             </div>
+            
+            {{#if results}}
+            {{else}}
+                <div class="memes-all">
+                        <div class="no-results">
+                                <img src="/res/noResults.png" class="image">
+                                <h1 class="display-4" style="text-align: left;">Welp.</h1>
+                                <h2>No results found. Try a different search, perhaps?</h2>
+                        </div>
+                </div>
+            {{/if}}
             
             <!--Posts-->
             <div class="memes-all">

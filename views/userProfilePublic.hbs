@@ -54,9 +54,11 @@
                 <img src="/res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 RageMemes
             </a>                         
-            <!--Search-->           
-            <input class="searchbar" type="search" placeholder="Search">
-            <button class="btn btn-primary" type="submit"><img src="/res/search.png" width="20" height="20s"></button>                        
+            <!--Search-->
+            <form id="searchTag" action="/search" method="post">           
+                <input class="searchbar" type="text" name="searchInput" placeholder="Search a tag..." value="{{searchInput}}" required>
+                <button class="btn btn-primary" type="submit" id="search-button"><img src="/res/search.png" width="20" height="20s"></button>
+            </form>                
             <!--User dropdown-->
             {{#if user}}
             <div class="dropdown">

@@ -145,13 +145,42 @@ body{
     background-color:#52f452;
 }
 
+#searchTag{
+    display:inline;
+}
+
 .memes-all{
     margin-top:75px;
 }
+
+/* new styles start here */
 
 .meme-post h3{
     color:#6d6464;
     font-size:16px;
     text-shadow:1px 1px #cecece;
     padding-bottom:1px;
+}
+
+.no-results{    
+    background-color:#EBECED;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+/*    -webkit-transform: translate(-50%, -50%);*/
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: auto;
+    width: 450px;
+    height: 450px;
+}
+
+.no-results h2{
+    color:#6d6464;
+    font-size:18px;
 }

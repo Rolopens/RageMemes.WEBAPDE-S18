@@ -300,8 +300,7 @@ app.get('/meme/:id', (req, res)=>{
             post,
             user: req.session.user
         })
-    })
-        
+    })  
 })
 /*-----------------------------------Viewing individual user pages-----------------------------------*/
 app.get('/user/:id', (req, res)=>{
@@ -321,19 +320,26 @@ app.get('/user/:id', (req, res)=>{
     })       
 })
 /*-----------------------------------Searching posts by tag-----------------------------------*/
+app.post('/search', urlencoder, (req, res)=>{
+    console.log(req.body.searchInput);
+    res.redirect('/search/' + req.body.searchInput);
+})
+/*-----------------------------------Searching posts by tag-----------------------------------*/
 app.get('/search/:id', (req, res)=>{
-    console.log("GET/ search");
     Post.find({
+        tags : req.params.id,
         public : true
     }).limit(20).sort({
         date : -1
-    }).then((results)=>{
+    }).populate('user')
+    .then((results)=>{
        res.render("index.hbs", {
            user: req.session.user,
+           searchInput: req.params.id,
            results
        }); 
     }, ()=>{
-        res.render("index.hbs");
+        res.render("error.hbs"); // should have "Results not found"
     })
 })
 /*-----------------------------------Rendering images-----------------------------------*/
