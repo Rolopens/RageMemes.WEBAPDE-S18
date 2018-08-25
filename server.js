@@ -8,9 +8,12 @@ const cookieparser = require('cookie-parser');
 const mongoose = require('mongoose');
 const crypto = require("crypto");
 
-// upload
+// upload packages
 const multer = require("multer")
 const fs = require("fs")
+
+// custom packages
+const moment = require("moment")
 
 // defined in model
 const {Post} = require("./model/Post.js");
@@ -22,7 +25,7 @@ const urlencoder = bodyparser.urlencoded({
     extended: true
 })
 
-
+// uploading
 const UPLOAD_PATH = path.resolve(__dirname, "resources");
 const upload = multer({
   dest: UPLOAD_PATH,
@@ -32,7 +35,14 @@ const upload = multer({
   }
 })
 
-//sessions and cookies
+// handlebars helpers
+hbs.registerHelper('formatDate', function(dateString) {
+    return new hbs.SafeString(
+        moment(dateString).format("MMMM DD, YYYY")
+    );
+});
+
+// sessions and cookies
 app.use(cookieparser());
 app.use(session({secret : "MCO2", resave: true, saveUninitialized : true}));
 
@@ -46,13 +56,17 @@ app.set("view-engine", "hbs");
 mongoose.Promise = global.Promise;
 
 // connect to the database
-//mongoose.connect("mongodb://localhost:27017/memesdata", {
-//    useNewUrlParser: true 
-//});
-
-mongoose.connect("mongodb://admin:r12345@ds123822.mlab.com:23822/ragememes", {
+mongoose.connect("mongodb://localhost:27017/memesdata", {
     useNewUrlParser: true 
 });
+
+
+
+
+
+//mongoose.connect("mongodb://admin:r12345@ds123822.mlab.com:23822/ragememes", {
+//    useNewUrlParser: true 
+//});
 
 //app.get("/", (req, res)=>{    
 //    // get all meme posts
@@ -75,7 +89,19 @@ mongoose.connect("mongodb://admin:r12345@ds123822.mlab.com:23822/ragememes", {
 //    
 //    post.save().then();
 
-// Post.remove({title: "Test2"}).then();
+
+
+
+// Post.remove({public: true}).then();
+// Post.remove({private: true}).then();
+//    User.remove({username: "bbb"}).then();
+//    User.find().then((docs)=>{
+//        console.log(docs)
+//    })
+
+
+
+
 
 
 
@@ -142,17 +168,30 @@ app.post("/UploadMeme", urlencoder, (req, res)=>{
 
 
 
-/* this is where everything i'm touching is */
+
+
+
+
+
+
+/* this is where everything i'm touching starts */
 
 
 /*-----------------------------------Default-----------------------------------*/
 app.get('/', (req, res)=>{
-    req.session.user = null;
-    console.log("GET/");
+    Post.find().then((docs)=>{
+        console.log(docs)
+    })
+    console.log(req.session.user);
+    console.log("GET/ ");
     Post.find({
         public : true
-    }).then((results)=>{
+    }).limit(20).sort({
+        date : -1
+    }).populate('user')
+    .then((results)=>{
        res.render("index.hbs", {
+           user: req.session.user,
            results
        }); 
     }, ()=>{
@@ -161,15 +200,61 @@ app.get('/', (req, res)=>{
 })
 /*------------------------------------Home-------------------------------------*/
 app.get('/home', (req, res)=>{
-    console.log("GET/");
+    console.log("GET/ home");
     res.redirect("/");
+})
+/*-----------------------------------Sign up-----------------------------------*/
+app.get('/signup', (req,res)=>{
+    console.log("GET/ signup");
+    res.sendFile(path.join(__dirname, '/views/signup.html')); //static
+})
+app.post("/signingUp", urlencoder, upload.single("img"), (req, res)=>{
+    console.log("POST/ signingup");
+    var username = req.body.uname;
+    var password = req.body.pword;
+    var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
+    var email = req.body.email;
+    var briefDescription = req.body.briefDescription;
+    
+    if(req.file){
+        console.log(req.file.filename)
+        var filename = req.file.filename;
+        var originalfilename = req.file.originalfilename;
+        var user = new User({
+            username, password: hashedpassword, email, filename, originalfilename, briefDescription
+        })
+    }
+    else{
+        var user = new User({
+            username, password: hashedpassword, email, briefDescription
+        })
+    }
+    
+    User.findOne({ 
+        $or: [ { username: user.username}, { email: user.email } ] 
+        }).then((existingUser)=>{
+        if(existingUser){
+            console.log("Error: Invalid username");
+            res.sendFile(path.join(__dirname, '/views/signup.html'));
+        }
+        else{
+            user.save().then((doc)=>{                                            
+            User.find().then((docs)=>{
+                console.log(docs)
+            })
+            req.session.user = user;
+            res.redirect("/"); 
+        })
+        } 
+    });        
 })
 /*------------------------------------Login------------------------------------*/
 app.get('/login', (req, res)=>{
-    console.log("GET/ login.html");
+    console.log("GET/ login");
     res.sendFile(path.join(__dirname, '/views/login.html')); //static
 })
 app.post("/authenticate", urlencoder, (req, res)=>{
+    console.log("POST/ authenticate, login successful");
     var password = req.body.pword;
     var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
     var email = req.body.email;
@@ -184,61 +269,33 @@ app.post("/authenticate", urlencoder, (req, res)=>{
             Post.find({
                 public : true
             }).then((results)=>{
-               res.render("indexLoggedIn.hbs", {
-                   user: req.session.user,
-                   results
-               }); 
+                console.log("Logged in: " + req.session.user);
+//               res.render("index.hbs", {
+//                   user: req.session.user,
+//                   results
+//               }); 
+                res.redirect("/");
             }, ()=>{
                 res.render("error.hbs");
             })
-            
-            
 //        res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
         }
         else{
-            res.sendFile(path.join(__dirname, '/views/login.html'));
+            res.sendFile(path.join(__dirname, '/views/login.html')); //static
         }
     })
 })
-/*-----------------------------------Sign up-----------------------------------*/
-app.get('/signup', (req,res)=>{
-    console.log("GET/ signup.html");
-    res.sendFile(path.join(__dirname, '/views/signup.html')); //static
-})
-app.post("/signingUp", urlencoder, upload.single("img"), (req, res)=>{
-  console.log(req.body.title)
-  console.log(req.file.filename)
-    var username = req.body.uname;
-    var password = req.body.pword;
-    var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
-    var email = req.body.email;
-    var filename = req.file.filename;
-    var originalfilename = req.file.originalname;
-    var briefDescription = req.body.briefDescription;
-    
-    var user = new User({
-        username, password: hashedpassword, email, filename, originalfilename, briefDescription
-    })
-    
-    User.findOne({ 
-        $or: [ { username: user.username}, { email: user.email } ] 
-        }).then((existingUser)=>{
-        if(existingUser){
-            console.log("invalid username");
-            res.sendFile(path.join(__dirname, '/views/signup.html'));
-        }
-        else{
-            user.save().then((doc)=>{
-            res.redirect("/"); 
-        })
-        } 
-    });
+/*------------------------------------Logout------------------------------------*/
+app.get('/logout', (req, res)=>{
+    console.log("GET/ logout");
+    req.session.destroy();
+    res.redirect("/");
 })
 /*-----------------------------------Viewing individual posts-----------------------------------*/
 app.get('/meme/:id', (req, res)=>{
-    console.log("GET/ ID accessed: " + req.params.id);
+    console.log("GET/ Meme accessed: " + req.params.id);
 //    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1.html"));
-     Post.findOne({_id: req.params.id}).then((post)=>{
+     Post.findOne({_id: req.params.id}).populate('user').then((post)=>{
         res.render("post.hbs", {
             post,
             user: req.session.user
@@ -246,7 +303,40 @@ app.get('/meme/:id', (req, res)=>{
     })
         
 })
-/*-----------------------------------Rendering-----------------------------------*/
+/*-----------------------------------Viewing individual user pages-----------------------------------*/
+app.get('/user/:id', (req, res)=>{
+    console.log("GET/ User accessed: " + req.params.id);
+    User.findOne({username: req.params.id}).then((user2)=>{
+        Post.find({
+            user : user2
+        }).limit(20).sort({
+            date : -1
+        }).then((results)=>{
+             res.render("userProfilePublic.hbs", {
+                 user: req.session.user,
+                 user2,
+                 results
+             });
+         })
+    })       
+})
+/*-----------------------------------Searching posts by tag-----------------------------------*/
+app.get('/search/:id', (req, res)=>{
+    console.log("GET/ search");
+    Post.find({
+        public : true
+    }).limit(20).sort({
+        date : -1
+    }).then((results)=>{
+       res.render("index.hbs", {
+           user: req.session.user,
+           results
+       }); 
+    }, ()=>{
+        res.render("index.hbs");
+    })
+})
+/*-----------------------------------Rendering images-----------------------------------*/
 app.get("/photo/:id", (req, res)=>{
   console.log(req.params.id)
 //  Post.findOne({_id: req.params.id}).then((doc)=>{
@@ -256,26 +346,54 @@ app.get("/photo/:id", (req, res)=>{
 //    res.sendStatus(404)
 //  })
 })
+/*-----------------------------------Uploading-----------------------------------*/
+app.post("/upload", urlencoder, upload.single("img"),(req, res)=>{
+    console.log("POST/ upload");
+    
+    var title = req.body.title;
+    var filename = req.file.filename;
+    var originalfilename = req.file.originalfilename;
+    var description = req.body.description;
+    var user = req.session.user._id;        
+    var tags = [];
+    var permittedUsers = [];
 
-///*-----------------------------------Uploading-----------------------------------*/
-//app.post("/upload", upload.single("img"),(req, res)=>{
-//  console.log(req.body.title)
-//  console.log(req.file.filename)
-//
-//  // multer saves the actual image, and we save the filepath into our DB
-//  var p = new Post({
-//      title : req.body.title,
-//      filename : req.file.filename,
-//      originalfilename : req.file.originalname
-//    })
-//
-//  p.save().then((doc)=>{
-//      res.render("post.hbs", {
-//        title : doc.title,
-//        id : doc._id
-//      })
-//    })
-//})
+    if(req.body.public == 'Public'){
+        var public = true;
+    }
+    else{
+        var public = false;
+    }
+    
+    if(req.body.tags) {
+        var tagsTemp = (req.body.tags).replace(/  +/g, ' ');
+        tagsTemp = tagsTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
+        tagsTemp = tagsTemp.replace(' ,',',');
+        tagsTemp = tagsTemp.replace(', ',',');
+        var tags = tagsTemp.split(',');
+    }
+    if(req.body.permittedUsers) {
+        var permittedUsersTemp = (req.body.permittedUsers).replace(/  +/g, ' ');
+        permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
+        permittedUsersTemp = permittedUsersTemp.replace(' ,',',');
+        permittedUsersTemp = permittedUsersTemp.replace(', ',',');
+        var permittedUsers = permittedUsersTemp.split(',');
+    }
+    
+    var p = new Post({
+        title, filename, originalfilename, description, user, tags, public, permittedUsers
+    })       
+    
+    p.save().then((doc)=>{
+        res.redirect("/")
+    })
+})
+
+
+
+
+
+
 
 
 
@@ -314,6 +432,9 @@ app.get('/wholesome-tag', (req, res)=>{
     console.log("GET/ wholesomeTagged.html");
     res.sendFile(path.join(__dirname, "/views/wholesomeTagged.html"));
 })
+
+
+
 
 
 
@@ -661,8 +782,8 @@ app.get('/tzuyu-view-profile', urlencoder, (req, res)=>{
 //    res.sendFile(path.join(__dirname, "/views/viewUser.html"));
 })
 
-// app.listen(3000, ()=>{
-//     console.log("Listening to port 3000");
-// })
+ app.listen(3000, ()=>{
+     console.log("Listening to port 3000");
+ })
 
-app.listen(process.env.PORT || 3000)
+//app.listen(process.env.PORT || 3000)

@@ -1,9 +1,8 @@
-<!-- "C:\Program Files\MongoDB\Server\4.0\bin\mongod.exe" -dbpath mongodbdata -->
-<html>
+<html lang="en">
     <head>
         <script src="/jquery-3.3.1.js"></script>
         
-        <title>{{post.title}}</title>
+        <title>{{post.title}} - RageMemes</title>
         <!-- Bootstrap core CSS -->
         <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"> -->
         <link href="../css/bootstrap.css" rel="stylesheet">
@@ -15,8 +14,37 @@
         <link href="../css/viewMeme.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         
-        <!-- <style>
-        </style> -->
+        <script>
+            function publicCheck() {
+                if (document.getElementById('privateButton').checked) {
+                    document.getElementById('ifPublic').style.display = 'block';
+                } 
+                else if(document.getElementById('publicButton').checked) {
+                    document.getElementById('ifPublic').style.display = 'none';
+               }
+            }
+        </script>
+                    
+        <script>
+            function previewFile() {
+                var preview = document.querySelector('img[id=preview]');
+                var file = document.querySelector('input[type=file]').files[0];
+                var reader = new FileReader();
+
+                reader.onloadend = function() {
+                    preview.src = reader.result;
+                    preview.width = 250;
+                    preview.height = 250;
+                    preview.style.display = "block";
+                }
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = "";
+                }
+            }
+            previewFile();
+        </script>
         
         <!-- <script>
             $(document).ready(function(){
@@ -81,102 +109,120 @@
     </head>
     
     <body>
-        <!--navbar-->
+         <!--Navbar-->
         <nav class="fixed-top navbar navbar-expand-lg home-navbar reverse-order">
-            {{#if user}}
-            <a class="navbar-brand whitewash-text" href="/user-home">
-                <img src="res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
-                RageMemes
-            </a>
-            {{else}}
-            <!--RageMemes text-->
+            <!--Home icon-->
             <a class="navbar-brand whitewash-text" href="/home">
                 <img src="/res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 RageMemes
-            </a>
-            {{/if}}
-            <!-- <input class="searchbar" type="search" placeholder="Search">
-            <button class="btn btn-primary" type="submit"><img src="/res/search.png" width="20" height="20s  "></button> -->
-            
+            </a>                         
+            <!--Search-->           
+            <input class="searchbar" type="search" placeholder="Search">
+            <button class="btn btn-primary" type="submit"><img src="/res/search.png" width="20" height="20s"></button>                        
+            <!--User dropdown-->
             {{#if user}}
-            <a class="nav-link whitewash-text right-floater" href="/home">Log out<span class="sr-only">(current)</span></a>
-            {{else}}
-            <!--login-->
-            <a class="nav-link whitewash-text right-floater" href="/login">Login<span class="sr-only">(current)</span></a>
-            <!--signup-->
-            <a class="nav-link whitewash-text right-floater" href="/signup">Sign up<span class="sr-only">(current)</span></a>
-            {{/if}}
-            
-            <!--tags-->
-            <div class="collapse navbar-collapse right-floater" id="navbarNavDropdown">
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown ">
-                        <a class="nav-link dropdown-toggle whitewash-text" href="" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Search by Tags
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <!--anime-tag-->
-                            <a class="dropdown-item" href="/anime-tag">#Anime</a> <!--fix link-->
-                            <!--classic-tag-->
-                            <a class="dropdown-item" href="/classic-tag">#Classic</a> <!--fix link-->
-                            <!--dank-tag-->
-                            <a class="dropdown-item" href="/dank-tag">#Dank</a> <!--fix link-->
-                            <!--pinoy-tag-->
-                            <a class="dropdown-item" href="/pinoy-tag">#Pinoy</a> <!--fix link-->
-                            <!--wholesome-tag-->
-                            <a class="dropdown-item" href="/wholesome-tag">#Wholesome</a> <!--fix link-->
-                        </div>
-                    </li>
+            <div class="dropdown">
+                {{#if user.filename}}
+                <img src="/photo/{{user.filename}}" class="avatar" data-toggle="dropdown">
+                {{else}}
+                <img src="/res/default.jpg" class="avatar" data-toggle="dropdown">
+                {{/if}}
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="#" class="dropdown-item">My profile</a></li>
+                    <li><a href="#" class="dropdown-item">Settings</a></li>
+                    <a href="/logout" class="dropdown-item">
+                        <div class="dropdown-divider"></div>
+                        Log out
+                    </a>
                 </ul>
             </div>
+            <a class="nav-link whitewash-text right-floater" href="/user/{{user.username}}">{{user.username}}<span class="sr-only">(current)</span></a>
+            <a class="nav-link whitewash-text right-floater" href="" data-toggle="modal" data-target="#modalQuickUploadForm">Upload meme<span class="sr-only">(current)</span></a>
+            {{else}}
+            <!--Login-->
+            <a class="nav-link whitewash-text right-floater" href="/login">Log in<span class="sr-only">(current)</span></a>
+            <!--Sign up-->
+            <a class="nav-link whitewash-text right-floater" href="/signup">Sign up<span class="sr-only">(current)</span></a>
+            {{/if}}
         </nav>
+        
          <!--Main content-->
-        {{#if user}}
-        <div id="main-content1">
-            <div class="meme-container">
-                <img src="res/TwiceMina.jpg" class="avatar">
-                <!--Mina Myoui-->
-                <a href="/user-upload" style="text-align: center; color:#3E3E3B;" class="lead">Upload form</a>
-                <a href="/user-profile" style="text-align: center; color:#3E3E3B;" class="lead">My memes</a>
-            </div>
-        </div>
-        {{/if}}
         <div id="main-content">
+            <!--Quick upload-->
+            <div class="modal fade" id="modalQuickUploadForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <br>
+                        <center><img src="../res/uploading.gif" class="img-thumbnail" width=200px></center>
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title w-100 font-weight-bold">Upload a meme!</h4>
+
+                            <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button> -->
+
+                        </div>
+                        <div class="modal-body mx-3">
+                            <form id="uploadMeme" class="form-format" action="/upload" method="post" enctype="multipart/form-data">
+                                <input type="file" id="uploadMemePic" onchange="previewFile()" accept="image/x-png,image/tiff,image/jpeg" name="img" required><br><br>
+                                <img src="" id="preview" class="img-thumbnail" style="display: none;"><br>
+                                <label for="defaultForm-title" class="modal-label">Title</label><br>
+                                <input id="defaultForm-title" class="form-control validate" name="title" required>
+                                <label for="defaultForm-title" class="modal-label">Description</label><br>
+                                <input id="defaultForm-title" class="form-control validate" name="description" required>
+                                <label for="defaultForm-title" class="modal-label">Tags</label><br>
+                                <input id="defaultForm-title" class="form-control validate" name="tags">
+                                <label for="defaultForm-title" class="modal-label">Viewing options</label><br>
+                                <input class="radio-size" style="vertical-align: middle; margin: 2px;" type="radio" name="public" value="Public" onclick="javascript:publicCheck();" id="publicButton" required>Public
+                                <input class="radio-size" style="vertical-align: middle; margin: 2px;" type="radio" name="public" value="Private" onclick="javascript:publicCheck();" id="privateButton" required>Private<br>
+                                <div id="ifPublic" style="display:none">
+                                    <label for="defaultForm-title" class="modal-label" name="permittedUsers">Users to share with</label><br>
+                                    <input id="defaultForm-title" class="form-control validate">
+                                </div>
+                                <br><button class="btn btn-default" type="submit" id="upload-button">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--Post-->
             <div class="container meme-container">
                 <div class="meme-post">
+                    <!--Main details-->
                     <h1 class="display-4" style="text-align: left; color:#3E3E3B;">{{post.title}}</h1>
-                    <img src="../res/meme1.jpg" class="image"> <!--fix link-->
+                    <img src="/photo/{{post.filename}}" class="image"> <!--fix link-->
                     <div class="details">
-                        <h2 class="description">{{post.description}}</h2>
-                        <!--posted by user-->
-                        <!-- <h3 class="author">
-                            Posted by 
-                            <a href="tzuyu-profile" value="{{post.user}}">{{post.user}}</a>
-                            on {{post.date}}
-                            <input type="hidden" name="owner" value="{{post.user}}">
-                        </h3> -->
+                        <h2 id="description">{{post.description}}</h2>
                         
+                        <!--Upload details-->
                         <table border="0">
                             <tr>
-                                <td rowspan="5"><img src="res/TwiceMina.jpg" class="avatar2"></td>
+                                <td id="tableAvatar" rowspan="5">
+                                    {{#if post.user.filename}}
+                                    <a href="/user/{{post.user.username}}"><img src="/photo/{{post.user.filename}}" class="avatar2"></a>
+                                    {{else}}
+                                    <a href="/user/{{post.user.username}}"><img src="/res/default.jpg" class="avatar2"></a>
+                                    {{/if}}
+                                </td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td><a href="/tzuyu-profile" value="{{post.user}}">{{post.user}}</a> <!--fix link--></td>
+                                <td><a href="/user/{{post.user.username}}" value="{{post.user.username}}">{{post.user.username}}</a></td>
                             </tr>
                             <tr>
-                                <td>{{post.date}}</td>
+                                <td><h2>Published on {{formatDate post.date}}</h2></td>
                             </tr>
                             <tr>                                
                                 <td>&nbsp;</td>
                             </tr>
                             <tr>
                                 <td>
-                                    <h3 class="tags">
+                                    <h2 class="tags">
                                          <i class="fa fa-tags"></i> {{#each post.tags}}
                                         {{this}}{{#unless @last}},{{/unless}}
                                         {{/each}}
-                                    </h3>
+                                    </h2>
                                 </td>
                             </tr>
                         </table>
@@ -184,8 +230,6 @@
                 </div>
             </div>
         </div>
-        
-        
     </body>
 </html>
 

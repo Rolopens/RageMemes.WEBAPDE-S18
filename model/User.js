@@ -1,8 +1,8 @@
 // create mongoose document posts 
 const mongoose = require("mongoose");
 var Schema = mongoose.Schema;
-var Post = require("../model/Post.js");
-var PostSchema = Post.Post.schema;
+//var Post = require("../model/Post.js");
+//var PostSchema = Post.Post.schema;
 
 var UserSchema = new Schema({
     username : {
@@ -22,6 +22,7 @@ var UserSchema = new Schema({
         unique : true,
         dropDups : true
     },
+    joinDate : { type: Date, default: Date.now },
     briefDescription : String,
     filename : String,
     originalfilename : String

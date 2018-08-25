@@ -40,7 +40,7 @@ body{
 .meme-container{
     background-color:#EBECED;
     padding:25px;
-    margin-top: 75px;
+    margin-top: 75px; /* changed from home */
     margin-bottom: 10px;
     display: flex;
     align-content: center;
@@ -65,26 +65,15 @@ body{
     float: right;
 }
 
-#main-content1{
-    margin-left: 30px;
-    width:15%;
-    padding: 0px;
-    box-sizing: border-box;
-    font-family: "Gill Sans MT", sans-serif;
-    font-size: 1.2rem;
-    position:fixed;   
-}
-
 .avatar{
-    height: 100px;
-    width: 100px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
+    float: right;
 }
 
-.avatar2{
-    height: 75px;
-    width: 75px;
-    border-radius: 50%;
+.dropdown{
+    float: right;
 }
 
 .flex-element{
@@ -93,6 +82,19 @@ body{
     justify-content: center;
     align-items: center;
 }
+
+.meme-post h1{
+    font-size:50px;
+    text-shadow: 1px 1px #cecece;
+}
+
+/* .meme-post a:link {
+    color:#3E3E3B;
+}
+
+.meme-post a:hover {
+    color:#4d4d47;
+} */
 
 .meme-post .image {
     margin-bottom:10px;
@@ -104,59 +106,11 @@ body{
     max-width: 90%; */
 }
 
-/* new styles start here */
-
-/*.post-title{
-    color: #3E3E3B;
-    font-size: 30px;
-}*/
-
-.meme-post .image:hover {
-    /* transform: scale(1.01); */ /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-}
-
-table {
-    border-top: 1px solid #c3bcbc;
-    margin:30px 0px 20px 0px; /*TRBL*/
-    width:100%;
-}
-
-th {
-    height:20px;
-}
-
-.meme-post h1{
-    font-size:50px;
-    text-shadow: 1px 1px #cecece;
-}
-
-.meme-post .title{
-    /* text-align:center; */
-}
-
-.details{
-    margin:0px 0px;
-    padding:0px 0px;
-    align-content:left;
-}
-
-.details h2{
-    font-size:15px;
-    color:#655e5e;
-}
-
-.details h3{
-    font-size:15px;
-    color:#918585;
-}
-
-.details .description{
-    margin:5px 5px 10px 5px;
-}
-
-.editable-input{
+/* .editable-input{
     width:500px;
-}
+    border-style:dashed;
+    border-color:#4C586F;
+} */
 
 .searchbar{
     border-top: 0px;
@@ -178,6 +132,66 @@ th {
     font-family: "Gill Sans MT", sans-serif;
 }
 
- span.icon {
+.modal-label{
+    margin-top:10px;
+/*    margin-bottom:10px;*/
+}
+
+.modal-body{
+    font-size:90%;
+}
+
+#upload-button{
+    background-color:#52f452;
+}
+
+/* .memes-all{
+    margin-top:75px;
+} */
+
+/* new styles start here */
+
+.avatar2{
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+}
+
+.meme-post .image:hover {
+    /* transform: scale(1.01); */ /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+
+table {
+    border-top: 1px solid #c3bcbc;
+    margin:30px 0px 20px 0px; /*TRBL*/
+    width:100%;
+}
+
+#tableAvatar {
+    width:100px;
+}
+
+th {
+    height:20px;
+}
+
+.details{
+    margin:0px 0px;
+    padding:0px 0px;
+    align-content:left;
+}
+
+.details h2{
+    color:#4e4949;
+    font-size:16px;
+}
+
+.details #description{
+    margin:5px 5px 10px 5px;
+    color:#4e4949;
+    font-size:20px;
+}
+
+/* span.icon {
   font-family: 'Glyphicons Halflings';
-} 
+}*/

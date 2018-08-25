@@ -1,0 +1,201 @@
+.home-navbar{
+    background-color:#3E3E3B;
+    color: #4C586F;
+}
+
+body{
+    background-image: url(../res/wallpaper.png);
+    background-attachment: fixed;
+    background-size: cover;
+
+    display: flex;
+    flex-direction: row;
+}
+
+.whitewash-text{
+    color:#EBECED;
+}
+
+.whitewash-text:hover{
+    color:#CBC5C1; 
+}
+
+.meme-post{
+    display: flex;
+    align-content: left;
+    justify-content: left;
+    align-items: left;
+    flex-direction: column;
+}
+
+#main-content{
+    width:45%;
+    margin: 0 auto;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: "Gill Sans MT", sans-serif;
+    font-size: 1.2rem;
+}
+
+.meme-container{    
+    background-color:#EBECED;
+    padding:25px;
+    margin-top: 40px;
+    margin-bottom: 10px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: auto;
+    min-width: 400px;
+}
+
+.post-title{
+    color: #3E3E3B;
+    font-size: 30px;
+}
+
+.navbar{
+    display: block;
+}
+
+.right-floater{
+    float: right;
+}
+
+.avatar{
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    float: right;
+}
+
+.dropdown{
+    float: right;
+}
+
+.flex-element{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.meme-post h1{
+    font-size:50px;
+    text-shadow: 1px 1px #cecece;
+}
+
+.meme-post a:link {
+    color:#3E3E3B;
+}
+
+.meme-post a:hover {
+    color:#4d4d47;
+}
+
+.meme-post .image {
+    margin-bottom:10px;
+    width: 640px;
+    max-width: 100%;
+    /*
+    transition: transform .2s;
+    box-shadow: 10px 10px;
+    max-width: 90%; */
+}
+
+/* .editable-input{
+    width:500px;
+    border-style:dashed;
+    border-color:#4C586F;
+} */
+
+.searchbar{
+    border-top: 0px;
+    border-right: 0px;
+    border-left: 0px;
+    height: 35px;
+    background-color: #3E3E3B;
+    border-bottom-style: solid;
+    border-bottom-color: #EBECED;
+    color:#EBECED;
+    width: 300px;
+}
+
+.searchbar:focus{
+    outline: none;
+}
+
+.fixed-top{
+    font-family: "Gill Sans MT", sans-serif;
+}
+
+.modal-label{
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.modal-body{
+    font-size:90%;
+}
+
+#upload-button{
+    background-color:#52f452;
+}
+
+.memes-all{
+    margin-top:75px;
+}
+
+/* new styles start here */
+
+.user-container{
+    margin-top:75px;
+}
+
+.user-box{    
+    background-color:#d1d3d4;
+    padding:25px;
+    margin-top: 40px;
+    display: flex;
+/*    align-content: left;*/
+/*    justify-content: left;*/
+/*    align-items: left;*/
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: auto;
+/*    min-width: 250px;*/
+    width: 100%;
+}
+
+#side-content{
+    width:25%;
+    margin: 0 auto;
+    padding: 0px 20px;
+    box-sizing: border-box;
+    font-family: "Gill Sans MT", sans-serif;
+    font-size: 1.2rem;
+    float: left;
+    position: fixed;
+}
+
+#side-content img{
+    width:200px;
+    height:200px;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom:10px;
+    border:solid white 4px;
+}
+
+#side-content #username{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#side-content .field{
+    font-weight: bold;
+}
