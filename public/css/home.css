@@ -176,8 +176,8 @@ body{
     flex-direction: column;
     border-radius: 10px;
     overflow: auto;
-    width: 450px;
-    height: 450px;
+    width: 60%;
+    height: 100%;
 }
 
 .no-results h2{
