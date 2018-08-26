@@ -182,11 +182,12 @@ app.get('/', (req, res)=>{
     Post.find().then((docs)=>{
         console.log(docs)
     })
-    console.log(req.session.user);
+    console.log(req.session.user + 'this is where the user is printed!!!!!!!!!!!!!!!!!!!!!!!');
     console.log("GET/ ");
     Post.find({
         public : true
-    }).limit(20).sort({
+    })
+    .limit(20).sort({
         date : -1
     }).populate('user')
     .then((results)=>{
@@ -195,7 +196,9 @@ app.get('/', (req, res)=>{
            results
        }); 
     }, ()=>{
-        res.render("index.hbs");
+        res.render("index.hbs", {
+            user: req.session.user
+        });
     })
 })
 /*------------------------------------Home-------------------------------------*/
@@ -270,10 +273,10 @@ app.post("/authenticate", urlencoder, (req, res)=>{
                 public : true
             }).then((results)=>{
                 console.log("Logged in: " + req.session.user);
-//               res.render("index.hbs", {
-//                   user: req.session.user,
-//                   results
-//               }); 
+               res.render("index.hbs", {
+                   user: req.session.user,
+                   results
+               }); 
                 res.redirect("/");
             }, ()=>{
                 res.render("error.hbs");
@@ -329,7 +332,8 @@ app.get('/search/:id', (req, res)=>{
     Post.find({
         tags : req.params.id,
         public : true
-    }).limit(20).sort({
+    })
+        .limit(20).sort({
         date : -1
     }).populate('user')
     .then((results)=>{
@@ -395,398 +399,6 @@ app.post("/upload", urlencoder, upload.single("img"),(req, res)=>{
     })
 })
 
-
-
-
-
-
-
-
-
-/* old stuff below /*
-
-
-
-
-
-
-
-
-
-/*------------------------------------Tags-------------------------------------*/
-app.get('/anime-tag', (req, res)=>{
-    console.log("GET/ animeTagged.html");
-    res.sendFile(path.join(__dirname, '/views/animeTagged.html'));
-})
-
-app.get('/classic-tag', (req, res)=>{
-    console.log("GET/ classicTagged.html");
-    res.sendFile(path.join(__dirname, '/views/classicTagged.html'));
-})
-
-app.get('/dank-tag', (req, res)=>{
-    console.log("GET/ dankTagged.html");
-    res.sendFile(path.join(__dirname, '/views/dankTagged.html'));
-})
-
-app. get('/pinoy-tag', (req, res)=>{
-    console.log("GET/ pinoyTagged.html");
-    res.sendFile(path.join(__dirname, "/views/pinoyTagged.html"));
-})
-
-app.get('/wholesome-tag', (req, res)=>{
-    console.log("GET/ wholesomeTagged.html");
-    res.sendFile(path.join(__dirname, "/views/wholesomeTagged.html"));
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*OLD*/
-
-
-
-/*--------------------------------View Meme------------------------------------*/
-app.get('/view-meme-1', (req, res)=>{
-//    console.log("GET/ viewMeme/viewMeme1.html");
-//    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1.html"));
-    Post.findOne({title: "Test2"}).then((post)=>{
-        res.render("post.hbs", {
-            post,
-            user: req.session.user
-        })
-    })
-        
-})
-app.get('/view-meme-2', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme2.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme2.html"));
-})
-
-app.get('/view-meme-3', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme3.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme3.html"));
-})
-
-app.get('/view-meme-4', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme4.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme4.html"));
-})
-
-app.get('/view-meme-5', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme5.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme5.html"));
-})
-
-app.get('/view-meme-6', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme6.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme6.html"));
-})
-
-app.get('/view-meme-7', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme7.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme7.html"));
-})
-
-app.get('/view-meme-8', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme8.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme8.html"));
-})
-
-app.get('/view-meme-9', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme9.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme9.html"));
-})
-
-app.get('/view-meme-10', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme10.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme10.html"));
-})
-
-app.get('/view-meme-11', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme11.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme11.html"));
-})
-
-app.get('/view-meme-12', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme12.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme12.html"));
-})
-
-app.get('/view-meme-13', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme13.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme13.html"));
-})
-
-app.get('/view-meme-14', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme14.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme14.html"));
-})
-
-app.get('/view-meme-15', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme15.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme15.html"));
-})
-
-/*---------------------(ERROR_HTML)Error Private Post--------------------------*/
-app.get('/error-private-post', (req, res)=>{
-    console.log("GET/ viewMeme/ErrorHtml/ErrorPrivatePost.html");
-    res.sendFile(path.join(__dirname, "/views/ErrorHtml/ErrorPrivatePost.html"));
-})
-
-/************************************MINA***************************************/
-/*------------------------------User Home Page---------------------------------*/
-app.post('/user-home', urlencoder, (req, res)=>{
-    console.log("POST/ indexLoggedIn");
-    Post.find({
-        public : true
-    }).then((results)=>{
-       res.render("indexLoggedIn.hbs", {
-           user: req.session.user,
-           results
-       }); 
-    }, ()=>{
-        res.render("error.hbs");
-    })
-    
-    //res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
-})
-
-app.get('/user-home', urlencoder, (req, res)=>{
-    console.log("POST/ indexLoggedIn");
-    Post.find({
-        public : true
-    }).then((results)=>{
-       res.render("indexLoggedIn.hbs", {
-           user: req.session.user,
-           results
-       }); 
-    }, ()=>{
-        res.render("error.hbs");
-    })
-    //res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
-})
-
-/*------------------------(ERROR_HTML)Minas Profile----------------------------*/
-app.get('/mina-view-profile', (req, res)=>{
-    console.log("GET/ viewMeme/ErrorHtml/MinasProfile.html");
-    res.sendFile(path.join(__dirname, "/views/ErrorHtml/MinasProfile.html"));
-})
-/*----------------------------------Upload-------------------------------------*/
-app.get('/user-upload', (req, res)=>{
-    console.log('GET/ upload.html');
-    res.sendFile(path.join(__dirname, "/views/upload.html"));
-})
-/*--------------------------------User Memes-----------------------------------*/
-app.get('/user-profile', (req,res)=>{
-//    console.log('GET/ viewMeme/MinasMemes.html');
-//    res.sendFile(path.join(__dirname, "/views/viewMeme/MinasMemes.html"));
-    Post.find({user: req.session.user.username}).then((results)=>{
-        res.render("UserProfilePrivate.hbs", {
-            results,
-            user: req.session.user
-        })
-    })
-})
-/*--------------------------------Login Tags-----------------------------------*/
-app.get('/anime-tag-login', (req, res)=>{
-    console.log("GET/ animeTaggedLog.html");
-    res.sendFile(path.join(__dirname, '/views/animeTaggedLog.html'));
-})
-
-app.get('/classic-tag-login', (req, res)=>{
-    console.log("GET/ classicTaggedLog.html");
-    res.sendFile(path.join(__dirname, '/views/classicTaggedLog.html'));
-})
-
-app.get('/dank-tag-login', (req, res)=>{
-    console.log("GET/ dankTaggedLog.html");
-    res.sendFile(path.join(__dirname, '/views/dankTaggedLog.html'));
-})
-
-app. get('/pinoy-tag-login', (req, res)=>{
-    console.log("GET/ pinoyTaggedLog.html");
-    res.sendFile(path.join(__dirname, "/views/pinoyTaggedLog.html"));
-})
-
-app.get('/wholesome-tag-login', (req, res)=>{
-    console.log("GET/ wholesomeTaggedLog.html");
-    res.sendFile(path.join(__dirname, "/views/wholesomeTaggedLog.html"));
-})
-/*----------------------------User View Meme-----------------------------------*/
-app.get('/profile-view-meme-1', (req, res)=>{
-//    console.log("GET/ viewMeme/viewMeme1-1.html");
-//    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1-1.html"));
-    Post.findOne({title: "Test2"}).then((post)=>{
-        res.render("post.hbs", {
-            post,
-            user: req.session.user
-        })
-    })
-})
-
-app.get('/profile-view-meme-2', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme2-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme2-1.html"));
-})
-
-app.get('/profile-view-meme-3', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme3-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme3-1.html"));
-})
-//Edit Meme
-app.get('/profile-view-meme-3-edit', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme3-1Edit.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme3-1Edit.html"));
-})
-
-app.get('/profile-view-meme-4', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme4.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme4-1.html"));
-})
-//Edit Meme
-app.get('/profile-view-meme-4-edit', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme4-1Edit.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme4-1Edit.html"));
-})
-//Share Meme
-app.get('/profile-view-meme-4-share', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme4-1Share.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme4-1Share.html"));
-})
-
-app.get('/profile-view-meme-5', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme5-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme5-1.html"));
-})
-//Edit Meme
-app.get('/profile-view-meme-5-edit', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme5-1Edit.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme5-1Edit.html"));
-})
-//Share Meme
-app.get('/profile-view-meme-5-share', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme5-1Share.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme5-1Share.html"));
-})
-app.get('/profile-view-meme-6', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme6-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme6-1.html"));
-})
-
-app.get('/profile-view-meme-7', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme7-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme7-1html"));
-})
-
-app.get('/profile-view-meme-8', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme8-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme8-1.html"));
-})
-
-app.get('/profile-view-meme-9', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme9-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme9-1.html"));
-})
-
-app.get('/profile-view-meme-10', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme10-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme10-1.html"));
-})
-app.get('/profile-view-meme-11', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme11-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme11-1.html"));
-})
-
-app.get('/profile-view-meme-12', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme12-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme12-1.html"));
-})
-
-app.get('/profile-view-meme-13', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme13-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme13-1.html"));
-})
-
-app.get('/profile-view-meme-14', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme14-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme14-1.html"));
-})
-
-app.get('/profile-view-meme-15', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme15-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme15-1.html"));
-})
-
-app.get('/profile-view-meme-17', (req, res)=>{
-    console.log("GET/ viewMeme/viewMeme17-1.html");
-    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme17-1.html"));
-})
-
-/***********************************TZUYU***************************************/
-/*---------------------(ERROR_HTML)Error Not Logined---------------------------*/
-app.get('/tzuyu-profile', urlencoder, (req, res)=>{
-//    console.log(req.body.owner)
-//    var owner = req.body.owner.value
-//    
-//    Post.find({user: owner}).then((results)=>{
-//        User.findOne({username: owner}).then((user2)=>{
-//            res.render("userProfilePublic.hbs", {
-//            user1: req.session.user,
-//            results,
-//            user2
-//            })
-//        })
-//        
-//    })
-    if(req.session.user){
-        res.render("userProfilePublic.hbs",{
-            user1: req.session.user
-        })
-    }else{
-        res.render("userProfilePublic.hbs")
-    }
-//    res.sendFile(path.join(__dirname, "/views/ErrorHtml/ErrorNotLogged.html"));
-})
-
-app.get('/tzuyu-view-profile', urlencoder, (req, res)=>{
-//    console.log(req.body.owner)
-//    var owner = req.body.owner.value
-//    Post.find({user: owner}).then((results)=>{
-//        User.findOne({username: owner}).then((user2)=>{
-//            res.render("userProfilePublic.hbs", {
-//            user1: req.session.user,
-//            results,
-//            user2
-//            })
-//        })
-//        
-//    })
-    console.log("GET/ viewUser.html");
-    if(req.session.user){
-        res.render("userProfilePublic.hbs",{
-            user1: req.session.user
-        })
-    }else{
-        res.render("userProfilePublic.hbs")
-    }
-//    res.sendFile(path.join(__dirname, "/views/viewUser.html"));
-})
 
  app.listen(3000, ()=>{
      console.log("Listening to port 3000");

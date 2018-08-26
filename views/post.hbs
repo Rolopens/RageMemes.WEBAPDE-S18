@@ -222,7 +222,7 @@
                                 <td>
                                     <h2 class="tags">
                                          <i class="fa fa-tags"></i> {{#each post.tags}}
-                                        {{this}}{{#unless @last}},{{/unless}}
+                                        <a href="/search/{{this}}">{{this}}{{#unless @last}},{{/unless}}</a>
                                         {{/each}}
                                     </h2>
                                 </td>
