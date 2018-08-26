@@ -204,6 +204,7 @@
                 <div class="meme-post">
                     <!--Main details-->
                     <h1 class="display-4" style="text-align: left; color:#3E3E3B;" id="titleHead">{{post.title}}</h1>
+                    {{#if equal}}
                     <!--Uploader options-->
                     <div class="dropdown" id="editTag">
                         <img src="/res/ellipsis.png" width="30" height="30" class="d-inline-block align-top" alt="" data-toggle="dropdown">
@@ -217,6 +218,7 @@
                             <a data-toggle="modal" data-target="#modalDeletePost" class="dropdown-item"><i class="fa fa-trash"></i> Delete</a>
                         </ul>
                     </div>
+                    {{/if}}
                     <!--Main details (continued)-->
                     <img src="/post/photo/{{post.filename}}" class="image"> <!--fix link-->
                     <div class="details">

@@ -59,10 +59,22 @@ router.get('/meme/:id', (req, res)=>{
     console.log("GET/ Meme accessed: " + req.params.id);
 //    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1.html"));
      Post.findOne({_id: req.params.id}).populate('user').then((post)=>{
-        res.render("post.hbs", {
+        if(req.session.user != null){
+            if(post.user.username === req.session.user.username){
+            res.render("post.hbs", {
+            post,
+            user: req.session.user,
+            equal: req.session.user
+        })
+        } 
+        }else {
+           res.render("post.hbs", {
             post,
             user: req.session.user
-        })
+        }) 
+        }
+        
+        
     })  
 })
 /*-----------------------------------Uploading-----------------------------------*/

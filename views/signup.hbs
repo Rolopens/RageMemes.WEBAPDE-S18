@@ -46,12 +46,13 @@
             <form id="login" class="form-format" action="/user/signingup" method="post" enctype="multipart/form-data">
                 <h1>Create an account!</h1>
 <!--                <img class="mb-4" src="res/signup.png" alt="" width="72" height="72">-->
+                <h7>Choose a Profile Picture! (optional)</h7>
                 <input type="file" name="img" id="uploadProfilePic" onchange="previewFile()" accept="image/x-png,image/tiff,image/jpeg">
                 <img src="" id="preview" class="img-thumbnail" style="display: none;">
                 <label for="inputEmail" class="sr-only input-width">Email address</label>
-                <input type="email" name="email" id="inputEmail" class="form-control input-width" placeholder="Email address" required>
+                <input type="email" name="email" id="inputEmail" class="form-control input-width" placeholder="Email address" required autofocus>
                 <label for="inputPassword" class="sr-only input-width">Username</label>
-                <input type="text" name="uname" id="inputUsername" class="form-control input-width" placeholder="Username" required autofocus>
+                <input type="text" name="uname" id="inputUsername" class="form-control input-width" placeholder="Username" required>
                 <label for="inputPassword" class="sr-only input-width">Password</label>
                 <input type="password" name="pword" id="inputPassword" class="form-control input-width" placeholder="Password" required>
                 <input type="password" id="inputPassword" class="form-control input-width" placeholder="Confirm password" required><br>
