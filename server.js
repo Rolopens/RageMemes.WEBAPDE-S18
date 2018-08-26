@@ -102,78 +102,6 @@ mongoose.connect("mongodb://localhost:27017/memesdata", {
 
 
 
-
-
-
-app.get('/tag', (req, res)=>{
-    console.log("GET/");
-    
-    res.render("tag.hbs",{
-        tagTitle: "Viewing posts tagged Anime"
-    }, err=>{
-        console.log(err);
-    })
-//    res.sendFile(path.join(__dirname, '/views/index1.html'));
-})
-
-
-
-app.post("/UploadMeme", urlencoder, (req, res)=>{
-//    var title = req.body.title;
-//    var description = req.body.description;
-//    var tags = [];
-//    
-//    var anime = req.body.tag1.value;
-//    var classic = req.body.tag2.checked;
-//    var dank = req.body.tag3.checked;
-//    var pinoy = req.body.tag4.checked;
-//    var wholesome = req.body.tag5.checked;
-//    if(anime == true){
-//        tags.append("Anime");
-//    }
-//    if(classic == true){
-//        tags.append("Classic");
-//    }
-//    if(dank == true){
-//        tags.append("Dank");
-//    }
-//    if(pinoy == true){
-//        tags.append("Pinoy");
-//    }
-//    if(wholesome == true){
-//        tags.append("Wholesome");
-//    }
-//    
-//    var public = req.body.Private.checked;
-//    if(public == true){
-//        public = false;
-//    }
-//    else{
-//        public = true;
-//    }
-//    
-//    var post = new Post({
-//        title,
-//        description,
-//        user: req.session.user.username,
-//        tags,
-//        public
-//    })
-//    
-//    post.save().then(()=>{
-//        res.sendFile(path.join(__dirname, "/views/viewMeme/MinasMemes.html"));
-//    })
-})
-
-
-
-
-
-
-
-
-
-
 /* this is where everything i'm touching starts */
 
 
@@ -349,12 +277,7 @@ app.get('/search/:id', (req, res)=>{
 /*-----------------------------------Rendering images-----------------------------------*/
 app.get("/photo/:id", (req, res)=>{
   console.log(req.params.id)
-//  Post.findOne({_id: req.params.id}).then((doc)=>{
     fs.createReadStream(path.resolve(UPLOAD_PATH, req.params.id)).pipe(res)
-//  }, (err)=>{
-//    console.log(err)
-//    res.sendStatus(404)
-//  })
 })
 /*-----------------------------------Uploading-----------------------------------*/
 app.post("/upload", urlencoder, upload.single("img"),(req, res)=>{
