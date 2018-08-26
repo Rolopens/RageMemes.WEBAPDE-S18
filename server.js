@@ -255,6 +255,10 @@ app.post('/meme/:id/edit', urlencoder, (req, res)=>{
         var public = false;
     }
     
+    var tags = tags.filter(function(elem, index, self) {
+        return index === self.indexOf(elem);
+    })
+    
      Post.findOneAndUpdate({_id: req.params.id}, {title, description, tags, public}).then(
         res.redirect('/meme/' + req.params.id));
 })
@@ -271,6 +275,10 @@ app.post('/meme/:id/share', urlencoder, (req, res)=>{
         permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
         var permittedUsers = permittedUsersTemp.split(',');
     }
+    
+    var permittedUsers = permittedUsers.filter(function(elem, index, self) {
+        return index === self.indexOf(elem);
+    })
     
      Post.findOneAndUpdate({_id: req.params.id}, {permittedUsers}).then(
         res.redirect('/meme/' + req.params.id));
@@ -377,6 +385,13 @@ app.post("/upload", urlencoder, upload.single("img"),(req, res)=>{
         permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
         var permittedUsers = permittedUsersTemp.split(',');
     }
+    
+    var tags = tags.filter(function(elem, index, self) {
+        return index === self.indexOf(elem);
+    })
+    var permittedUsers = permittedUsers.filter(function(elem, index, self) {
+        return index === self.indexOf(elem);
+    })
     
     var p = new Post({
         title, filename, originalfilename, description, user, tags, public, permittedUsers
