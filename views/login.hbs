@@ -23,6 +23,9 @@
         <div class="container">
             <form id="login" class="form-format" action="/user/authenticate" method="post">
                 <h1>Account login</h1>
+                {{#if message}}
+                <div style="color:red;">{{message}}</div>
+                {{/if}}
                 <img class="mb-4" src="../res/loginface.png" alt="" width="72" height="72">
                 <label for="inputEmail" class="sr-only input-width">Email address</label>
                 <input type="email" name="email" id="inputEmail" class="form-control input-width" placeholder="Email address" required autofocus>

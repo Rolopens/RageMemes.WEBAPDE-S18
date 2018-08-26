@@ -44,6 +44,9 @@
         <!--signup contents-->
         <div class="container">
             <form id="login" class="form-format" action="/user/signingup" method="post" enctype="multipart/form-data">
+                {{#if message}}
+                <div style="color:red;">{{message}}</div>
+                {{/if}}
                 <h1>Create an account!</h1>
 <!--                <img class="mb-4" src="res/signup.png" alt="" width="72" height="72">-->
                 <h7>Choose a Profile Picture! (optional)</h7>
@@ -55,7 +58,7 @@
                 <input type="text" name="uname" id="inputUsername" class="form-control input-width" placeholder="Username" required>
                 <label for="inputPassword" class="sr-only input-width">Password</label>
                 <input type="password" name="pword" id="inputPassword" class="form-control input-width" placeholder="Password" required>
-                <input type="password" id="inputPassword" class="form-control input-width" placeholder="Confirm password" required><br>
+                <br>
                 <label for="inputPassword" class="sr-only input-width">Short description</label>
                 <input type="text" name="briefDescription" id="inputDescription" class="form-control input-width" maxlength="150" placeholder="Brief description of yourself"><br>
 <!--      <input type="submit" value="Upload">-->

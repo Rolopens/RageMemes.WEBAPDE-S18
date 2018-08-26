@@ -81,7 +81,9 @@ router.post("/signingUp", urlencoder, upload.single("img"), (req, res)=>{
         }).then((existingUser)=>{
         if(existingUser){
             console.log("Error: Invalid username");
-            res.redner("signup.hbs");
+            res.render("signup.hbs", {
+                message: "ERROR: User already exists"
+            });
         }
         else{
             user.save().then((doc)=>{                                            
@@ -127,7 +129,9 @@ router.post("/authenticate", urlencoder, (req, res)=>{
 //        res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
         }
         else{
-            res.render("login.hbs"); //static
+            res.render("login.hbs", {
+                message: "ERROR: invalid credentials"
+            }); //static
         }
     })
 })
