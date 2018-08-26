@@ -139,6 +139,15 @@ body{
 
 .modal-body{
     font-size:90%;
+    overflow:hidden;
+}
+
+.btn-default{
+    width:18%;
+}
+
+#cancel-button{
+    background-color:#c4cec4;
 }
 
 #upload-button{
@@ -201,5 +210,25 @@ body{
 }
 
 #side-content .field{
-    font-weight: bold;
+    font-weight:bold;
+    width:120px;
+    vertical-align:text-top;
+}
+
+.no-results{    
+    background-color:#EBECED;
+    position: fixed;
+    top: 18%;
+    left: 60%;
+/*    -webkit-transform: translate(-50%, -50%);*/
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: auto;
+    width: 60%;
+    height: 15%;
 }

@@ -26,6 +26,7 @@ body{
     justify-content: left;
     align-items: left;
     flex-direction: column;
+    position: relative; /* changed from home */
 }
 
 #main-content{
@@ -139,6 +140,15 @@ body{
 
 .modal-body{
     font-size:90%;
+    overflow:hidden;
+}
+
+.btn-default{
+    width:18%;
+}
+
+#cancel-button{
+    background-color:#c4cec4;
 }
 
 #upload-button{
@@ -192,6 +202,16 @@ th {
     font-size:20px;
 }
 
-/* span.icon {
-  font-family: 'Glyphicons Halflings';
-}*/
+#editTag{
+    position:absolute;
+    top:0px;
+    right:0px;
+}
+
+#delete-button{
+    background-color:#f45252;
+}
+
+#deleteMessage{
+    font-size:100%;
+}

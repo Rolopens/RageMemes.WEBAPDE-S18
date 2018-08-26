@@ -114,8 +114,7 @@ app.get('/', (req, res)=>{
     console.log("GET/ ");
     Post.find({
         public : true
-    })
-    .limit(20).sort({
+    }).limit(20).sort({
         date : -1
     }).populate('user')
     .then((results)=>{
@@ -233,6 +232,56 @@ app.get('/meme/:id', (req, res)=>{
         })
     })  
 })
+/*-----------------------------------Editing individual posts-----------------------------------*/
+app.post('/meme/:id/edit', urlencoder, (req, res)=>{
+    console.log("POST/ Meme accessed (edit): " + req.params.id);
+    
+    var title = req.body.title;
+    var description = req.body.description; 
+    var tags = [];
+    
+    if(req.body.tags) {
+        var tagsTemp = (req.body.tags).replace(/  +/g, ' ');
+        tagsTemp = tagsTemp.replace(/, /g,',');
+        tagsTemp = tagsTemp.replace(/ ,/g,',');
+        tagsTemp = tagsTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
+        var tags = tagsTemp.split(',');
+    }
+
+    if(req.body.public == 'Public'){
+        var public = true;
+    }
+    else{
+        var public = false;
+    }
+    
+     Post.findOneAndUpdate({_id: req.params.id}, {title, description, tags, public}).then(
+        res.redirect('/meme/' + req.params.id));
+})
+/*-----------------------------------Sharing individual posts-----------------------------------*/
+app.post('/meme/:id/share', urlencoder, (req, res)=>{
+    console.log("POST/ Meme accessed (share): " + req.params.id);
+    
+    var permittedUsers = [];
+    
+    if(req.body.permittedUsers) {
+        var permittedUsersTemp = (req.body.permittedUsers).replace(/  +/g, ' ');
+        permittedUsersTemp = permittedUsersTemp.replace(/, /g,',');
+        permittedUsersTemp = permittedUsersTemp.replace(/ ,/g,',');
+        permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
+        var permittedUsers = permittedUsersTemp.split(',');
+    }
+    
+     Post.findOneAndUpdate({_id: req.params.id}, {permittedUsers}).then(
+        res.redirect('/meme/' + req.params.id));
+})
+/*-----------------------------------Deleting individual posts-----------------------------------*/
+app.post('/meme/:id/delete', urlencoder, (req, res)=>{
+    console.log("POST/ Meme accessed (delete): " + req.params.id);
+    
+     Post.remove({_id: req.params.id}).then(
+        res.redirect('/'));
+})
 /*-----------------------------------Viewing individual user pages-----------------------------------*/
 app.get('/user/:id', (req, res)=>{
     console.log("GET/ User accessed: " + req.params.id);
@@ -255,13 +304,29 @@ app.post('/search', urlencoder, (req, res)=>{
     console.log(req.body.searchInput);
     res.redirect('/search/' + req.body.searchInput);
 })
-/*-----------------------------------Searching posts by tag-----------------------------------*/
 app.get('/search/:id', (req, res)=>{
     Post.find({
         tags : req.params.id,
         public : true
+    }).limit(20).sort({
+        date : -1
+    }).populate('user')
+    .then((results)=>{
+       res.render("index.hbs", {
+           user: req.session.user,
+           searchInput: req.params.id,
+           results
+       }); 
+    }, ()=>{
+        res.render("error.hbs"); // should have "Results not found"
     })
-        .limit(20).sort({
+})
+/*-----------------------------------Viewing posts by tag-----------------------------------*/
+app.get('/tagged/:id', (req, res)=>{
+    Post.find({
+        tags : req.params.id,
+        public : true
+    }).limit(20).sort({
         date : -1
     }).populate('user')
     .then((results)=>{
@@ -300,16 +365,16 @@ app.post("/upload", urlencoder, upload.single("img"),(req, res)=>{
     
     if(req.body.tags) {
         var tagsTemp = (req.body.tags).replace(/  +/g, ' ');
+        tagsTemp = tagsTemp.replace(/, /g,',');
+        tagsTemp = tagsTemp.replace(/ ,/g,',');
         tagsTemp = tagsTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
-        tagsTemp = tagsTemp.replace(' ,',',');
-        tagsTemp = tagsTemp.replace(', ',',');
         var tags = tagsTemp.split(',');
     }
     if(req.body.permittedUsers) {
         var permittedUsersTemp = (req.body.permittedUsers).replace(/  +/g, ' ');
+        permittedUsersTemp = permittedUsersTemp.replace(/, /g,',');
+        permittedUsersTemp = permittedUsersTemp.replace(/ ,/g,',');
         permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
-        permittedUsersTemp = permittedUsersTemp.replace(' ,',',');
-        permittedUsersTemp = permittedUsersTemp.replace(', ',',');
         var permittedUsers = permittedUsersTemp.split(',');
     }
     
