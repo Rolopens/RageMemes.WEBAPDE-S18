@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>Login</title>
+        <!-- Bootstrap core CSS -->
+        <link href="../css/bootstrap.css" rel="stylesheet">
+        <!-- Custom styles for this template -->
+        <link href="../css/login-signup.css" rel="stylesheet">
+    </head>
+   
+    <body>
+        <!--navbar-->
+        <nav class="fixed-top navbar navbar-expand-lg home-navbar reverse-order">
+            <a class="navbar-brand whitewash-text" href="/">
+                <img src="../res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                RageMemes
+            </a>
+<!--
+            <input class="searchbar" type="search" placeholder="Search">
+            <button class="btn btn-primary" type="submit"><img src="res/search.png" width="20" height="20s  "></button>
+-->
+        </nav>
+        <!--login contents-->
+        <div class="container">
+            <form id="login" class="form-format" action="/user/authenticate" method="post">
+                <h1>Account login</h1>
+                <img class="mb-4" src="../res/loginface.png" alt="" width="72" height="72">
+                <label for="inputEmail" class="sr-only input-width">Email address</label>
+                <input type="email" name="email" id="inputEmail" class="form-control input-width" placeholder="Email address" required autofocus>
+                <label for="inputPassword" class="sr-only input-width">Password</label>
+                <input type="password" name="pword" id="inputPassword" class="form-control input-width" placeholder="Password" required><br>
+<!--                <div style="display: flex; flex-direction: row;"><input name="remember" style="vertical-align: center; margin:2px;" type="checkbox">Remember me</div>-->
+                <button class="btn btn-lg btn-primary btn-block input-width" type="submit">Log in</button>
+                <div class="checkbox mb-3 mt-4">
+                    <a href="/user/signup">Want to join? Sign up!</a>
+                </div>
+                <p class="mt-5 mb-3 text-muted">&copy; RageMemes by Michiko Go, Miggy Llamas, Rolo Peña 2018</p>
+            </form>
+        </div>   
+    </body>
+</html>

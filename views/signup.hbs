@@ -1,0 +1,70 @@
+<html>
+    <head>
+        <title>Create an account!</title>
+        <!-- Bootstrap core CSS -->
+        <link href="../css/bootstrap.css" rel="stylesheet">
+        <!-- Custom styles for this template -->
+        <link href="../css/login-signup.css" rel="stylesheet">
+    
+        <script>
+            function previewFile() {
+                var preview = document.querySelector('img[id=preview]');
+                var file = document.querySelector('input[type=file]').files[0];
+                var reader = new FileReader();
+
+                reader.onloadend = function() {
+                    preview.src = reader.result;
+                    preview.width = 250;
+                    preview.height = 250;
+                    preview.style.display = "block";
+                }
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = "";
+                }
+            }
+            previewFile();
+        </script>
+        
+    </head>
+   
+    <body>
+        <!--navbar-->
+        <nav class="fixed-top navbar navbar-expand-lg home-navbar reverse-order">
+            <a class="navbar-brand whitewash-text" href="/">
+                <img src="../res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                RageMemes
+            </a>
+<!--
+            <input class="searchbar" type="search" placeholder="Search">
+            <button class="btn btn-primary" type="submit"><img src="res/search.png" width="20" height="20s  "></button>
+-->
+        </nav>
+        <!--signup contents-->
+        <div class="container">
+            <form id="login" class="form-format" action="/user/signingup" method="post" enctype="multipart/form-data">
+                <h1>Create an account!</h1>
+<!--                <img class="mb-4" src="res/signup.png" alt="" width="72" height="72">-->
+                <input type="file" name="img" id="uploadProfilePic" onchange="previewFile()" accept="image/x-png,image/tiff,image/jpeg">
+                <img src="" id="preview" class="img-thumbnail" style="display: none;">
+                <label for="inputEmail" class="sr-only input-width">Email address</label>
+                <input type="email" name="email" id="inputEmail" class="form-control input-width" placeholder="Email address" required>
+                <label for="inputPassword" class="sr-only input-width">Username</label>
+                <input type="text" name="uname" id="inputUsername" class="form-control input-width" placeholder="Username" required autofocus>
+                <label for="inputPassword" class="sr-only input-width">Password</label>
+                <input type="password" name="pword" id="inputPassword" class="form-control input-width" placeholder="Password" required>
+                <input type="password" id="inputPassword" class="form-control input-width" placeholder="Confirm password" required><br>
+                <label for="inputPassword" class="sr-only input-width">Short description</label>
+                <input type="text" name="briefDescription" id="inputDescription" class="form-control input-width" maxlength="150" placeholder="Brief description of yourself"><br>
+<!--      <input type="submit" value="Upload">-->
+                <button class="btn btn-lg btn-success btn-block input-width" type="submit">Sign up</button>
+            
+                <div class="checkbox mb-3 mt-4">
+                    <a href="/user/login">Have an account? Log in!</a>
+                </div>
+                <p class="mt-5 mb-3 text-muted">&copy; RageMemes by Michiko Go, Miggy Llamas, Rolo Peña 2018</p>
+            </form>
+        </div>
+    </body>
+</html>

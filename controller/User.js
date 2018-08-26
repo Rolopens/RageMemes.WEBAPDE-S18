@@ -1,9 +1,11 @@
+// packages
+const crypto = require("crypto");
 const express = require("express")
 const router = express.Router()
-const User = require("../models/user")
 const bodyparser = require("body-parser")
-const auth = require("../middlewares/auth")
-const Post = require("../models/post")
+const auth = require("../middleware/auth")
+const hbs = require('hbs');
+const path = require('path');
 
 const app = express()
 
@@ -11,14 +13,48 @@ const urlencoder = bodyparser.urlencoded({
   extended : true
 })
 
+// upload packages
+const multer = require("multer")
+const fs = require("fs")
+
+// custom packages
+const moment = require("moment")
+
+// defined in model
+const {Post} = require("../model/Post.js");
+const {User} = require("../model/User.js");
+
+// uploading
+const UPLOAD_PATH = path.resolve(__dirname, "resources");
+const upload = multer({
+  dest: UPLOAD_PATH,
+  limits: {
+    fileSize : 10000000,
+    files : 2
+  }
+})
+
+// handlebars helpers
+hbs.registerHelper('formatDate', function(dateString) {
+    return new hbs.SafeString(
+        moment(dateString).format("MMMM DD, YYYY")
+    );
+});
+
 router.use(urlencoder)
 
-/*-----------------------------------Sign up-----------------------------------*/
-app.get('/signup', (req,res)=>{
-    console.log("GET/ signup");
-    res.sendFile(path.join(__dirname, '/views/signup.html')); //static
+/*-----------------------------------Rendering images-----------------------------------*/
+router.get("/photo/:id", (req, res)=>{
+  console.log(req.params.id)
+    fs.createReadStream(path.resolve(UPLOAD_PATH, req.params.id)).pipe(res)
 })
-app.post("/signingUp", urlencoder, upload.single("img"), (req, res)=>{
+
+/*-----------------------------------Sign up-----------------------------------*/
+router.get('/signup', (req,res)=>{
+    console.log("GET/ signup");
+    res.render("signup.hbs") //static
+})
+router.post("/signingUp", urlencoder, upload.single("img"), (req, res)=>{
     console.log("POST/ signingup");
     var username = req.body.uname;
     var password = req.body.pword;
@@ -45,7 +81,7 @@ app.post("/signingUp", urlencoder, upload.single("img"), (req, res)=>{
         }).then((existingUser)=>{
         if(existingUser){
             console.log("Error: Invalid username");
-            res.sendFile(path.join(__dirname, '/views/signup.html'));
+            res.redner("signup.hbs");
         }
         else{
             user.save().then((doc)=>{                                            
@@ -59,11 +95,11 @@ app.post("/signingUp", urlencoder, upload.single("img"), (req, res)=>{
     });        
 })
 /*------------------------------------Login------------------------------------*/
-app.get('/login', (req, res)=>{
+router.get('/login', (req, res)=>{
     console.log("GET/ login");
-    res.sendFile(path.join(__dirname, '/views/login.html')); //static
+    res.render("login.hbs"); //static
 })
-app.post("/authenticate", urlencoder, (req, res)=>{
+router.post("/authenticate", urlencoder, (req, res)=>{
     console.log("POST/ authenticate, login successful");
     var password = req.body.pword;
     var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
@@ -91,18 +127,18 @@ app.post("/authenticate", urlencoder, (req, res)=>{
 //        res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
         }
         else{
-            res.sendFile(path.join(__dirname, '/views/login.html')); //static
+            res.render("login.hbs"); //static
         }
     })
 })
 /*------------------------------------Logout------------------------------------*/
-app.get('/logout', (req, res)=>{
+router.get('/logout', (req, res)=>{
     console.log("GET/ logout");
     req.session.destroy();
     res.redirect("/");
 })
 /*-----------------------------------Viewing individual user pages-----------------------------------*/
-app.get('/user/:id', (req, res)=>{
+router.get('/:id', (req, res)=>{
     console.log("GET/ User accessed: " + req.params.id);
     User.findOne({username: req.params.id}).then((user2)=>{
         Post.find({
@@ -118,3 +154,5 @@ app.get('/user/:id', (req, res)=>{
          })
     })       
 })
+
+module.exports = router

@@ -1,5 +1,13 @@
-/*-----------------------------------Rendering images-----------------------------------*/
-app.get("/photo/:id", (req, res)=>{
-  console.log(req.params.id)
-    fs.createReadStream(path.resolve(UPLOAD_PATH, req.params.id)).pipe(res)
-})
+
+
+module.exports = function(req, res, next){
+
+  if(req.session.username){
+    console.log("exists")
+    next()
+  }else{
+      res.render("index", {
+        error : "Error"
+      })
+  }
+}

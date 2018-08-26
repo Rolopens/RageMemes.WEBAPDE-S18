@@ -50,12 +50,12 @@
          <!--Navbar-->
         <nav class="fixed-top navbar navbar-expand-lg home-navbar reverse-order">
             <!--Home icon-->
-            <a class="navbar-brand whitewash-text" href="/home">
+            <a class="navbar-brand whitewash-text" href="/">
                 <img src="/res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 RageMemes
             </a>                         
             <!--Search-->
-            <form id="searchTag" action="/search" method="post">           
+            <form id="searchTag" action="/post/search" method="post">           
                 <input class="searchbar" type="text" name="searchInput" placeholder="Search a tag..." value="{{searchInput}}" required>
                 <button class="btn btn-primary" type="submit" id="search-button"><img src="/res/search.png" width="20" height="20s"></button>
             </form>                
@@ -63,7 +63,7 @@
             {{#if user}}
             <div class="dropdown">
                 {{#if user.filename}}
-                <img src="/photo/{{user.filename}}" class="avatar" data-toggle="dropdown">
+                <img src="/post/photo/{{user.filename}}" class="avatar" data-toggle="dropdown">
                 {{else}}
                 <img src="/res/default.jpg" class="avatar" data-toggle="dropdown">
                 {{/if}}
@@ -71,7 +71,7 @@
                     <li><a href="/user/{{user.username}}" class="dropdown-item">My profile</a></li>
                     <li><a href="#" class="dropdown-item">Settings</a></li>
                     <div class="dropdown-divider"></div>
-                    <a href="/logout" class="dropdown-item">Log out</a>
+                    <a href="/user/logout" class="dropdown-item">Log out</a>
                 </ul>
             </div>
             <a class="nav-link whitewash-text right-floater" href="/user/{{user.username}}">{{user.username}}<span class="sr-only">(current)</span></a>
@@ -89,7 +89,7 @@
             <div class="user-container">
                 <div class="user-box">
                     {{#if user2.filename}}
-                    <img src="/photo/{{user2.filename}}" class="avatar" data-toggle="dropdown">
+                    <img src="/post/photo/{{user2.filename}}" class="avatar" data-toggle="dropdown">
                     {{else}}
                     <img src="/res/default.jpg" class="avatar" data-toggle="dropdown">
                     {{/if}}
@@ -137,7 +137,7 @@
                             <h4 class="modal-title w-100 font-weight-bold">Upload a meme!</h4>
                         </div>
                         <div class="modal-body mx-3">
-                            <form id="uploadMeme" class="form-format" action="/upload" method="post" enctype="multipart/form-data">
+                            <form id="uploadMeme" class="form-format" action="/post/upload" method="post" enctype="multipart/form-data">
                                 <input type="file" id="uploadMemePic" onchange="previewFile()" accept="image/x-png,image/tiff,image/jpeg" name="img" required><br><br>
                                 <img src="" id="preview" class="img-thumbnail" style="display: none;"><br>
                                 <label for="defaultForm-title" class="modal-label">Title</label><br>
@@ -175,8 +175,8 @@
                 {{#each results}}
                     <div class="meme-container">
                         <div class="meme-post">
-                            <h1 class="display-4" style="text-align: left;"><a href="/meme/{{_id}}">{{title}}</a></h1>
-                            <a data-id="{{_id}}" href="/meme/{{_id}}"><img src="/photo/{{filename}}" class="image"></a>
+                            <h1 class="display-4" style="text-align: left;"><a href="/post/meme/{{_id}}">{{title}}</a></h1>
+                            <a data-id="{{_id}}" href="/post/meme/{{_id}}"><img src="/post/photo/{{filename}}" class="image"></a>
                         </div>
                     </div>
                 {{/each}}

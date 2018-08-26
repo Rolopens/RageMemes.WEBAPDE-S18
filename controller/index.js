@@ -1,0 +1,39 @@
+const express = require("express")
+const router = express.Router()
+const app = express()
+//const Post = require("../model/Post.js")
+
+//// defined in model
+const {Post} = require("../model/Post.js");
+const {User} = require("../model/User.js");
+
+// load all the controllers into router
+router.use("/post", require("./Post.js"))
+router.use("/user", require("./User.js"))
+
+/*-----------------------------------Default-----------------------------------*/
+router.get('/', (req, res)=>{
+    Post.find().then((docs)=>{
+        console.log(docs)
+    })
+    console.log(req.session.user + 'this is where the user is printed!!!!!!!!!!!!!!!!!!!!!!!');
+    console.log("GET/ ");
+    Post.find({
+        public : true
+    })
+    .limit(20).sort({
+        date : -1
+    }).populate('user')
+    .then((results)=>{
+       res.render("index.hbs", {
+           user: req.session.user,
+           results
+       }); 
+    }, ()=>{
+        res.render("index.hbs", {
+            user: req.session.user
+        });
+    })
+})
+
+module.exports = router

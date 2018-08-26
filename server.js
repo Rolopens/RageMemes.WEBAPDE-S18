@@ -105,303 +105,224 @@ mongoose.connect("mongodb://localhost:27017/memesdata", {
 /* this is where everything i'm touching starts */
 
 
-/*-----------------------------------Default-----------------------------------*/
-app.get('/', (req, res)=>{
-    Post.find().then((docs)=>{
-        console.log(docs)
-    })
-    console.log(req.session.user + 'this is where the user is printed!!!!!!!!!!!!!!!!!!!!!!!');
-    console.log("GET/ ");
-    Post.find({
-        public : true
-    }).limit(20).sort({
-        date : -1
-    }).populate('user')
-    .then((results)=>{
-       res.render("index.hbs", {
-           user: req.session.user,
-           results
-       }); 
-    }, ()=>{
-        res.render("index.hbs", {
-            user: req.session.user
-        });
-    })
-})
-/*------------------------------------Home-------------------------------------*/
-app.get('/home', (req, res)=>{
-    console.log("GET/ home");
-    res.redirect("/");
-})
-/*-----------------------------------Sign up-----------------------------------*/
-app.get('/signup', (req,res)=>{
-    console.log("GET/ signup");
-    res.sendFile(path.join(__dirname, '/views/signup.html')); //static
-})
-app.post("/signingUp", urlencoder, upload.single("img"), (req, res)=>{
-    console.log("POST/ signingup");
-    var username = req.body.uname;
-    var password = req.body.pword;
-    var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
-    var email = req.body.email;
-    var briefDescription = req.body.briefDescription;
-    
-    if(req.file){
-        console.log(req.file.filename)
-        var filename = req.file.filename;
-        var originalfilename = req.file.originalfilename;
-        var user = new User({
-            username, password: hashedpassword, email, filename, originalfilename, briefDescription
-        })
-    }
-    else{
-        var user = new User({
-            username, password: hashedpassword, email, briefDescription
-        })
-    }
-    
-    User.findOne({ 
-        $or: [ { username: user.username}, { email: user.email } ] 
-        }).then((existingUser)=>{
-        if(existingUser){
-            console.log("Error: Invalid username");
-            res.sendFile(path.join(__dirname, '/views/signup.html'));
-        }
-        else{
-            user.save().then((doc)=>{                                            
-            User.find().then((docs)=>{
-                console.log(docs)
-            })
-            req.session.user = user;
-            res.redirect("/"); 
-        })
-        } 
-    });        
-})
-/*------------------------------------Login------------------------------------*/
-app.get('/login', (req, res)=>{
-    console.log("GET/ login");
-    res.sendFile(path.join(__dirname, '/views/login.html')); //static
-})
-app.post("/authenticate", urlencoder, (req, res)=>{
-    console.log("POST/ authenticate, login successful");
-    var password = req.body.pword;
-    var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
-    var email = req.body.email;
-    
-    User.findOne({
-        email, password: hashedpassword
-    }).then((user)=>{
-        if(user){
-            console.log(user.username);
-            req.session.user = user;
-            
-            Post.find({
-                public : true
-            }).then((results)=>{
-                console.log("Logged in: " + req.session.user);
-               res.render("index.hbs", {
-                   user: req.session.user,
-                   results
-               }); 
-                res.redirect("/");
-            }, ()=>{
-                res.render("error.hbs");
-            })
-//        res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
-        }
-        else{
-            res.sendFile(path.join(__dirname, '/views/login.html')); //static
-        }
-    })
-})
-/*------------------------------------Logout------------------------------------*/
-app.get('/logout', (req, res)=>{
-    console.log("GET/ logout");
-    req.session.destroy();
-    res.redirect("/");
-})
-/*-----------------------------------Viewing individual posts-----------------------------------*/
-app.get('/meme/:id', (req, res)=>{
-    console.log("GET/ Meme accessed: " + req.params.id);
-//    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1.html"));
-     Post.findOne({_id: req.params.id}).populate('user').then((post)=>{
-        res.render("post.hbs", {
-            post,
-            user: req.session.user
-        })
-    })  
-})
-/*-----------------------------------Editing individual posts-----------------------------------*/
-app.post('/meme/:id/edit', urlencoder, (req, res)=>{
-    console.log("POST/ Meme accessed (edit): " + req.params.id);
-    
-    var title = req.body.title;
-    var description = req.body.description; 
-    var tags = [];
-    
-    if(req.body.tags) {
-        var tagsTemp = (req.body.tags).replace(/  +/g, ' ');
-        tagsTemp = tagsTemp.replace(/, /g,',');
-        tagsTemp = tagsTemp.replace(/ ,/g,',');
-        tagsTemp = tagsTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
-        var tags = tagsTemp.split(',');
-    }
+///*-----------------------------------Default-----------------------------------*/
+//app.get('/', (req, res)=>{
+//    Post.find().then((docs)=>{
+//        console.log(docs)
+//    })
+//    console.log(req.session.user + 'this is where the user is printed!!!!!!!!!!!!!!!!!!!!!!!');
+//    console.log("GET/ ");
+//    Post.find({
+//        public : true
+//    })
+//    .limit(20).sort({
+//        date : -1
+//    }).populate('user')
+//    .then((results)=>{
+//       res.render("index.hbs", {
+//           user: req.session.user,
+//           results
+//       }); 
+//    }, ()=>{
+//        res.render("index.hbs", {
+//            user: req.session.user
+//        });
+//    })
+//})
+///*------------------------------------Home-------------------------------------*/
+//app.get('/home', (req, res)=>{
+//    console.log("GET/ home");
+//    res.redirect("/");
+//})
+///*-----------------------------------Sign up-----------------------------------*/
+//app.get('/signup', (req,res)=>{
+//    console.log("GET/ signup");
+//    res.sendFile(path.join(__dirname, '/views/signup.html')); //static
+//})
+//app.post("/signingUp", urlencoder, upload.single("img"), (req, res)=>{
+//    console.log("POST/ signingup");
+//    var username = req.body.uname;
+//    var password = req.body.pword;
+//    var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
+//    var email = req.body.email;
+//    var briefDescription = req.body.briefDescription;
+//    
+//    if(req.file){
+//        console.log(req.file.filename)
+//        var filename = req.file.filename;
+//        var originalfilename = req.file.originalfilename;
+//        var user = new User({
+//            username, password: hashedpassword, email, filename, originalfilename, briefDescription
+//        })
+//    }
+//    else{
+//        var user = new User({
+//            username, password: hashedpassword, email, briefDescription
+//        })
+//    }
+//    
+//    User.findOne({ 
+//        $or: [ { username: user.username}, { email: user.email } ] 
+//        }).then((existingUser)=>{
+//        if(existingUser){
+//            console.log("Error: Invalid username");
+//            res.sendFile(path.join(__dirname, '/views/signup.html'));
+//        }
+//        else{
+//            user.save().then((doc)=>{                                            
+//            User.find().then((docs)=>{
+//                console.log(docs)
+//            })
+//            req.session.user = user;
+//            res.redirect("/"); 
+//        })
+//        } 
+//    });        
+//})
+///*------------------------------------Login------------------------------------*/
+//app.get('/login', (req, res)=>{
+//    console.log("GET/ login");
+//    res.sendFile(path.join(__dirname, '/views/login.html')); //static
+//})
+//app.post("/authenticate", urlencoder, (req, res)=>{
+//    console.log("POST/ authenticate, login successful");
+//    var password = req.body.pword;
+//    var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
+//    var email = req.body.email;
+//    
+//    User.findOne({
+//        email, password: hashedpassword
+//    }).then((user)=>{
+//        if(user){
+//            console.log(user.username);
+//            req.session.user = user;
+//            
+//            Post.find({
+//                public : true
+//            }).then((results)=>{
+//                console.log("Logged in: " + req.session.user);
+//               res.render("index.hbs", {
+//                   user: req.session.user,
+//                   results
+//               }); 
+//                res.redirect("/");
+//            }, ()=>{
+//                res.render("error.hbs");
+//            })
+////        res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
+//        }
+//        else{
+//            res.sendFile(path.join(__dirname, '/views/login.html')); //static
+//        }
+//    })
+//})
+///*------------------------------------Logout------------------------------------*/
+//app.get('/logout', (req, res)=>{
+//    console.log("GET/ logout");
+//    req.session.destroy();
+//    res.redirect("/");
+//})
+///*-----------------------------------Viewing individual posts-----------------------------------*/
+//app.get('/meme/:id', (req, res)=>{
+//    console.log("GET/ Meme accessed: " + req.params.id);
+////    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1.html"));
+//     Post.findOne({_id: req.params.id}).populate('user').then((post)=>{
+//        res.render("post.hbs", {
+//            post,
+//            user: req.session.user
+//        })
+//    })  
+//})
+///*-----------------------------------Viewing individual user pages-----------------------------------*/
+//app.get('/user/:id', (req, res)=>{
+//    console.log("GET/ User accessed: " + req.params.id);
+//    User.findOne({username: req.params.id}).then((user2)=>{
+//        Post.find({
+//            user : user2
+//        }).limit(20).sort({
+//            date : -1
+//        }).then((results)=>{
+//             res.render("userProfilePublic.hbs", {
+//                 user: req.session.user,
+//                 user2,
+//                 results
+//             });
+//         })
+//    })       
+//})
+///*-----------------------------------Searching posts by tag-----------------------------------*/
+//app.post('/search', urlencoder, (req, res)=>{
+//    console.log(req.body.searchInput);
+//    res.redirect('/search/' + req.body.searchInput);
+//})
+///*-----------------------------------Searching posts by tag-----------------------------------*/
+//app.get('/search/:id', (req, res)=>{
+//    Post.find({
+//        tags : req.params.id,
+//        public : true
+//    })
+//        .limit(20).sort({
+//        date : -1
+//    }).populate('user')
+//    .then((results)=>{
+//       res.render("index.hbs", {
+//           user: req.session.user,
+//           searchInput: req.params.id,
+//           results
+//       }); 
+//    }, ()=>{
+//        res.render("error.hbs"); // should have "Results not found"
+//    })
+//})
+///*-----------------------------------Rendering images-----------------------------------*/
+//app.get("/photo/:id", (req, res)=>{
+//  console.log(req.params.id)
+//    fs.createReadStream(path.resolve(UPLOAD_PATH, req.params.id)).pipe(res)
+//})
+///*-----------------------------------Uploading-----------------------------------*/
+//app.post("/upload", urlencoder, upload.single("img"),(req, res)=>{
+//    console.log("POST/ upload");
+//    
+//    var title = req.body.title;
+//    var filename = req.file.filename;
+//    var originalfilename = req.file.originalfilename;
+//    var description = req.body.description;
+//    var user = req.session.user._id;        
+//    var tags = [];
+//    var permittedUsers = [];
+//
+//    if(req.body.public == 'Public'){
+//        var public = true;
+//    }
+//    else{
+//        var public = false;
+//    }
+//    
+//    if(req.body.tags) {
+//        var tagsTemp = (req.body.tags).replace(/  +/g, ' ');
+//        tagsTemp = tagsTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
+//        tagsTemp = tagsTemp.replace(' ,',',');
+//        tagsTemp = tagsTemp.replace(', ',',');
+//        var tags = tagsTemp.split(',');
+//    }
+//    if(req.body.permittedUsers) {
+//        var permittedUsersTemp = (req.body.permittedUsers).replace(/  +/g, ' ');
+//        permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
+//        permittedUsersTemp = permittedUsersTemp.replace(' ,',',');
+//        permittedUsersTemp = permittedUsersTemp.replace(', ',',');
+//        var permittedUsers = permittedUsersTemp.split(',');
+//    }
+//    
+//    var p = new Post({
+//        title, filename, originalfilename, description, user, tags, public, permittedUsers
+//    })       
+//    
+//    p.save().then((doc)=>{
+//        res.redirect("/")
+//    })
+//})
 
-    if(req.body.public == 'Public'){
-        var public = true;
-    }
-    else{
-        var public = false;
-    }
-    
-    var tags = tags.filter(function(elem, index, self) {
-        return index === self.indexOf(elem);
-    })
-    
-     Post.findOneAndUpdate({_id: req.params.id}, {title, description, tags, public}).then(
-        res.redirect('/meme/' + req.params.id));
-})
-/*-----------------------------------Sharing individual posts-----------------------------------*/
-app.post('/meme/:id/share', urlencoder, (req, res)=>{
-    console.log("POST/ Meme accessed (share): " + req.params.id);
-    
-    var permittedUsers = [];
-    
-    if(req.body.permittedUsers) {
-        var permittedUsersTemp = (req.body.permittedUsers).replace(/  +/g, ' ');
-        permittedUsersTemp = permittedUsersTemp.replace(/, /g,',');
-        permittedUsersTemp = permittedUsersTemp.replace(/ ,/g,',');
-        permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
-        var permittedUsers = permittedUsersTemp.split(',');
-    }
-    
-    var permittedUsers = permittedUsers.filter(function(elem, index, self) {
-        return index === self.indexOf(elem);
-    })
-    
-     Post.findOneAndUpdate({_id: req.params.id}, {permittedUsers}).then(
-        res.redirect('/meme/' + req.params.id));
-})
-/*-----------------------------------Deleting individual posts-----------------------------------*/
-app.post('/meme/:id/delete', urlencoder, (req, res)=>{
-    console.log("POST/ Meme accessed (delete): " + req.params.id);
-    
-     Post.remove({_id: req.params.id}).then(
-        res.redirect('/'));
-})
-/*-----------------------------------Viewing individual user pages-----------------------------------*/
-app.get('/user/:id', (req, res)=>{
-    console.log("GET/ User accessed: " + req.params.id);
-    User.findOne({username: req.params.id}).then((user2)=>{
-        Post.find({
-            user : user2
-        }).limit(20).sort({
-            date : -1
-        }).then((results)=>{
-             res.render("userProfilePublic.hbs", {
-                 user: req.session.user,
-                 user2,
-                 results
-             });
-         })
-    })       
-})
-/*-----------------------------------Searching posts by tag-----------------------------------*/
-app.post('/search', urlencoder, (req, res)=>{
-    console.log(req.body.searchInput);
-    res.redirect('/search/' + req.body.searchInput);
-})
-app.get('/search/:id', (req, res)=>{
-    Post.find({
-        tags : req.params.id,
-        public : true
-    }).limit(20).sort({
-        date : -1
-    }).populate('user')
-    .then((results)=>{
-       res.render("index.hbs", {
-           user: req.session.user,
-           searchInput: req.params.id,
-           results
-       }); 
-    }, ()=>{
-        res.render("error.hbs"); // should have "Results not found"
-    })
-})
-/*-----------------------------------Viewing posts by tag-----------------------------------*/
-app.get('/tagged/:id', (req, res)=>{
-    Post.find({
-        tags : req.params.id,
-        public : true
-    }).limit(20).sort({
-        date : -1
-    }).populate('user')
-    .then((results)=>{
-       res.render("index.hbs", {
-           user: req.session.user,
-           searchInput: req.params.id,
-           results
-       }); 
-    }, ()=>{
-        res.render("error.hbs"); // should have "Results not found"
-    })
-})
-/*-----------------------------------Rendering images-----------------------------------*/
-app.get("/photo/:id", (req, res)=>{
-  console.log(req.params.id)
-    fs.createReadStream(path.resolve(UPLOAD_PATH, req.params.id)).pipe(res)
-})
-/*-----------------------------------Uploading-----------------------------------*/
-app.post("/upload", urlencoder, upload.single("img"),(req, res)=>{
-    console.log("POST/ upload");
-    
-    var title = req.body.title;
-    var filename = req.file.filename;
-    var originalfilename = req.file.originalfilename;
-    var description = req.body.description;
-    var user = req.session.user._id;        
-    var tags = [];
-    var permittedUsers = [];
-
-    if(req.body.public == 'Public'){
-        var public = true;
-    }
-    else{
-        var public = false;
-    }
-    
-    if(req.body.tags) {
-        var tagsTemp = (req.body.tags).replace(/  +/g, ' ');
-        tagsTemp = tagsTemp.replace(/, /g,',');
-        tagsTemp = tagsTemp.replace(/ ,/g,',');
-        tagsTemp = tagsTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
-        var tags = tagsTemp.split(',');
-    }
-    if(req.body.permittedUsers) {
-        var permittedUsersTemp = (req.body.permittedUsers).replace(/  +/g, ' ');
-        permittedUsersTemp = permittedUsersTemp.replace(/, /g,',');
-        permittedUsersTemp = permittedUsersTemp.replace(/ ,/g,',');
-        permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
-        var permittedUsers = permittedUsersTemp.split(',');
-    }
-    
-    var tags = tags.filter(function(elem, index, self) {
-        return index === self.indexOf(elem);
-    })
-    var permittedUsers = permittedUsers.filter(function(elem, index, self) {
-        return index === self.indexOf(elem);
-    })
-    
-    var p = new Post({
-        title, filename, originalfilename, description, user, tags, public, permittedUsers
-    })       
-    
-    p.save().then((doc)=>{
-        res.redirect("/")
-    })
-})
-
+app.use(require("./controller"));
 
  app.listen(3000, ()=>{
      console.log("Listening to port 3000");

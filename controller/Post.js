@@ -1,9 +1,11 @@
+// packages
+const crypto = require("crypto");
 const express = require("express")
 const router = express.Router()
-const User = require("../models/user")
 const bodyparser = require("body-parser")
-const auth = require("../middlewares/auth")
-const Post = require("../models/post")
+const auth = require("../middleware/auth")
+const hbs = require('hbs');
+const path = require('path');
 
 const app = express()
 
@@ -11,39 +13,49 @@ const urlencoder = bodyparser.urlencoded({
   extended : true
 })
 
+// upload packages
+const multer = require("multer")
+const fs = require("fs")
+
+// custom packages
+const moment = require("moment")
+
+// defined in model
+const {Post} = require("../model/Post.js");
+const {User} = require("../model/User.js");
+
+// uploading
+const UPLOAD_PATH = path.resolve(__dirname, "resources");
+const upload = multer({
+  dest: UPLOAD_PATH,
+  limits: {
+    fileSize : 10000000,
+    files : 2
+  }
+})
+
+// handlebars helpers
+hbs.registerHelper('formatDate', function(dateString) {
+    return new hbs.SafeString(
+        moment(dateString).format("MMMM DD, YYYY")
+    );
+});
+
 router.use(urlencoder)
+/*-----------------------------------Rendering images-----------------------------------*/
+router.get("/photo/:id", (req, res)=>{
+  console.log(req.params.id)
+    fs.createReadStream(path.resolve(UPLOAD_PATH, req.params.id)).pipe(res)
+})
 
 /*------------------------------------Home-------------------------------------*/
-app.get('/home', (req, res)=>{
+router.get('/home', (req, res)=>{
     console.log("GET/ home");
     res.redirect("/");
 })
-/*-----------------------------------Default-----------------------------------*/
-app.get('/', (req, res)=>{
-    Post.find().then((docs)=>{
-        console.log(docs)
-    })
-    console.log(req.session.user + 'this is where the user is printed!!!!!!!!!!!!!!!!!!!!!!!');
-    console.log("GET/ ");
-    Post.find({
-        public : true
-    })
-    .limit(20).sort({
-        date : -1
-    }).populate('user')
-    .then((results)=>{
-       res.render("index.hbs", {
-           user: req.session.user,
-           results
-       }); 
-    }, ()=>{
-        res.render("index.hbs", {
-            user: req.session.user
-        });
-    })
-})
+
 /*-----------------------------------Viewing individual posts-----------------------------------*/
-app.get('/meme/:id', (req, res)=>{
+router.get('/meme/:id', (req, res)=>{
     console.log("GET/ Meme accessed: " + req.params.id);
 //    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1.html"));
      Post.findOne({_id: req.params.id}).populate('user').then((post)=>{
@@ -54,7 +66,7 @@ app.get('/meme/:id', (req, res)=>{
     })  
 })
 /*-----------------------------------Uploading-----------------------------------*/
-app.post("/upload", urlencoder, upload.single("img"),(req, res)=>{
+router.post("/upload", urlencoder, upload.single("img"),(req, res)=>{
     console.log("POST/ upload");
     
     var title = req.body.title;
@@ -74,18 +86,25 @@ app.post("/upload", urlencoder, upload.single("img"),(req, res)=>{
     
     if(req.body.tags) {
         var tagsTemp = (req.body.tags).replace(/  +/g, ' ');
+        tagsTemp = tagsTemp.replace(/, /g,',');
+        tagsTemp = tagsTemp.replace(/ ,/g,',');
         tagsTemp = tagsTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
-        tagsTemp = tagsTemp.replace(' ,',',');
-        tagsTemp = tagsTemp.replace(', ',',');
         var tags = tagsTemp.split(',');
     }
     if(req.body.permittedUsers) {
         var permittedUsersTemp = (req.body.permittedUsers).replace(/  +/g, ' ');
+        permittedUsersTemp = permittedUsersTemp.replace(/, /g,',');
+        permittedUsersTemp = permittedUsersTemp.replace(/ ,/g,',');
         permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
-        permittedUsersTemp = permittedUsersTemp.replace(' ,',',');
-        permittedUsersTemp = permittedUsersTemp.replace(', ',',');
         var permittedUsers = permittedUsersTemp.split(',');
     }
+    
+    var tags = tags.filter(function(elem, index, self) {
+        return index === self.indexOf(elem);
+    })
+    var permittedUsers = permittedUsers.filter(function(elem, index, self) {
+        return index === self.indexOf(elem);
+    })
     
     var p = new Post({
         title, filename, originalfilename, description, user, tags, public, permittedUsers
@@ -96,12 +115,12 @@ app.post("/upload", urlencoder, upload.single("img"),(req, res)=>{
     })
 })
 /*-----------------------------------Searching posts by tag-----------------------------------*/
-app.post('/search', urlencoder, (req, res)=>{
+router.post('/search', urlencoder, (req, res)=>{
     console.log(req.body.searchInput);
-    res.redirect('/search/' + req.body.searchInput);
+    res.redirect('/post/search/' + req.body.searchInput);
 })
 /*-----------------------------------Searching posts by tag-----------------------------------*/
-app.get('/search/:id', (req, res)=>{
+router.get('/search/:id', (req, res)=>{
     Post.find({
         tags : req.params.id,
         public : true
@@ -119,4 +138,62 @@ app.get('/search/:id', (req, res)=>{
         res.render("error.hbs"); // should have "Results not found"
     })
 })
+/*-----------------------------------Editing individual posts-----------------------------------*/
+router.post('/meme/:id/edit', urlencoder, (req, res)=>{
+    console.log("POST/ Meme accessed (edit): " + req.params.id);
+    
+    var title = req.body.title;
+    var description = req.body.description; 
+    var tags = [];
+    
+    if(req.body.tags) {
+        var tagsTemp = (req.body.tags).replace(/  +/g, ' ');
+        tagsTemp = tagsTemp.replace(/, /g,',');
+        tagsTemp = tagsTemp.replace(/ ,/g,',');
+        tagsTemp = tagsTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
+        var tags = tagsTemp.split(',');
+    }
 
+    if(req.body.public == 'Public'){
+        var public = true;
+    }
+    else{
+        var public = false;
+    }
+    
+    var tags = tags.filter(function(elem, index, self) {
+        return index === self.indexOf(elem);
+    })
+    
+     Post.findOneAndUpdate({_id: req.params.id}, {title, description, tags, public}).then(
+        res.redirect('/post/meme/' + req.params.id));
+})
+/*-----------------------------------Sharing individual posts-----------------------------------*/
+router.post('/meme/:id/share', urlencoder, (req, res)=>{
+    console.log("POST/ Meme accessed (share): " + req.params.id);
+    
+    var permittedUsers = [];
+    
+    if(req.body.permittedUsers) {
+        var permittedUsersTemp = (req.body.permittedUsers).replace(/  +/g, ' ');
+        permittedUsersTemp = permittedUsersTemp.replace(/, /g,',');
+        permittedUsersTemp = permittedUsersTemp.replace(/ ,/g,',');
+        permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
+        var permittedUsers = permittedUsersTemp.split(',');
+    }
+    
+    var permittedUsers = permittedUsers.filter(function(elem, index, self) {
+        return index === self.indexOf(elem);
+    })
+    
+     Post.findOneAndUpdate({_id: req.params.id}, {permittedUsers}).then(
+        res.redirect('/post/meme/' + req.params.id));
+})
+/*-----------------------------------Deleting individual posts-----------------------------------*/
+router.post('/meme/:id/delete', urlencoder, (req, res)=>{
+    console.log("POST/ Meme accessed (delete): " + req.params.id);
+    
+     Post.remove({_id: req.params.id}).then(
+        res.redirect('/'));
+})
+module.exports = router
