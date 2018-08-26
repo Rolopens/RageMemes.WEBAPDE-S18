@@ -1,3 +1,18 @@
+const express = require("express")
+const router = express.Router()
+const User = require("../models/user")
+const bodyparser = require("body-parser")
+const auth = require("../middlewares/auth")
+const Post = require("../models/post")
+
+const app = express()
+
+const urlencoder = bodyparser.urlencoded({
+  extended : true
+})
+
+router.use(urlencoder)
+
 /*-----------------------------------Sign up-----------------------------------*/
 app.get('/signup', (req,res)=>{
     console.log("GET/ signup");
