@@ -43,6 +43,23 @@ hbs.registerHelper('formatDate', function(dateString) {
 });
 
 router.use(urlencoder)
+/*-----------------------------------Showing Posts shared with me-----------------------------------*/
+router.get('/:id/shared', (req, res)=>{
+    Post.find({
+        permittedUsers : req.params.id,
+    })
+        .limit(20).sort({
+        date : -1
+    }).populate('user')
+    .then((results)=>{
+       res.render("index.hbs", {
+           user: req.session.user,
+           results
+       }); 
+    }, ()=>{
+        res.render("error.hbs"); // should have "Results not found"
+    })
+})
 /*-----------------------------------Rendering images-----------------------------------*/
 router.get("/photo/:id", (req, res)=>{
   console.log(req.params.id)
@@ -238,4 +255,5 @@ router.post('/meme/:id/comment', urlencoder, (req, res)=>{
      Post.findOneAndUpdate({_id: req.params.id}, {$push: {comments: c}}).then(
         res.redirect('/post/meme/' + req.params.id));
 })
+
 module.exports = router

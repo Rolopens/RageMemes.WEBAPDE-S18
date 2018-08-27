@@ -148,8 +148,21 @@ router.get('/logout', (req, res)=>{
 router.get('/:id', (req, res)=>{
     console.log("GET/ User accessed: " + req.params.id);
     User.findOne({username: req.params.id}).then((user2)=>{
-        Post.find({
-            user : user2
+        if(req.session.user.username == user2.username){
+            Post.find({
+            $and : [{user : user2}, {public: false}]
+        }).limit(20).sort({
+            date : -1
+        }).then((results)=>{
+             res.render("userProfilePublic.hbs", {
+                 user: req.session.user,
+                 user2,
+                 results
+             });
+         })  
+        }else{
+            Post.find({
+            $and : [{user : user2}, {public: true}]
         }).limit(20).sort({
             date : -1
         }).then((results)=>{
@@ -159,6 +172,8 @@ router.get('/:id', (req, res)=>{
                  results
              });
          })
+        }
+        
     })       
 })
 
