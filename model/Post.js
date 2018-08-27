@@ -6,6 +6,9 @@ var Schema = mongoose.Schema;
 var User = require("../model/User.js");
 var UserSchema = User.User.schema;
 
+var Comment = require("../model/Comment.js");
+var CommentSchema = Comment.Comment.schema;
+
 var PostSchema = new Schema({
     title : { type : String, required : true },
     filename : String,
@@ -15,7 +18,8 @@ var PostSchema = new Schema({
     tags : [String],
     date : { type: Date, default: Date.now },
     public : Boolean,
-    permittedUsers : [String]
+    permittedUsers : [String],
+    comments : [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]
 })
 
 var Post = mongoose.model("Post", PostSchema);

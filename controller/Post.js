@@ -23,6 +23,7 @@ const moment = require("moment")
 // defined in model
 const {Post} = require("../model/Post.js");
 const {User} = require("../model/User.js");
+const {Comment} = require("../model/Comment.js");
 
 // uploading
 const UPLOAD_PATH = path.resolve(__dirname, "resources");
@@ -58,7 +59,14 @@ router.get('/home', (req, res)=>{
 router.get('/meme/:id', (req, res)=>{
     console.log("GET/ Meme accessed: " + req.params.id);
 //    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1.html"));
-     Post.findOne({_id: req.params.id}).populate('user').then((post)=>{
+     Post.findOne({_id: req.params.id}).populate({
+         path: 'comments',
+         model: 'Comment',
+         populate: {
+             path: 'user',
+             model: 'User'
+         }
+     }).populate('user').then((post)=>{
         if(req.session.user != null){
             if(post.user.username === req.session.user.username){
             res.render("post.hbs", {
@@ -207,5 +215,22 @@ router.post('/meme/:id/delete', urlencoder, (req, res)=>{
     
      Post.remove({_id: req.params.id}).then(
         res.redirect('/'));
+})
+/*-----------------------------------Commenting on individual posts-----------------------------------*/
+router.post('/meme/:id/comment', urlencoder, (req, res)=>{
+    console.log("POST/ Meme accessed (comment): " + req.params.id);
+    console.log(req.body.userComment);
+    
+    var text = req.body.userComment;
+    var user = req.session.user._id;
+    
+    var c = new Comment({
+        text, user
+    })
+        
+    c.save();
+    
+     Post.findOneAndUpdate({_id: req.params.id}, {$push: {comments: c}}).then(
+        res.redirect('/post/meme/' + req.params.id));
 })
 module.exports = router

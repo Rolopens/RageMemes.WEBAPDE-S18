@@ -45,6 +45,28 @@
             }
             previewFile();
         </script>
+                    
+        <script>
+            function previewAvatarFile() {
+                var previewAvatar = document.querySelector('img[id=previewAvatar]');
+                var file = document.querySelector('input[type=file]').files[0];
+                var reader = new FileReader();
+
+                reader.onloadend = function() {
+                    previewAvatar.src = reader.result;
+                    previewAvatar.width = 200px;
+                    previewAvatar.height = 200px;
+                    previewAvatar.style.border = "solid white 4px";
+                    previewAvatar.style.display = "block";
+                }
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    previewAvatar.src = "";
+                }
+            }
+            previewAvatarFile();
+        </script>
     </head>
     
     <body>
@@ -70,7 +92,7 @@
                 {{/if}}
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li><a href="/user/{{user.username}}" class="dropdown-item">My profile</a></li>
-                    <li><a href="#" class="dropdown-item">Settings</a></li>
+                    <li><a data-toggle="modal" data-target="#modalEditDetails" class="dropdown-item">Settings</a></li>
                     <div class="dropdown-divider"></div>
                     <a href="/user/logout" class="dropdown-item">Log out</a>
                 </ul>
@@ -94,15 +116,9 @@
                     <div class="modal-content">
                         <!-- <button type="button" class="close" data-dismiss="modal" style="position:fixed;right:0;padding-right:10px;padding-top:5px;" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <br> -->
-                        <br>
-                        <center><img src="../res/uploading.gif" class="img-thumbnail" width=200px></center>
+                        <center><img src="/res/uploading.gif" class="img-thumbnail" width=200px></center>
                         <div class="modal-header text-center">
                             <h4 class="modal-title w-100 font-weight-bold">Upload a meme!</h4>
-
-                            <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button> -->
-
                         </div>
                         <div class="modal-body mx-3">
                             <form id="uploadMeme" class="form-format" action="/post/upload" method="post" enctype="multipart/form-data">
@@ -118,10 +134,43 @@
                                 <input class="radio-size" style="vertical-align: middle; margin: 2px;" type="radio" name="public" value="Public" onclick="javascript:publicCheck();" id="publicButton" required>Public
                                 <input class="radio-size" style="vertical-align: middle; margin: 2px;" type="radio" name="public" value="Private" onclick="javascript:publicCheck();" id="privateButton" required>Private<br>
                                 <div id="ifPublic" style="display:none">
-                                    <label for="defaultForm-title" class="modal-label" name="permittedUsers">Users to share with</label><br>
-                                    <input id="defaultForm-title" class="form-control validate">
+                                    <label for="defaultForm-title" class="modal-label">Users to share with</label><br>
+                                    <input id="defaultForm-title" class="form-control validate" name="permittedUsers">
                                 </div>
-                                <br><button class="btn btn-default" type="submit" id="upload-button">Upload</button>
+                                <br><button class="btn btn-default" type="button" data-dismiss="modal" id="cancel-button">Cancel</button>
+                                <button class="btn btn-default" type="submit" id="upload-button">Upload</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!--Edit user details-->
+            <div class="modal fade" id="modalEditDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <!-- <button type="button" class="close" data-dismiss="modal" style="position:fixed;right:0;padding-right:10px;padding-top:5px;" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <br> -->
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title w-100 font-weight-bold">Editing your details</h4>
+                        </div>
+                        <div class="modal-body mx-3">
+                            <form id="editDetails" class="form-format" action="/user/{{user._id}}/update" method="post" enctype="multipart/form-data">
+                                <label for="defaultForm-title" class="modal-label">Profile picture</label><br>
+                                <input type="file" id="uploadAvatarPic" onchange="previewAvatarFile()" accept="image/x-png,image/tiff,image/jpeg" name="img" required><br><br>
+                                
+                                {{#if post.user.filename}}
+                                <img src="/post/photo/{{post.user.filename}}" id="previewAvatar"><br>
+                                {{else}}
+                                <img src="/res/default.jpg" id="previewAvatar"><br>
+                                {{/if}}
+                                
+                                <label for="defaultForm-title" class="modal-label">Email address</label><br>
+                                <input id="defaultForm-title" class="form-control validate" name="email" value="{{user.email}}">
+                                <label for="defaultForm-title" class="modal-label">Short description of yourself</label><br>
+                                <input id="defaultForm-title" class="form-control validate" name="briefDescription" value="{{user.briefDescription}}">
+                                <br><button class="btn btn-default" type="button" data-dismiss="modal" id="cancel-button">Cancel</button>
+                                <button class="btn btn-default" type="submit" id="upload-button">Save</button>
                             </form>
                         </div>
                     </div>
@@ -249,13 +298,55 @@
                                 <td>
                                     <h2 class="tags">
                                          <i class="fa fa-tags"></i> {{#each post.tags}}
-                                        <a href="/post/search/{{this}}">{{this}}{{#unless @last}},{{/unless}}</a>
+                                        <a href="/post/search/{{this}}">{{this}}</a>{{#unless @last}},{{/unless}}
                                         {{/each}}
                                     </h2>
                                 </td>
                             </tr>
                         </table>
                     </div>
+                    
+                    <!--Comments-->
+                    {{#if post.comments}}                    
+                    <div class="comments">
+                        <h1 id="description">Comments:</h1>
+                            <table border="0">
+                            {{#each post.comments}}
+                                <tr>
+                                    <td id="tableAvatar" rowspan="5">
+                                        {{#if post.user.filename}}
+                                        <a href="/user/{{post.user.username}}"><img src="/post/photo/{{post.user.filename}}" class="avatar2"></a>
+                                        {{else}}
+                                        <a href="/user/{{post.user.username}}"><img src="/res/default.jpg" class="avatar2"></a>
+                                        {{/if}}
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="/user/{{this.user.username}}" value="{{this.user.username}}">{{this.user.username}}</a> said on {{formatDate this.date}}...</td>
+                                </tr>
+                                <tr>
+                                    <td><h2>{{this.text}}</h2></td>
+                                </tr>
+                                <tr>                                
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>                                
+                                    <td>&nbsp;</td>
+                                </tr>
+                            {{/each}}
+                            </table>
+                    </div>
+                    {{/if}}
+                    
+                    {{#if user}}
+                    <form id="addComment" class="form-format" action="/post/meme/{{post._id}}/comment" method="post">
+                        <label for="defaultForm-title" class="modal-label">Your two cents?</label><br>
+                        <input id="defaultForm-title" class="form-control validate" name="userComment" placeholder="Enter a comment...">
+                        <button class="btn btn-default" type="submit" id="comment-button">Post</button>                                
+                    </form>
+                    {{/if}}
+                    
                 </div>
             </div>
         </div>
