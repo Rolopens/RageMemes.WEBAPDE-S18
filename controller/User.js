@@ -148,7 +148,7 @@ router.get('/logout', (req, res)=>{
 router.get('/:id', (req, res)=>{
     console.log("GET/ User accessed: " + req.params.id);
     User.findOne({username: req.params.id}).then((user2)=>{
-        if(req.session.user.username == user2.username){
+        if(req.session.user && req.session.user.username == user2.username){
             Post.find({
             $and : [{user : user2}, {public: false}]
         }).limit(20).sort({
