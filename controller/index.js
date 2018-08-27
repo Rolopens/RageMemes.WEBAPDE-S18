@@ -42,14 +42,14 @@ router.get('/', (req, res)=>{
     Post.find({
         public : true
     })
-    .limit(5).sort({
+    .limit(20).sort({
         date : -1
     }).populate('user')
     .then((results)=>{
        res.render("index.hbs", {
            user: req.session.user,
-           limit: 5,
-           nextLimit: 10,
+           limit: 20,
+           nextLimit: 40,
            results
        }); 
     }, ()=>{
@@ -62,7 +62,7 @@ router.get('/', (req, res)=>{
 router.get('/view/:id', urlencoder, (req, res)=>{    
     console.log("GET/ view");
     var limit = parseInt(req.params.id, 10);
-    var nextLimit = limit + 5;
+    var nextLimit = limit + 20;
 //    console.log(limit);
     Post.find({
         public : true
