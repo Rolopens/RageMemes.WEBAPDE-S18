@@ -250,3 +250,14 @@ th {
     background-color:#52f452;
     margin-top:5px;
 }
+
+table .commentsList {
+    border-top: 1px solid #c3bcbc;
+    border-bottom-style: none;
+    margin:30px 0px 20px 0px; /*TRBL*/
+    width:100%;
+}
+
+.commentsList #tableAvatar {
+    width:100px;
+}
