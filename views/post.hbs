@@ -24,6 +24,12 @@
                }
             }
         </script>
+        
+        <script>
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip();   
+            });
+        </script>
                     
         <script>
             function previewFile() {
@@ -48,24 +54,23 @@
                     
         <script>
             function previewAvatarFile() {
-                var previewAvatar = document.querySelector('img[id=previewAvatar]');
+                var preview = document.querySelector('img[id=preview]');
                 var file = document.querySelector('input[type=file]').files[0];
                 var reader = new FileReader();
 
                 reader.onloadend = function() {
-                    previewAvatar.src = reader.result;
-                    previewAvatar.width = 200px;
-                    previewAvatar.height = 200px;
-                    previewAvatar.style.border = "solid white 4px";
-                    previewAvatar.style.display = "block";
+                    preview.src = reader.result;
+                    preview.width = 250;
+                    preview.height = 250;
+                    preview.style.display = "block";
                 }
                 if (file) {
                     reader.readAsDataURL(file);
                 } else {
-                    previewAvatar.src = "";
+                    preview.src = "";
                 }
             }
-            previewAvatarFile();
+            previewFile();
         </script>
     </head>
     
@@ -91,11 +96,13 @@
                 <img src="/res/default.jpg" class="avatar" data-toggle="dropdown">
                 {{/if}}
                 <ul class="dropdown-menu dropdown-menu-right">
-                    <li><a href="/user/{{user.username}}" class="dropdown-item">My profile</a></li>
-                    <li><a data-toggle="modal" data-target="#modalEditDetails" class="dropdown-item">Settings</a></li>
-                    <li><a href="/post/{{user.username}}/shared" class="dropdown-item">Shared With Me</a></li>
+                    <li><a href="/" class="dropdown-item">Public memes</a></li>
+                    <li><a href="/post/{{user.username}}/shared" class="dropdown-item">Shared with me</a></li>
                     <div class="dropdown-divider"></div>
-                    <a href="/user/logout" class="dropdown-item">Log out</a>
+                    <li><a href="/user/{{user.username}}" class="dropdown-item"><i class="fa fa-user"></i> My profile</a></li>
+                    <li><a data-toggle="modal" data-target="#modalEditDetails" class="dropdown-item"><i class="fa fa-cog"></i> Settings</a></li>
+                    <div class="dropdown-divider"></div>
+                    <a href="/user/logout" class="dropdown-item"><i class="fa fa-sign-out"></i> Log out</a>
                 </ul>
             </div>
             <a class="nav-link whitewash-text right-floater" href="/user/{{user.username}}">{{user.username}}<span class="sr-only">(current)</span></a>
@@ -156,19 +163,19 @@
                             <h4 class="modal-title w-100 font-weight-bold">Editing your details</h4>
                         </div>
                         <div class="modal-body mx-3">
-                            <form id="editDetails" class="form-format" action="/user/{{user._id}}/update" method="post" enctype="multipart/form-data">
+                            <form id="editDetails" class="form-format" action="/user/{{user._id}}/edit" method="post" enctype="multipart/form-data">
                                 <label for="defaultForm-title" class="modal-label">Profile picture</label><br>
                                 <input type="file" id="uploadAvatarPic" onchange="previewAvatarFile()" accept="image/x-png,image/tiff,image/jpeg" name="img" required><br><br>
                                 
-                                {{#if post.user.filename}}
-                                <img src="/post/photo/{{post.user.filename}}" id="previewAvatar"><br>
+                                {{#if user.filename}}
+                                <img src="/post/photo/{{user.filename}}" id="previewAvatar" style="display:block;"><br>
                                 {{else}}
-                                <img src="/res/default.jpg" id="previewAvatar"><br>
+                                <img src="/res/default.jpg" id="previewAvatar" style="display:block;"><br>
                                 {{/if}}
                                 
                                 <label for="defaultForm-title" class="modal-label">Email address</label><br>
                                 <input id="defaultForm-title" class="form-control validate" name="email" value="{{user.email}}">
-                                <label for="defaultForm-title" class="modal-label">Short description of yourself</label><br>
+                                <label for="defaultForm-title" class="modal-label">About me</label><br>
                                 <input id="defaultForm-title" class="form-control validate" name="briefDescription" value="{{user.briefDescription}}">
                                 <br><button class="btn btn-default" type="button" data-dismiss="modal" id="cancel-button">Cancel</button>
                                 <button class="btn btn-default" type="submit" id="upload-button">Save</button>
@@ -290,7 +297,7 @@
                                 <td><a href="/user/{{post.user.username}}" value="{{post.user.username}}">{{post.user.username}}</a></td>
                             </tr>
                             <tr>
-                                <td><h2>Published on {{formatDate post.date}}</h2></td>
+                                <td><h2>{{#if post.public}}<a data-toggle="tooltip" title="Public"><i class="fa fa-globe"></i></a>{{else}}<a data-toggle="tooltip" title="Private"><i class="fa fa-eye-slash"></i></a>{{/if}} Published on {{formatDate post.date}}</h2></td>
                             </tr>
                             <tr>                                
                                 <td>&nbsp;</td>
@@ -298,7 +305,7 @@
                             <tr>
                                 <td>
                                     <h2 class="tags">
-                                         <i class="fa fa-tags"></i> {{#each post.tags}}
+                                        <a data-toggle="tooltip" title="Tags"><i class="fa fa-tags"></i></a> {{#each post.tags}}
                                         <a href="/post/search/{{this}}">{{this}}</a>{{#unless @last}},{{/unless}}
                                         {{/each}}
                                     </h2>
@@ -307,7 +314,15 @@
                         </table>
                     </div>
                     
-                    <!--Comments-->
+                    <!--Comments-->                    
+                    {{#if user}}
+                    <form id="addComment" class="form-format" action="/post/meme/{{post._id}}/comment" method="post">
+                        <label for="defaultForm-title" class="modal-label">Your two cents?</label><br>
+                        <input id="defaultForm-title" class="form-control validate" name="userComment" placeholder="Enter a comment...">
+                        <button class="btn btn-default" type="submit" id="comment-button">Post</button>                                
+                    </form>
+                    {{/if}}
+                    
                     {{#if post.comments}}                    
                     <div class="comments">
                         <h1 id="description">Comments:</h1>
@@ -329,14 +344,6 @@
                             {{/each}}
                             </table>
                     </div>
-                    {{/if}}
-                    
-                    {{#if user}}
-                    <form id="addComment" class="form-format" action="/post/meme/{{post._id}}/comment" method="post">
-                        <label for="defaultForm-title" class="modal-label">Your two cents?</label><br>
-                        <input id="defaultForm-title" class="form-control validate" name="userComment" placeholder="Enter a comment...">
-                        <button class="btn btn-default" type="submit" id="comment-button">Post</button>                                
-                    </form>
                     {{/if}}
                     
                 </div>

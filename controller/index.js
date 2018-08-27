@@ -18,6 +18,9 @@ router.get('/', (req, res)=>{
     }
     
     
+    User.find().then((docs)=>{
+        console.log(docs)
+    })
     Post.find().then((docs)=>{
         console.log(docs)
     })

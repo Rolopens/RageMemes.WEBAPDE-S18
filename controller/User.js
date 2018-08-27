@@ -176,5 +176,17 @@ router.get('/:id', (req, res)=>{
         
     })       
 })
+/*-----------------------------------Editing individual user details-----------------------------------*/
+router.post('/:id/edit', urlencoder, upload.single("img"), (req, res)=>{
+    console.log("POST/ User accessed (edit): " + req.params.id);
+    
+    var filename = req.file.filename;
+    var originalfilename = req.file.originalfilename;
+    var email = req.body.email;
+    var briefDescription = req.body.briefDescription;
+    
+     User.findOneAndUpdate({_id: req.params.id}, {filename, originalfilename, email, briefDescription}).then(
+        res.redirect('/'));
+})
 
 module.exports = router

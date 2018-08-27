@@ -68,9 +68,10 @@
                 <img src="../res/default.jpg" class="avatar" data-toggle="dropdown">
                 {{/if}}
                 <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="/post/{{user.username}}/shared" class="dropdown-item">Shared with me</a></li>
+                    <div class="dropdown-divider"></div>
                     <li><a href="/user/{{user.username}}" class="dropdown-item">My profile</a></li>
                     <li><a href="#" class="dropdown-item">Settings</a></li>
-                    <li><a href="/post/{{user.username}}/shared" class="dropdown-item">Shared With Me</a></li>
                     <div class="dropdown-divider"></div>
                     <a href="/user/logout" class="dropdown-item">Log out</a>
                 </ul>

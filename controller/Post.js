@@ -43,7 +43,7 @@ hbs.registerHelper('formatDate', function(dateString) {
 });
 
 router.use(urlencoder)
-/*-----------------------------------Showing Posts shared with me-----------------------------------*/
+/*-----------------------------------Showing posts shared with user-----------------------------------*/
 router.get('/:id/shared', (req, res)=>{
     Post.find({
         permittedUsers : req.params.id,
