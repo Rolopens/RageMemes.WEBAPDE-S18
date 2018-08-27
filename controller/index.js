@@ -13,12 +13,14 @@ router.use("/user", require("./User.js"))
 
 /*-----------------------------------Default-----------------------------------*/
 router.get('/', (req, res)=>{
-    //req.session.user = req.cookies.user;
+    if(req.cookies.user){
+       req.session.user = req.cookies.user; 
+    }
+    
     
     Post.find().then((docs)=>{
         console.log(docs)
     })
-    console.log(req.session.user + 'this is where the user is printed!!!!!!!!!!!!!!!!!!!!!!!');
     console.log("GET/ ");
     Post.find({
         public : true

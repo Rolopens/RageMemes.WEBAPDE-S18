@@ -114,19 +114,16 @@ router.post("/authenticate", urlencoder, (req, res)=>{
         
         if(user){
             console.log(user.username);
+            console.log(check);
             req.session.user = user;
-//            if (check == true){
-//                req.cookies.user = user;
-//            }
+            if (check == "on"){
+                req.cookies.user = user;
+            }
             
             Post.find({
                 public : true
             }).then((results)=>{
                 console.log("Logged in: " + req.session.user);
-               res.render("index.hbs", {
-                   user: req.session.user,
-                   results
-               }); 
                 res.redirect("/");
             }, ()=>{
                 res.render("error.hbs");
@@ -144,7 +141,7 @@ router.post("/authenticate", urlencoder, (req, res)=>{
 router.get('/logout', (req, res)=>{
     console.log("GET/ logout");
     req.session.destroy();
-    //response.clearCookie("user");
+    res.clearCookie("user");
     res.redirect("/");
 })
 /*-----------------------------------Viewing individual user pages-----------------------------------*/
