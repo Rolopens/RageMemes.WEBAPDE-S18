@@ -16,8 +16,8 @@ const fs = require("fs")
 const moment = require("moment")
 
 // defined in model
-const {Post} = require("./model/Post.js");
-const {User} = require("./model/User.js");
+const Post = require("./model/Post.js");
+const User = require("./model/User.js");
 
 // create server, etc.
 const app = express();
@@ -71,15 +71,15 @@ app.set("view-engine", "hbs");
 // connecting to mongoDB server; Promise Library
 mongoose.Promise = global.Promise;
 
-// connect to the database
-mongoose.connect("mongodb://localhost:27017/memesdata", {
-    useNewUrlParser: true 
-});
-
-
-//mongoose.connect("mongodb://admin:r12345@ds123822.mlab.com:23822/ragememes", {
+//// connect to the database
+//mongoose.connect("mongodb://localhost:27017/memesdata", {
 //    useNewUrlParser: true 
 //});
+
+
+mongoose.connect("mongodb://admin:r12345@ds123822.mlab.com:23822/ragememes", {
+    useNewUrlParser: true 
+});
 
 //app.get("/", (req, res)=>{    
 //    // get all meme posts
@@ -337,8 +337,8 @@ mongoose.connect("mongodb://localhost:27017/memesdata", {
 
 app.use(require("./controller"));
 
- app.listen(3000, ()=>{
-     console.log("Listening to port 3000");
- })
+// app.listen(3000, ()=>{
+//     console.log("Listening to port 3000");
+// })
 
-//app.listen(process.env.PORT || 3000)
+app.listen(process.env.PORT || 3000)
