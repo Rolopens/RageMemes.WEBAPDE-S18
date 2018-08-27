@@ -74,9 +74,21 @@ body{
 }
 
 .avatar{
-    height: 100px;
-    width: 100px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
+    float: right;
+    padding: 5px;    
+}
+
+.moreOptions{
+    width: 40px;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.moreOptions:hover{
+    opacity: 0.7;
 }
 
 .flex-element{
