@@ -44,7 +44,15 @@ hbs.registerHelper('formatDate', function(dateString) {
 
 // sessions and cookies
 app.use(cookieparser());
-app.use(session({secret : "MCO2", resave: true, saveUninitialized : true}));
+app.use(session({
+    secret : "MCO3", 
+    resave: true, 
+    saveUninitialized : true, 
+    name: "WEBAPDEMP3",
+    cookie: {
+        maxAge: 1000*60*60*24*7*3
+    }
+}));
 
 // calling public folder for the .ccs files
     // app.use(express.static('public'));
@@ -59,9 +67,6 @@ mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost:27017/memesdata", {
     useNewUrlParser: true 
 });
-
-
-
 
 
 //mongoose.connect("mongodb://admin:r12345@ds123822.mlab.com:23822/ragememes", {

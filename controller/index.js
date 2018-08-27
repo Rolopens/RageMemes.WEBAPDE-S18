@@ -13,6 +13,8 @@ router.use("/user", require("./User.js"))
 
 /*-----------------------------------Default-----------------------------------*/
 router.get('/', (req, res)=>{
+    //req.session.user = req.cookies.user;
+    
     Post.find().then((docs)=>{
         console.log(docs)
     })

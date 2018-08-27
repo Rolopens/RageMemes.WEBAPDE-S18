@@ -65,13 +65,13 @@ router.get('/meme/:id', (req, res)=>{
             post,
             user: req.session.user,
             equal: req.session.user
-        })
-        } 
-        }else {
+            })
+            }else {
            res.render("post.hbs", {
             post,
             user: req.session.user
         }) 
+        } 
         }
         
         

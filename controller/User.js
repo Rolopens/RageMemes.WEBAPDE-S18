@@ -106,13 +106,18 @@ router.post("/authenticate", urlencoder, (req, res)=>{
     var password = req.body.pword;
     var hashedpassword = crypto.createHash("md5").update(password).digest("hex");
     var email = req.body.email;
+    var check = req.body.remember;
     
     User.findOne({
         email, password: hashedpassword
     }).then((user)=>{
+        
         if(user){
             console.log(user.username);
             req.session.user = user;
+//            if (check == true){
+//                req.cookies.user = user;
+//            }
             
             Post.find({
                 public : true
@@ -139,6 +144,7 @@ router.post("/authenticate", urlencoder, (req, res)=>{
 router.get('/logout', (req, res)=>{
     console.log("GET/ logout");
     req.session.destroy();
+    //response.clearCookie("user");
     res.redirect("/");
 })
 /*-----------------------------------Viewing individual user pages-----------------------------------*/
