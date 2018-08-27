@@ -314,10 +314,10 @@
                             {{#each post.comments}}
                                 <tr>
                                     <td id="tableAvatar" rowspan="5">
-                                        {{#if post.user.filename}}
-                                        <a href="/user/{{post.user.username}}"><img src="/post/photo/{{post.user.filename}}" class="avatar2"></a>
+                                        {{#if this.user.filename}}
+                                        <a href="/user/{{this.user.username}}"><img src="/post/photo/{{this.user.filename}}" class="avatar2"></a>
                                         {{else}}
-                                        <a href="/user/{{post.user.username}}"><img src="/res/default.jpg" class="avatar2"></a>
+                                        <a href="/user/{{this.user.username}}"><img src="/res/default.jpg" class="avatar2"></a>
                                         {{/if}}
                                     </td>
                                     <td></td>
