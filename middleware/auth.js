@@ -6,8 +6,6 @@ module.exports = function(req, res, next){
     console.log("exists")
     next()
   }else{
-      res.render("index", {
-        error : "Error"
-      })
+      res.redirect("/")
   }
 }
