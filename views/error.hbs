@@ -83,11 +83,7 @@
             <!--User dropdown-->
             {{#if user}}
             <div class="dropdown">
-                {{#if user.filename}}
-                <img src="/post/photo/{{user.filename}}" class="avatar" data-toggle="dropdown">
-                {{else}}
-                <img src="../res/default.jpg" class="avatar" data-toggle="dropdown">
-                {{/if}}
+                <img src="/res/more.png" class="moreOptions nav-link whitewash-text right-floater" data-toggle="dropdown">
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li><a href="/" class="dropdown-item">Public memes</a></li>
                     <li><a href="/post/{{user.username}}/shared" class="dropdown-item">Shared with me</a></li>
@@ -98,8 +94,13 @@
                     <a href="/user/logout" class="dropdown-item"><i class="fa fa-sign-out"></i> Log out</a>
                 </ul>
             </div>
-            <a class="nav-link whitewash-text right-floater" href="/user/{{user.username}}">{{user.username}}<span class="sr-only">(current)</span></a>
             <a class="nav-link whitewash-text right-floater" href="" data-toggle="modal" data-target="#modalQuickUploadForm">Upload meme<span class="sr-only">(current)</span></a>
+            <a class="nav-link whitewash-text right-floater" href="/user/{{user.username}}">{{user.username}}<span class="sr-only">(current)</span></a>
+            {{#if user.filename}}
+            <img src="/post/photo/{{user.filename}}" class="avatar">
+            {{else}}
+            <img src="/res/default.jpg" class="avatar">
+            {{/if}}
             {{else}}
             <!--Login-->
             <a class="nav-link whitewash-text right-floater" href="/user/login">Log in<span class="sr-only">(current)</span></a>

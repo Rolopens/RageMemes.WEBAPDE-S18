@@ -110,24 +110,24 @@ router.get('/meme/:id', (req, res) => {
             for(i=0; i < post.permittedUsers.length; i++){
 //                console.log(post.permittedUsers[i] + "BIG TEST")
                 if (req.session.user != null && post.permittedUsers[i] === req.session.user.username){
-                    if (post.user.username === req.session.user.username) {
-                        res.render("post.hbs", {
-                            post,
-                            user: req.session.user,
-                            equal: req.session.user
-                        })
-                    } else {
                         res.render("post.hbs", {
                             post,
                             user: req.session.user
-                        })  
-                    }
+                        }) 
                  }
         
             }
-            res.render("error.hbs", {
-                user: req.session.user
-            });
+            if (post.user.username === req.session.user.username) {
+                res.render("post.hbs", {
+                    post,
+                    user: req.session.user,
+                    equal: req.session.user
+                })
+            } else {
+                res.render("error.hbs", {
+                    user: req.session.user
+                });
+            }
         }
     })
 })
