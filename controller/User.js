@@ -150,7 +150,7 @@ router.get('/:id', (req, res)=>{
     User.findOne({username: req.params.id}).then((user2)=>{
         if(req.session.user && req.session.user.username == user2.username){
             Post.find({
-            $and : [{user : user2}, {public: false}]
+            user : user2
         }).limit(20).sort({
             date : -1
         }).then((results)=>{
