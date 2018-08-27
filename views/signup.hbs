@@ -8,7 +8,7 @@
     
         <script>
             function previewFile() {
-                var preview = document.querySelector('img[id=preview]');
+                var preview = document.querySelector('img[id=previewAvatar]');
                 var file = document.querySelector('input[type=file]').files[0];
                 var reader = new FileReader();
 
@@ -46,11 +46,13 @@
             <form id="login" class="form-format" action="/user/signingup" method="post" enctype="multipart/form-data">
                 <h1>Create an account!</h1>
 <!--                <img class="mb-4" src="res/signup.png" alt="" width="72" height="72">-->
-                <h7>Choose a Profile Picture! (optional)</h7>
+                
+                <img src="/res/default.jpg" id="previewAvatar" style="display:block;">
+<!--                <img src="" id="preview" class="img-thumbnail" style="display:none;">-->
+                <h5>Upload a profile picture, maybe?</h5>
+                <h8>(You can skip this step for now.)</h8>
                 <input type="file" name="img" id="uploadProfilePic" onchange="previewFile()" accept="image/x-png,image/tiff,image/jpeg">
-                <img src="" id="preview" class="img-thumbnail" style="display: none;">
-                
-                
+    
                 {{#if message}}
                 <div style="color:red;padding-bottom:5px;">{{message}}</div>
                 {{/if}}
@@ -63,7 +65,7 @@
                 <input type="password" name="pword" id="inputPassword" class="form-control input-width" placeholder="Password" required>
                 <br>
                 <label for="inputPassword" class="sr-only input-width">Short description</label>
-                <textarea type="text" name="briefDescription" id="inputDescription" class="form-control input-width" maxlength="150" placeholder="Brief description of yourself"></textarea><br>
+                <textarea type="text" name="briefDescription" id="inputDescription" class="form-control input-width" maxlength="150" placeholder="Describe yourself..."></textarea><br>
 <!--      <input type="submit" value="Upload">-->
                 <button class="btn btn-lg btn-success btn-block input-width" id="submitButton" type="submit">Sign up</button>
             

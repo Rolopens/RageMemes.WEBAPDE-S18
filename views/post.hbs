@@ -100,21 +100,23 @@
             {{#if user}}
             <div class="dropdown">
                 <img src="/res/more.png" class="moreOptions nav-link whitewash-text right-floater" data-toggle="dropdown">
-                <a class="nav-link whitewash-text right-floater" href="/user/{{user.username}}">{{user.username}}<span class="sr-only">(current)</span></a>
-                {{#if user.filename}}
-                <img src="/post/photo/{{user.filename}}" class="avatar">
-                {{else}}
-                <img src="/res/default.jpg" class="avatar">
-                {{/if}}
                 <ul class="dropdown-menu dropdown-menu-right">
-                    <li><a href="/user/{{user.username}}" class="dropdown-item">My profile</a></li>
-                    <li><a data-toggle="modal" data-target="#modalEditDetails" class="dropdown-item"><i class="fa fa-cog"></i> Settings</a></li>
-                    <li><a href="/post/{{user.username}}/shared" class="dropdown-item">Shared With Me</a></li>
+                    <li><a href="/" class="dropdown-item">Public memes</a></li>
+                    <li><a href="/post/{{user.username}}/shared" class="dropdown-item">Shared with me</a></li>
                     <div class="dropdown-divider"></div>
-                    <a href="/user/logout" class="dropdown-item">Log out</a>
+                    <li><a href="/user/{{user.username}}" class="dropdown-item"><i class="fa fa-user"></i> My profile</a></li>
+                    <li><a data-toggle="modal" data-target="#modalEditDetails" class="dropdown-item"><i class="fa fa-cog"></i> Settings</a></li>
+                    <div class="dropdown-divider"></div>
+                    <a href="/user/logout" class="dropdown-item"><i class="fa fa-sign-out"></i> Log out</a>
                 </ul>
             </div>
             <a class="nav-link whitewash-text right-floater" href="" data-toggle="modal" data-target="#modalQuickUploadForm">Upload meme<span class="sr-only">(current)</span></a>
+            <a class="nav-link whitewash-text right-floater" href="/user/{{user.username}}">{{user.username}}<span class="sr-only">(current)</span></a>
+            {{#if user.filename}}
+            <img src="/post/photo/{{user.filename}}" class="avatar">
+            {{else}}
+            <img src="/res/default.jpg" class="avatar">
+            {{/if}}
             {{else}}
             <!--Login-->
             <a class="nav-link whitewash-text right-floater" href="/user/login">Log in<span class="sr-only">(current)</span></a>
@@ -171,7 +173,7 @@
                         <div class="modal-body mx-3">
                             <form id="editDetails" class="form-format" action="/user/{{user._id}}/edit" method="post" enctype="multipart/form-data">
                                 <label for="defaultForm-title" class="modal-label">Profile picture</label><br>
-                                <input type="file" id="uploadAvatarPic" onchange="previewAvatarFile()" accept="image/x-png,image/tiff,image/jpeg" name="img" required><br><br>
+                                <input type="file" id="uploadAvatarPic" onchange="previewAvatarFile()" accept="image/x-png,image/tiff,image/jpeg" name="img"><br><br>
                                 
                                 {{#if user.filename}}
 <!--                                <button type="button" class="close" onclick="javascript:revertAvatarFile()" style="position:fixed;right:70;padding-right:10px;padding-top:5px;" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->

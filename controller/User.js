@@ -180,13 +180,26 @@ router.get('/:id', (req, res)=>{
 router.post('/:id/edit', urlencoder, upload.single("img"), (req, res)=>{
     console.log("POST/ User accessed (edit): " + req.params.id);
     
-    var filename = req.file.filename;
-    var originalfilename = req.file.originalfilename;
     var email = req.body.email;
     var briefDescription = req.body.briefDescription;
+
+    req.session.user.email = req.body.email;
+    req.session.user.briefDescription = req.body.briefDescription;
     
-     User.findOneAndUpdate({_id: req.params.id}, {filename, originalfilename, email, briefDescription}).then(
-        res.redirect('/'));
+    if(req.file){
+        var filename = req.file.filename;
+        var originalfilename = req.file.originalfilename;
+
+        req.session.user.filename = req.file.filename;
+        req.session.user.originalfilename = req.file.originalfilename;
+
+         User.findOneAndUpdate({_id: req.params.id}, {filename, originalfilename, email, briefDescription}).then(
+            res.redirect('/'));
+    }
+    else{
+         User.findOneAndUpdate({_id: req.params.id}, {email, briefDescription}).then(
+            res.redirect('/'));
+    }
 })
 
 module.exports = router
