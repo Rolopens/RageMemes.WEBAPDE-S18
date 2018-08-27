@@ -92,7 +92,7 @@
                 {{/if}}
                 <ul class="dropdown-menu dropdown-menu-right">
                     <li><a href="/user/{{user.username}}" class="dropdown-item">My profile</a></li>
-                    <li><a href="#" class="dropdown-item">Settings</a></li>
+                    <li><a data-toggle="modal" data-target="#modalEditDetails" class="dropdown-item"><i class="fa fa-cog"></i> Settings</a></li>
                     <li><a href="/post/{{user.username}}/shared" class="dropdown-item">Shared With Me</a></li>
                     <div class="dropdown-divider"></div>
                     <a href="/user/logout" class="dropdown-item">Log out</a>
@@ -101,9 +101,9 @@
             <a class="nav-link whitewash-text right-floater" href="" data-toggle="modal" data-target="#modalQuickUploadForm">Upload meme<span class="sr-only">(current)</span></a>
             {{else}}
             <!--Login-->
-            <a class="nav-link whitewash-text right-floater" href="/login">Log in<span class="sr-only">(current)</span></a>
+            <a class="nav-link whitewash-text right-floater" href="../user/login">Log in<span class="sr-only">(current)</span></a>
             <!--Sign up-->
-            <a class="nav-link whitewash-text right-floater" href="/signup">Sign up<span class="sr-only">(current)</span></a>
+            <a class="nav-link whitewash-text right-floater" href="../user/signup">Sign up<span class="sr-only">(current)</span></a>
             {{/if}}
         </nav>
         

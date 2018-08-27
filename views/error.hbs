@@ -1,17 +1,17 @@
+<!-- "C:\Program Files\MongoDB\Server\4.0\bin\mongod.exe" -dbpath mongodbdata -->
 <html lang="en">
     <head>
         <script src="/jquery-3.3.1.js"></script>
         
-        <title>{{user2.username}} - RageMemes</title>
+        <title>RageMemes</title>
         <!-- Bootstrap core CSS -->
-        <link href="../css/bootstrap.css" rel="stylesheet">
+        <link href="/css/bootstrap.css" rel="stylesheet">
         <!--Bootstrap JS-->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
         <!-- Custom styles for this template -->
-        <link href="../css/user.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="/css/home.css" rel="stylesheet">
         
         <script>
             function publicCheck() {
@@ -23,7 +23,7 @@
                }
             }
         </script>
-    
+                    
         <script>
             function previewFile() {
                 var preview = document.querySelector('img[id=preview]');
@@ -66,7 +66,7 @@
             previewAvatarFile();
         </script>
     </head>
-
+    
     <body>
          <!--Navbar-->
         <nav class="fixed-top navbar navbar-expand-lg home-navbar reverse-order">
@@ -74,69 +74,39 @@
             <a class="navbar-brand whitewash-text" href="/">
                 <img src="/res/homeIcon.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 RageMemes
-            </a>                         
+            </a>
             <!--Search-->
             <form id="searchTag" action="/post/search" method="post">           
                 <input class="searchbar" type="text" name="searchInput" placeholder="Search a tag..." value="{{searchInput}}" required>
                 <button class="btn btn-primary" type="submit" id="search-button"><img src="/res/search.png" width="20" height="20s"></button>
-            </form>                
+            </form>
             <!--User dropdown-->
-           {{#if user}}
+            {{#if user}}
             <div class="dropdown">
-                <img src="/res/more.png" class="moreOptions nav-link whitewash-text right-floater" data-toggle="dropdown">
-                <a class="nav-link whitewash-text right-floater" href="/user/{{user.username}}">{{user.username}}<span class="sr-only">(current)</span></a>
                 {{#if user.filename}}
-                <img src="/post/photo/{{user.filename}}" class="avatar">
+                <img src="/post/photo/{{user.filename}}" class="avatar" data-toggle="dropdown">
                 {{else}}
-                <img src="/res/default.jpg" class="avatar">
+                <img src="../res/default.jpg" class="avatar" data-toggle="dropdown">
                 {{/if}}
                 <ul class="dropdown-menu dropdown-menu-right">
-                    <li><a href="/user/{{user.username}}" class="dropdown-item">My profile</a></li>
-                    <li><a data-toggle="modal" data-target="#modalEditDetails" class="dropdown-item"><i class="fa fa-cog"></i> Settings</a></li>
-                    <li><a href="/post/{{user.username}}/shared" class="dropdown-item">Shared With Me</a></li>
+                    <li><a href="/" class="dropdown-item">Public memes</a></li>
+                    <li><a href="/post/{{user.username}}/shared" class="dropdown-item">Shared with me</a></li>
                     <div class="dropdown-divider"></div>
-                    <a href="/user/logout" class="dropdown-item">Log out</a>
+                    <li><a href="/user/{{user.username}}" class="dropdown-item"><i class="fa fa-user"></i> My profile</a></li>
+                    <li><a data-toggle="modal" data-target="#modalEditDetails" class="dropdown-item"><i class="fa fa-cog"></i> Settings</a></li>
+                    <div class="dropdown-divider"></div>
+                    <a href="/user/logout" class="dropdown-item"><i class="fa fa-sign-out"></i> Log out</a>
                 </ul>
             </div>
+            <a class="nav-link whitewash-text right-floater" href="/user/{{user.username}}">{{user.username}}<span class="sr-only">(current)</span></a>
             <a class="nav-link whitewash-text right-floater" href="" data-toggle="modal" data-target="#modalQuickUploadForm">Upload meme<span class="sr-only">(current)</span></a>
             {{else}}
             <!--Login-->
-            <a class="nav-link whitewash-text right-floater" href="../user/login">Log in<span class="sr-only">(current)</span></a>
+            <a class="nav-link whitewash-text right-floater" href="/user/login">Log in<span class="sr-only">(current)</span></a>
             <!--Sign up-->
-            <a class="nav-link whitewash-text right-floater" href="../user/signup">Sign up<span class="sr-only">(current)</span></a>
+            <a class="nav-link whitewash-text right-floater" href="/user/signup">Sign up<span class="sr-only">(current)</span></a>
             {{/if}}
         </nav>
-        
-        <div id="side-content">
-            <!--User infobox-->
-            <div class="user-container">
-                <div class="user-box">
-                    {{#if user2.filename}}
-                    <img src="/post/photo/{{user2.filename}}" class="avatar" data-toggle="dropdown">
-                    {{else}}
-                    <img src="/res/default.jpg" class="avatar" data-toggle="dropdown">
-                    {{/if}}
-<!--                    <div id="username"><h2 style="text-align: center; color:#3E3E3B;">{{user2.username}}</h2><i class="fa fa-user"></i></div>-->
-                          <table border="0">
-                            <tr>
-                                <td id="tableAvatar" colspan="2">
-                                    <div id="username"><h3 style="text-align: center; color:#3E3E3B;">{{user2.username}}</h3></div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="field">Member since</td>
-                                <td>{{formatDate user2.joinDate}}</td>
-                            </tr>
-                            {{#if user2.briefDescription}}
-                                <tr>
-                                    <td class="field">About me</td>
-                                    <td>{{user2.briefDescription}}</td>
-                                </tr>
-                            {{/if}}
-                        </table>
-                </div>
-            </div>
-        </div>
         
          <!--Main content-->
         <div id="main-content">
@@ -175,7 +145,7 @@
                     </div>
                 </div>
             </div>
-                        
+            
             <!--Edit user details-->
             <div class="modal fade" id="modalEditDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -208,29 +178,15 @@
                 </div>
             </div>
             
-            <!--Default message-->
-            {{#if results}}
-            {{else}}
+            <!--Error Message message-->
                 <div class="memes-all">
                         <div class="no-results">
-                                <h2>This user hasn't uploaded any memes.</h2>
+                                <img src="/res/noResults.png" class="image">
+                                <h1 class="display-4" style="text-align: left;">Welp.</h1>
+                                <h2>There was an error processing your request.</h2>
                         </div>
                 </div>
-            {{/if}}
             
-            <!--Posts-->
-            <div class="memes-all">
-                {{#each results}}
-                    <div class="meme-container">
-                        <div class="meme-post">
-                            <h1 class="display-4" style="text-align: left;"><a href="/post/meme/{{_id}}">{{title}}</a></h1>
-                            <a data-id="{{_id}}" href="/post/meme/{{_id}}"><img src="/post/photo/{{filename}}" class="image"></a>
-                        </div>
-                    </div>
-                {{/each}}
-            </div>
         </div>
     </body>
-    <script>
-    </script>
 </html>
