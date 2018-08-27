@@ -4,8 +4,8 @@ const app = express()
 //const Post = require("../model/Post.js")
 
 //// defined in model
-const {Post} = require("../model/Post.js");
-const {User} = require("../model/User.js");
+const Post = require("../model/Post.js");
+const User = require("../model/User.js");
 
 // load all the controllers into router
 router.use("/post", require("./Post.js"))
@@ -31,21 +31,15 @@ router.get('/', (req, res)=>{
        req.session.user = req.cookies.user; 
     }
     
-    User.find().then((docs)=>{
-        console.log(docs)
-    })
-    Post.find().then((docs)=>{
-        console.log(docs)
-    })
+//    User.find().then((docs)=>{
+//        console.log(docs)
+//    })
+//    Post.find().then((docs)=>{
+//        console.log(docs)
+//    })
     
     console.log("GET/ ");
-    Post.find({
-        public : true
-    })
-    .limit(20).sort({
-        date : -1
-    }).populate('user')
-    .then((results)=>{
+    Post.getAllPublic().then((results)=>{
        res.render("index.hbs", {
            user: req.session.user,
            limit: 20,
@@ -64,12 +58,7 @@ router.get('/view/:id', urlencoder, (req, res)=>{
     var limit = parseInt(req.params.id, 10);
     var nextLimit = limit + 20;
 //    console.log(limit);
-    Post.find({
-        public : true
-    })
-    .limit(limit).sort({
-        date : -1
-    }).populate('user')
+    Post.getAllWithLimit(limit)
     .then((results)=>{
        res.render("index.hbs", {
            user: req.session.user,

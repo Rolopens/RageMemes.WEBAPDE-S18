@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var User = require("../model/User.js");
-var UserSchema = User.User.schema;
 
 var CommentSchema = new Schema({
     text : { type : String, required : true },

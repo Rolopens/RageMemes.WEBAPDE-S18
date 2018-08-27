@@ -21,12 +21,10 @@ const fs = require("fs")
 const moment = require("moment")
 
 // defined in model
-const {
-    Post
-} = require("../model/Post.js");
-const {
-    User
-} = require("../model/User.js");
+const Post = require("../model/Post.js");
+//const {
+//    User
+//} = require("../model/User.js");
 const {
     Comment
 } = require("../model/Comment.js");
@@ -51,12 +49,7 @@ hbs.registerHelper('formatDate', function (dateString) {
 router.use(urlencoder)
 /*-----------------------------------Showing posts shared with user-----------------------------------*/
 router.get('/:id/shared', (req, res) => {
-    Post.find({
-            permittedUsers: req.params.id,
-        })
-        .limit(20).sort({
-            date: -1
-        }).populate('user')
+    Post.getSharedWithMe(req.params.id)
         .then((results) => {
             res.render("index.hbs", {
                 user: req.session.user,
@@ -83,18 +76,10 @@ router.get('/home', (req, res) => {
 router.get('/meme/:id', (req, res) => {
     console.log("GET/ Meme accessed: " + req.params.id);
     //    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1.html"));
-    Post.findOne({
-        _id: req.params.id
-    }).populate({
-        path: 'comments',
-        model: 'Comment',
-        populate: {
-            path: 'user',
-            model: 'User'
-        }
-    }).populate('user').then((post) => {
+    Post.getOneViaPostId(req.params.id).then((post) => {
+        console.log(post)
         if (post.public){
-            if (req.session.user != null && post.user.username === req.session.user.username) {
+            if (req.session.user != null && (post.user.username === req.session.user.username)) {
                 res.render("post.hbs", {
                     post,
                     user: req.session.user,
@@ -114,10 +99,11 @@ router.get('/meme/:id', (req, res) => {
                             post,
                             user: req.session.user
                         }) 
+                    break;
                  }
         
             }
-            if (post.user.username === req.session.user.username) {
+            if (req.session.user != null && post.user.username === req.session.user.username) {
                 res.render("post.hbs", {
                     post,
                     user: req.session.user,
@@ -172,7 +158,7 @@ router.post("/upload", urlencoder, upload.single("img"), (req, res) => {
         return index === self.indexOf(elem);
     })
 
-    var p = new Post({
+    var p = {
         title,
         filename,
         originalfilename,
@@ -181,9 +167,9 @@ router.post("/upload", urlencoder, upload.single("img"), (req, res) => {
         tags,
         public,
         permittedUsers
-    })
+    }
 
-    p.save().then((doc) => {
+    Post.uploadPost(p).then((doc) => {
         res.redirect("/")
     })
 })
@@ -194,13 +180,7 @@ router.post('/search', urlencoder, (req, res) => {
 })
 /*-----------------------------------Searching posts by tag-----------------------------------*/
 router.get('/search/:id', (req, res) => {
-    Post.find({
-            tags: req.params.id,
-            public: true
-        })
-        .limit(20).sort({
-            date: -1
-        }).populate('user')
+    Post.getViaTags(req.params.id)
         .then((results) => {
             res.render("index.hbs", {
                 user: req.session.user,
@@ -208,7 +188,11 @@ router.get('/search/:id', (req, res) => {
                 results
             });
         }, () => {
-            res.render("error.hbs"); // should have "Results not found"
+            res.render("index.hbs", {
+                user: req.session.user,
+                searchInput: req.params.id,
+                results
+            });
         })
 })
 /*-----------------------------------Editing individual posts-----------------------------------*/
@@ -237,14 +221,8 @@ router.post('/meme/:id/edit', urlencoder, (req, res) => {
         return index === self.indexOf(elem);
     })
 
-    Post.findOneAndUpdate({
-        _id: req.params.id
-    }, {
-        title,
-        description,
-        tags,
-        public
-    }).then(
+    Post.editPost(req.params.id, title, description,
+        tags, public).then(
         res.redirect('/post/meme/' + req.params.id));
 })
 /*-----------------------------------Sharing individual posts-----------------------------------*/
@@ -265,20 +243,15 @@ router.post('/meme/:id/share', urlencoder, (req, res) => {
         return index === self.indexOf(elem);
     })
 
-    Post.findOneAndUpdate({
-        _id: req.params.id
-    }, {
-        permittedUsers
-    }).then(
+    Post.sharePost(req.params.id, permittedUsers).then(
         res.redirect('/post/meme/' + req.params.id));
 })
 /*-----------------------------------Deleting individual posts-----------------------------------*/
 router.post('/meme/:id/delete', urlencoder, (req, res) => {
     console.log("POST/ Meme accessed (delete): " + req.params.id);
 
-    Post.remove({
-        _id: req.params.id
-    }).then(
+    Post.deletePost(req.params.id
+    ).then(
         res.redirect('/'));
 })
 /*-----------------------------------Commenting on individual posts-----------------------------------*/
@@ -296,13 +269,7 @@ router.post('/meme/:id/comment', urlencoder, (req, res) => {
 
     c.save();
 
-    Post.findOneAndUpdate({
-        _id: req.params.id
-    }, {
-        $push: {
-            comments: c
-        }
-    }).then(
+    Post.commentPost(req.params.id , c).then(
         res.redirect('/post/meme/' + req.params.id));
 })
 

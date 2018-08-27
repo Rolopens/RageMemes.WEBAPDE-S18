@@ -21,8 +21,8 @@ const fs = require("fs")
 const moment = require("moment")
 
 // defined in model
-const {Post} = require("../model/Post.js");
-const {User} = require("../model/User.js");
+const Post = require("../model/Post.js");
+const User = require("../model/User.js");
 
 // uploading
 const UPLOAD_PATH = path.resolve(__dirname, "resources");
@@ -73,19 +73,17 @@ router.post("/signingUp", urlencoder, upload.single("img"), (req, res)=>{
         console.log(req.file.filename)
         var filename = req.file.filename;
         var originalfilename = req.file.originalfilename;
-        var user = new User({
+        var user = {
             username, password: hashedpassword, email, filename, originalfilename, briefDescription
-        })
+        }
     }
     else{
-        var user = new User({
+        var user = {
             username, password: hashedpassword, email, briefDescription
-        })
+        }
     }
     
-    User.findOne({ 
-        $or: [ { username: user.username}, { email: user.email } ] 
-        }).then((existingUser)=>{
+    User.getOne( user.username, user.email ).then((existingUser)=>{
         if(existingUser){
             console.log("Error: Invalid username");
             res.render("signup.hbs", {
@@ -93,11 +91,11 @@ router.post("/signingUp", urlencoder, upload.single("img"), (req, res)=>{
             });
         }
         else{
-            user.save().then((doc)=>{                                            
-            User.find().then((docs)=>{
-                console.log(docs)
-            })
-            req.session.user = user;
+            User.create(user).then((newUser)=>{                                            
+//            User.find().then((docs)=>{
+//                console.log(docs)
+//            })
+            req.session.user = newUser;
             res.redirect("/"); 
         })
         } 
@@ -115,9 +113,7 @@ router.post("/authenticate", urlencoder, (req, res)=>{
     var email = req.body.email;
     var check = req.body.remember;
     
-    User.findOne({
-        email, password: hashedpassword
-    }).then((user)=>{
+    User.authenticate(email, hashedpassword).then((user)=>{
         
         if(user){
             console.log(user.username);
@@ -126,15 +122,15 @@ router.post("/authenticate", urlencoder, (req, res)=>{
             if (check == "on"){
                 req.cookies.user = user;
             }
-            
-            Post.find({
-                public : true
-            }).then((results)=>{
-                console.log("Logged in: " + req.session.user);
-                res.redirect("/");
-            }, ()=>{
-                res.render("error.hbs");
-            })
+            res.redirect("/");
+//            Post.find({
+//                public : true
+//            }).then((results)=>{
+//                console.log("Logged in: " + req.session.user);
+//                res.redirect("/");
+//            }, ()=>{
+//                res.render("error.hbs");
+//            })
 //        res.sendFile(path.join(__dirname, "/views/loggedInHome.html"));
         }
         else{
@@ -154,13 +150,10 @@ router.get('/logout', (req, res)=>{
 /*-----------------------------------Viewing individual user pages-----------------------------------*/
 router.get('/:id', (req, res)=>{
     console.log("GET/ User accessed: " + req.params.id);
-    User.findOne({username: req.params.id}).then((user2)=>{
+    User.getOneViaId(req.params.id).then((user2)=>{
         if(req.session.user && req.session.user.username == user2.username){
-            Post.find({
-            user : user2
-        }).limit(5).sort({
-            date : -1
-        }).populate('user').then((results)=>{
+            Post.getMyMemesPublic(user2
+        ).then((results)=>{
              res.render("userProfilePublic.hbs", {
                  user: req.session.user,
                  user2,
@@ -170,11 +163,7 @@ router.get('/:id', (req, res)=>{
              });
          })  
         }else{
-            Post.find({
-            $and : [{user : user2}, {public: true}]
-        }).limit(5).sort({
-            date : -1
-        }).populate('user').then((results)=>{
+            Post.getMyMemes(user2).then((results)=>{
              res.render("userProfilePublic.hbs", {
                  user: req.session.user,
                  user2,
@@ -191,13 +180,9 @@ router.get(':id/view/:lim', urlencoder, (req, res)=>{
     console.log("GET/ User view");
     var limit = parseInt(req.params.lim, 10);
     var nextLimit = limit + 5;
-    User.findOne({username: req.params.id}).then((user2)=>{
+    User.getOneViaId(req.params.id).then((user2)=>{
         if(req.session.user && req.session.user.username == user2.username){
-            Post.find({
-            user : user2
-        }).limit(5).sort({
-            date : -1
-        }).populate('user').then((results)=>{
+            Post.getMyMemesPublic(user2).then((results)=>{
              res.render("userProfilePublic.hbs", {
                  user: req.session.user,
                  user2,
@@ -207,11 +192,7 @@ router.get(':id/view/:lim', urlencoder, (req, res)=>{
              });
          })  
         }else{
-            Post.find({
-            $and : [{user : user2}, {public: true}]
-        }).limit(5).sort({
-            date : -1
-        }).populate('user').then((results)=>{
+            Post.getMyMemes(user2).then((results)=>{
              res.render("userProfilePublic.hbs", {
                  user: req.session.user,
                  user2,
@@ -240,11 +221,11 @@ router.post('/:id/edit', urlencoder, upload.single("img"), (req, res)=>{
         req.session.user.filename = req.file.filename;
         req.session.user.originalfilename = req.file.originalfilename;
 
-         User.findOneAndUpdate({_id: req.params.id}, {filename, originalfilename, email, briefDescription}).then(
+         User.editAccountWithFile( req.params.id, filename, originalfilename, email, briefDescription).then(
             res.redirect('/'));
     }
     else{
-         User.findOneAndUpdate({_id: req.params.id}, {email, briefDescription}).then(
+         User.editAccount(req.params.id, email, briefDescription).then(
             res.redirect('/'));
     }
 })
