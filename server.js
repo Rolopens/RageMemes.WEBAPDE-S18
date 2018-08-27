@@ -42,6 +42,14 @@ hbs.registerHelper('formatDate', function(dateString) {
     );
 });
 
+//hbs.registerHelper('ifSecond', function(index, options) {
+//   if(index > 0){
+//      return options.fn(this);
+//   } else {
+//      return options.inverse(this);
+//   }
+//});
+
 // sessions and cookies
 app.use(cookieparser());
 app.use(session({

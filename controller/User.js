@@ -40,6 +40,13 @@ hbs.registerHelper('formatDate', function(dateString) {
         moment(dateString).format("MMMM DD, YYYY")
     );
 });
+hbs.registerHelper('ifLast', function(index, limit, options) {
+   if(index !=0 && ((index + 1) % limit) == 0){
+      return options.fn(this);
+   } else {
+      return options.inverse(this);
+   }
+});
 
 router.use(urlencoder)
 
@@ -151,29 +158,69 @@ router.get('/:id', (req, res)=>{
         if(req.session.user && req.session.user.username == user2.username){
             Post.find({
             user : user2
-        }).limit(20).sort({
+        }).limit(5).sort({
             date : -1
-        }).then((results)=>{
+        }).populate('user').then((results)=>{
              res.render("userProfilePublic.hbs", {
                  user: req.session.user,
                  user2,
+                 limit: 5,
+                 nextLimit: 10,
                  results
              });
          })  
         }else{
             Post.find({
             $and : [{user : user2}, {public: true}]
-        }).limit(20).sort({
+        }).limit(5).sort({
             date : -1
-        }).then((results)=>{
+        }).populate('user').then((results)=>{
              res.render("userProfilePublic.hbs", {
                  user: req.session.user,
                  user2,
+                 limit: 5,
+                 nextLimit: 10,
                  results
              });
          })
-        }
-        
+        } 
+    })       
+})
+/*-----------------------------------View more-----------------------------------*/
+router.get(':id/view/:lim', urlencoder, (req, res)=>{
+    console.log("GET/ User view");
+    var limit = parseInt(req.params.lim, 10);
+    var nextLimit = limit + 5;
+    User.findOne({username: req.params.id}).then((user2)=>{
+        if(req.session.user && req.session.user.username == user2.username){
+            Post.find({
+            user : user2
+        }).limit(5).sort({
+            date : -1
+        }).populate('user').then((results)=>{
+             res.render("userProfilePublic.hbs", {
+                 user: req.session.user,
+                 user2,
+                 limit,
+                 nextLimit,
+                 results
+             });
+         })  
+        }else{
+            Post.find({
+            $and : [{user : user2}, {public: true}]
+        }).limit(5).sort({
+            date : -1
+        }).populate('user').then((results)=>{
+             res.render("userProfilePublic.hbs", {
+                 user: req.session.user,
+                 user2,
+                 limit,
+                 nextLimit,
+                 results
+             });
+         })
+        } 
     })       
 })
 /*-----------------------------------Editing individual user details-----------------------------------*/

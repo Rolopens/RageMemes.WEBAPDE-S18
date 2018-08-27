@@ -221,3 +221,7 @@ body{
     width: 400px;
     max-width: 100%;
 }
+
+.notLast{
+    display:none;
+}

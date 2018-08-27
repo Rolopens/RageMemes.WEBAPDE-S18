@@ -226,9 +226,21 @@
                     <div class="meme-container">
                         <div class="meme-post">
                             <h1 class="display-4" style="text-align: left;"><a href="/post/meme/{{_id}}">{{title}}</a></h1>
+                            <h3 style="text-align: left;">Posted by <a href="/user/{{user.username}}">{{user.username}}</a></h3>
                             <a data-id="{{_id}}" href="/post/meme/{{_id}}"><img src="/post/photo/{{filename}}" class="image"></a>
                         </div>
                     </div>
+                
+                <div class="{{#ifLast @index ../limit}}
+                  last
+                {{else}}
+                  notLast
+                {{/ifLast}}">
+                    {{#if @last}}
+                    <form action="/user/{{user.username}}/view/{{../nextLimit}}">
+                        <button class="btn btn-lg btn-primary btn-block input-width" id="submitButton" type="submit">View more</button>
+                    </form>
+                    {{/if}}</div>
                 {{/each}}
             </div>
         </div>

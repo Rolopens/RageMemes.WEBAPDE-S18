@@ -11,12 +11,25 @@ const {User} = require("../model/User.js");
 router.use("/post", require("./Post.js"))
 router.use("/user", require("./User.js"))
 
+const hbs = require('hbs');
+hbs.registerHelper('ifLast', function(index, limit, options) {
+   if(index !=0 && ((index + 1) % limit) == 0){
+      return options.fn(this);
+   } else {
+      return options.inverse(this);
+   }
+});
+
+const bodyparser = require("body-parser")
+const urlencoder = bodyparser.urlencoded({
+  extended : true
+})
+
 /*-----------------------------------Default-----------------------------------*/
 router.get('/', (req, res)=>{
     if(req.cookies.user){
        req.session.user = req.cookies.user; 
     }
-    
     
     User.find().then((docs)=>{
         console.log(docs)
@@ -24,16 +37,44 @@ router.get('/', (req, res)=>{
     Post.find().then((docs)=>{
         console.log(docs)
     })
+    
     console.log("GET/ ");
     Post.find({
         public : true
     })
-    .limit(20).sort({
+    .limit(5).sort({
         date : -1
     }).populate('user')
     .then((results)=>{
        res.render("index.hbs", {
            user: req.session.user,
+           limit: 5,
+           nextLimit: 10,
+           results
+       }); 
+    }, ()=>{
+        res.render("index.hbs", {
+            user: req.session.user
+        });
+    })
+})
+/*-----------------------------------View more-----------------------------------*/
+router.get('/view/:id', urlencoder, (req, res)=>{    
+    console.log("GET/ view");
+    var limit = parseInt(req.params.id, 10);
+    var nextLimit = limit + 5;
+//    console.log(limit);
+    Post.find({
+        public : true
+    })
+    .limit(limit).sort({
+        date : -1
+    }).populate('user')
+    .then((results)=>{
+       res.render("index.hbs", {
+           user: req.session.user,
+           limit,
+           nextLimit,
            results
        }); 
     }, ()=>{

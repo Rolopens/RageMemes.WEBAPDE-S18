@@ -202,6 +202,17 @@
                             <a data-id="{{_id}}" href="/post/meme/{{_id}}"><img src="/post/photo/{{filename}}" class="image"></a>
                         </div>
                     </div>
+                
+                <div class="{{#ifLast @index ../limit}}
+                  last
+                {{else}}
+                  notLast
+                {{/ifLast}}">
+                    {{#if @last}}
+                    <form action="/view/{{../nextLimit}}">
+                        <button class="btn btn-lg btn-primary btn-block input-width" id="submitButton" type="submit">View more</button>
+                    </form>
+                    {{/if}}</div>
                 {{/each}}
             </div>
         </div>
