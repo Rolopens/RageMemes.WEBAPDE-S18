@@ -60,6 +60,7 @@ router.get('/:id/shared', (req, res)=>{
         res.render("error.hbs"); // should have "Results not found"
     })
 })
+
 /*-----------------------------------Rendering images-----------------------------------*/
 router.get("/photo/:id", (req, res)=>{
   console.log(req.params.id)

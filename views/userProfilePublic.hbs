@@ -23,11 +23,11 @@
                }
             }
         </script>
-                    
+    
         <script>
             function previewFile() {
                 var preview = document.querySelector('img[id=preview]');
-                var file = document.querySelector('input[type=file]').files[0];
+                var file = document.querySelector('input[id=uploadMemePic]').files[0];
                 var reader = new FileReader();
 
                 reader.onloadend = function() {
@@ -43,6 +43,27 @@
                 }
             }
             previewFile();
+        </script>
+                    
+        <script>
+            function previewAvatarFile() {
+                var previewAvatar = document.querySelector('img[id=previewAvatar]');
+                var file = document.querySelector('input[id=uploadAvatarPic]').files[0];
+                var reader = new FileReader();
+
+                reader.onloadend = function() {
+                    previewAvatar.src = reader.result;
+                    previewAvatar.width = 250;
+                    previewAvatar.height = 250;
+                    previewAvatar.style.display = "block";
+                }
+                if (file) {
+                    reader.readAsDataURL(file);
+                } else {
+                    previewAvatar.src = "";
+                }
+            }
+            previewAvatarFile();
         </script>
     </head>
 
@@ -68,11 +89,13 @@
                 <img src="/res/default.jpg" class="avatar" data-toggle="dropdown">
                 {{/if}}
                 <ul class="dropdown-menu dropdown-menu-right">
-                    <li><a href="/user/{{user.username}}" class="dropdown-item">My profile</a></li>
-                    <li><a href="#" class="dropdown-item">Settings</a></li>
-                    <li><a href="/post/{{user.username}}/shared" class="dropdown-item">Shared With Me</a></li>
+                    <li><a href="/" class="dropdown-item">Public memes</a></li>
+                    <li><a href="/post/{{user.username}}/shared" class="dropdown-item">Shared with me</a></li>
                     <div class="dropdown-divider"></div>
-                    <a href="/user/logout" class="dropdown-item">Log out</a>
+                    <li><a href="/user/{{user.username}}" class="dropdown-item"><i class="fa fa-user"></i> My profile</a></li>
+                    <li><a data-toggle="modal" data-target="#modalEditDetails" class="dropdown-item"><i class="fa fa-cog"></i> Settings</a></li>
+                    <div class="dropdown-divider"></div>
+                    <a href="/user/logout" class="dropdown-item"><i class="fa fa-sign-out"></i> Log out</a>
                 </ul>
             </div>
             <a class="nav-link whitewash-text right-floater" href="/user/{{user.username}}">{{user.username}}<span class="sr-only">(current)</span></a>
@@ -118,6 +141,7 @@
         
          <!--Main content-->
         <div id="main-content">
+            <!--Modals-->
             <!--Quick upload-->
             <div class="modal fade" id="modalQuickUploadForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -152,7 +176,40 @@
                     </div>
                 </div>
             </div>
+                        
+            <!--Edit user details-->
+            <div class="modal fade" id="modalEditDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title w-100 font-weight-bold">Editing your details</h4>
+                        </div>
+                        <div class="modal-body mx-3">
+                            <form id="editDetails" class="form-format" action="/user/{{user._id}}/edit" method="post" enctype="multipart/form-data">
+                                <label for="defaultForm-title" class="modal-label">Profile picture</label><br>
+                                <input type="file" id="uploadAvatarPic" onchange="previewAvatarFile()" accept="image/x-png,image/tiff,image/jpeg" name="img" required><br><br>
+                                
+                                {{#if user.filename}}
+<!--                                <button type="button" class="close" onclick="javascript:revertAvatarFile()" style="position:fixed;right:70;padding-right:10px;padding-top:5px;" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                                <img src="/post/photo/{{user.filename}}" id="previewAvatar" style="display:block;"><br>
+                                {{else}}
+                                <img src="/res/default.jpg" id="previewAvatar" style="display:block;"><br>
+                                {{/if}}
+<!--                                <img src="" id="previewAvatar" class="img-thumbnail" style="display: none;"><br>-->
+                                
+                                <label for="defaultForm-title" class="modal-label">Email address</label><br>
+                                <input id="defaultForm-title" class="form-control validate" name="email" value="{{user.email}}">
+                                <label for="defaultForm-title" class="modal-label">About me</label><br>
+                                <input id="defaultForm-title" class="form-control validate" name="briefDescription" value="{{user.briefDescription}}">
+                                <br><button class="btn btn-default" type="button" data-dismiss="modal" id="cancel-button">Cancel</button>
+                                <button class="btn btn-default" type="submit" id="upload-button">Save</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
+            <!--Default message-->
             {{#if results}}
             {{else}}
                 <div class="memes-all">

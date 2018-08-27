@@ -34,7 +34,7 @@
         <script>
             function previewFile() {
                 var preview = document.querySelector('img[id=preview]');
-                var file = document.querySelector('input[type=file]').files[0];
+                var file = document.querySelector('input[id=uploadMemePic]').files[0];
                 var reader = new FileReader();
 
                 reader.onloadend = function() {
@@ -54,24 +54,33 @@
                     
         <script>
             function previewAvatarFile() {
-                var preview = document.querySelector('img[id=preview]');
-                var file = document.querySelector('input[type=file]').files[0];
+                var previewAvatar = document.querySelector('img[id=previewAvatar]');
+                var file = document.querySelector('input[id=uploadAvatarPic]').files[0];
                 var reader = new FileReader();
 
                 reader.onloadend = function() {
-                    preview.src = reader.result;
-                    preview.width = 250;
-                    preview.height = 250;
-                    preview.style.display = "block";
+                    previewAvatar.src = reader.result;
+                    previewAvatar.width = 250;
+                    previewAvatar.height = 250;
+                    previewAvatar.style.display = "block";
                 }
                 if (file) {
                     reader.readAsDataURL(file);
                 } else {
-                    preview.src = "";
+                    previewAvatar.src = "";
                 }
             }
-            previewFile();
+            previewAvatarFile();
         </script>
+                    
+<!--
+        <script>
+            function revertAvatarFile() {
+                var previewAvatar = document.querySelector('img[id=previewAvatar]');
+                    previewAvatar.height = 500;
+            }
+        </script>
+-->
     </head>
     
     <body>
@@ -157,8 +166,6 @@
             <div class="modal fade" id="modalEditDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <!-- <button type="button" class="close" data-dismiss="modal" style="position:fixed;right:0;padding-right:10px;padding-top:5px;" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <br> -->
                         <div class="modal-header text-center">
                             <h4 class="modal-title w-100 font-weight-bold">Editing your details</h4>
                         </div>
@@ -168,10 +175,12 @@
                                 <input type="file" id="uploadAvatarPic" onchange="previewAvatarFile()" accept="image/x-png,image/tiff,image/jpeg" name="img" required><br><br>
                                 
                                 {{#if user.filename}}
+<!--                                <button type="button" class="close" onclick="javascript:revertAvatarFile()" style="position:fixed;right:70;padding-right:10px;padding-top:5px;" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
                                 <img src="/post/photo/{{user.filename}}" id="previewAvatar" style="display:block;"><br>
                                 {{else}}
                                 <img src="/res/default.jpg" id="previewAvatar" style="display:block;"><br>
                                 {{/if}}
+<!--                                <img src="" id="previewAvatar" class="img-thumbnail" style="display: none;"><br>-->
                                 
                                 <label for="defaultForm-title" class="modal-label">Email address</label><br>
                                 <input id="defaultForm-title" class="form-control validate" name="email" value="{{user.email}}">
