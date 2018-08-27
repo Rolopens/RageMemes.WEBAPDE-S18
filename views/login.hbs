@@ -23,20 +23,20 @@
         <div class="container">
             <form id="login" class="form-format" action="/user/authenticate" method="post">
                 <h1>Account login</h1>
+<!--                <img class="mb-4" src="../res/loginface.png" alt="" width="72" height="72">-->
                 {{#if message}}
-                <div style="color:red;">{{message}}</div>
+                <div style="color:red;padding-bottom:5px;">{{message}}</div>
                 {{/if}}
-                <img class="mb-4" src="../res/loginface.png" alt="" width="72" height="72">
                 <label for="inputEmail" class="sr-only input-width">Email address</label>
                 <input type="email" name="email" id="inputEmail" class="form-control input-width" placeholder="Email address" required autofocus>
                 <label for="inputPassword" class="sr-only input-width">Password</label>
                 <input type="password" name="pword" id="inputPassword" class="form-control input-width" placeholder="Password" required><br>
 <!--                <div style="display: flex; flex-direction: row;"><input name="remember" style="vertical-align: center; margin:2px;" type="checkbox">Remember me</div>-->
-                <div>
-                    <input name="remember" type="checkbox" class="form-check-input" id = "rememberme">
-                    <label class="form-check-label" for="rememberme">Remember Me?</label>
+                <div id="rememberLogin">
+                    <input name="remember" type="checkbox" class="form-check-input" id="rememberme">
+                    <label class="form-check-label" for="rememberme">Remember me</label>
                 </div><br>
-                <button class="btn btn-lg btn-primary btn-block input-width" type="submit">Log in</button>
+                <button class="btn btn-lg btn-primary btn-block input-width" id="submitButton" type="submit">Log in</button>
                 <div class="checkbox mb-3 mt-4">
                     <a href="/user/signup">Want to join? Sign up!</a>
                 </div>

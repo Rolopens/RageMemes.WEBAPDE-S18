@@ -116,3 +116,11 @@ body{
 #preview{
     margin:20px;
 }
+
+#submitButton{
+    margin:10px 0px 10px 0px; /*TRBL*/
+}
+
+#rememberLogin{
+    margin:5px 0px 0px 0px; /*TRBL*/
+}

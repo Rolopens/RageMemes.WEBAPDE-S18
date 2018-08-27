@@ -194,3 +194,8 @@ body{
     color:#6d6464;
     font-size:18px;
 }
+
+.no-results img{
+    width: 400px;
+    max-width: 100%;
+}

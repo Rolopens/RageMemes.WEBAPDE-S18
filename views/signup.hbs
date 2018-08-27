@@ -44,14 +44,17 @@
         <!--signup contents-->
         <div class="container">
             <form id="login" class="form-format" action="/user/signingup" method="post" enctype="multipart/form-data">
-                {{#if message}}
-                <div style="color:red;">{{message}}</div>
-                {{/if}}
                 <h1>Create an account!</h1>
 <!--                <img class="mb-4" src="res/signup.png" alt="" width="72" height="72">-->
                 <h7>Choose a Profile Picture! (optional)</h7>
                 <input type="file" name="img" id="uploadProfilePic" onchange="previewFile()" accept="image/x-png,image/tiff,image/jpeg">
                 <img src="" id="preview" class="img-thumbnail" style="display: none;">
+                
+                
+                {{#if message}}
+                <div style="color:red;padding-bottom:5px;">{{message}}</div>
+                {{/if}}
+                
                 <label for="inputEmail" class="sr-only input-width">Email address</label>
                 <input type="email" name="email" id="inputEmail" class="form-control input-width" placeholder="Email address" required autofocus>
                 <label for="inputPassword" class="sr-only input-width">Username</label>
@@ -62,7 +65,7 @@
                 <label for="inputPassword" class="sr-only input-width">Short description</label>
                 <textarea type="text" name="briefDescription" id="inputDescription" class="form-control input-width" maxlength="150" placeholder="Brief description of yourself"></textarea><br>
 <!--      <input type="submit" value="Upload">-->
-                <button class="btn btn-lg btn-success btn-block input-width" type="submit">Sign up</button>
+                <button class="btn btn-lg btn-success btn-block input-width" id="submitButton" type="submit">Sign up</button>
             
                 <div class="checkbox mb-3 mt-4">
                     <a href="/user/login">Have an account? Log in!</a>
