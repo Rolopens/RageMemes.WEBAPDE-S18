@@ -157,8 +157,8 @@ router.get('/:id', (req, res)=>{
              res.render("userProfilePublic.hbs", {
                  user: req.session.user,
                  user2,
-                 limit: 5,
-                 nextLimit: 10,
+                 limit: 20,
+                 nextLimit: 40,
                  results
              });
          })  
@@ -167,8 +167,8 @@ router.get('/:id', (req, res)=>{
              res.render("userProfilePublic.hbs", {
                  user: req.session.user,
                  user2,
-                 limit: 5,
-                 nextLimit: 10,
+                 limit: 20,
+                 nextLimit: 40,
                  results
              });
          })
@@ -176,13 +176,14 @@ router.get('/:id', (req, res)=>{
     })       
 })
 /*-----------------------------------View more-----------------------------------*/
-router.get(':id/view/:lim', urlencoder, (req, res)=>{
+router.get('/:id/view/:lim', urlencoder, (req, res)=>{
     console.log("GET/ User view");
     var limit = parseInt(req.params.lim, 10);
-    var nextLimit = limit + 5;
+    var nextLimit = limit + 20;
+    console.log(nextLimit);
     User.getOneViaId(req.params.id).then((user2)=>{
         if(req.session.user && req.session.user.username == user2.username){
-            Post.getMyMemesPublic(user2).then((results)=>{
+            Post.getMyMemesPublicWithLimit(user2, limit).then((results)=>{
              res.render("userProfilePublic.hbs", {
                  user: req.session.user,
                  user2,
@@ -192,7 +193,7 @@ router.get(':id/view/:lim', urlencoder, (req, res)=>{
              });
          })  
         }else{
-            Post.getMyMemes(user2).then((results)=>{
+            Post.getMyMemesWithLimit(user2, limit).then((results)=>{
              res.render("userProfilePublic.hbs", {
                  user: req.session.user,
                  user2,

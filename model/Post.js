@@ -152,7 +152,7 @@ exports.getMyMemes = function(user2){
   return new Promise(function(resolve, reject){
     Post.find({
             $and : [{user : user2}, {public: true}]
-        }).limit(5).sort({
+        }).limit(20).sort({
             date : -1
         }).populate('user').then((post)=>{
       console.log(post)
@@ -164,7 +164,7 @@ exports.getMyMemes = function(user2){
 }
 exports.getMyMemesPublic = function(user2){
   return new Promise(function(resolve, reject){
-    Post.find({user : user2}).limit(5).sort({
+    Post.find({user : user2}).limit(20).sort({
             date : -1
         }).populate('user').then((post)=>{
       console.log(post)
@@ -197,6 +197,34 @@ exports.getAllWithLimit = function(limit){
     }).populate('user')
         .then((posts)=>{
       resolve(posts)
+    }, (err)=>{
+      reject(err)
+    })
+  })
+}
+
+exports.getMyMemesWithLimit = function(user2, limit){
+  return new Promise(function(resolve, reject){
+    Post.find({
+            $and : [{user : user2}, {public: true}]
+        }).limit(limit).sort({
+            date : -1
+        }).populate('user').then((post)=>{
+      console.log(post)
+      resolve(post)
+    }, (err)=>{
+      reject(err)
+    })
+  })
+}
+
+exports.getMyMemesPublicWithLimit = function(user2, limit){
+  return new Promise(function(resolve, reject){
+    Post.find({user : user2}).limit(limit).sort({
+            date : -1
+        }).populate('user').then((post)=>{
+      console.log(post)
+      resolve(post)
     }, (err)=>{
       reject(err)
     })

@@ -78,10 +78,28 @@ router.get('/meme/:id', (req, res) => {
     //    res.sendFile(path.join(__dirname, "/views/viewMeme/viewMeme1.html"));
     Post.getOneViaPostId(req.params.id).then((post) => {
         console.log(post)
+        
+        var liked;
+        if(req.session.user != null) {           
+            for(i=0; i < post.usersLiked.length; i++){
+        console.log(post.usersLiked[i]);
+        console.log(req.session.user._id);
+                if(post.usersLiked[i] === req.session.user._id){
+                    liked = true;
+                    break;
+                 }
+//                else{
+//                    var liked = false;
+//                }
+            }
+        }
+        console.log(liked);
+        
         if (post.public){
-            if (req.session.user != null && (post.user.username === req.session.user.username)) {
+            if (req.session.user != null && (post.user.username === req.session.user.username)) {                
                 res.render("post.hbs", {
                     post,
+                    liked,
                     user: req.session.user,
                     equal: req.session.user
                 })
@@ -270,6 +288,15 @@ router.post('/meme/:id/comment', urlencoder, (req, res) => {
     c.save();
 
     Post.commentPost(req.params.id , c).then(
+        res.redirect('/post/meme/' + req.params.id));
+})
+/*-----------------------------------Liking and unliking individual posts-----------------------------------*/
+router.get('/meme/:id/like', (req, res) => {
+    Post.likePost(req.params.id, req.session.user._id).then(
+        res.redirect('/post/meme/' + req.params.id));
+})
+router.get('/meme/:id/unlike', (req, res) => {
+    Post.unlikePost(req.params.id, req.session.user._id).then(
         res.redirect('/post/meme/' + req.params.id));
 })
 
