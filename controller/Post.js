@@ -161,14 +161,14 @@ router.post("/upload", urlencoder, upload.single("img"), (req, res) => {
         var tagsTemp = (req.body.tags).replace(/  +/g, ' ');
         tagsTemp = tagsTemp.replace(/, /g, ',');
         tagsTemp = tagsTemp.replace(/ ,/g, ',');
-        tagsTemp = tagsTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
+        tagsTemp = tagsTemp.replace(/[^a-zA-Z0-9 .,]/g, "");
         var tags = tagsTemp.split(',');
     }
     if (req.body.permittedUsers) {
         var permittedUsersTemp = (req.body.permittedUsers).replace(/  +/g, ' ');
         permittedUsersTemp = permittedUsersTemp.replace(/, /g, ',');
         permittedUsersTemp = permittedUsersTemp.replace(/ ,/g, ',');
-        permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
+        permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 .,]/g, "");
         var permittedUsers = permittedUsersTemp.split(',');
     }
 
@@ -228,7 +228,7 @@ router.post('/meme/:id/edit', urlencoder, (req, res) => {
         var tagsTemp = (req.body.tags).replace(/  +/g, ' ');
         tagsTemp = tagsTemp.replace(/, /g, ',');
         tagsTemp = tagsTemp.replace(/ ,/g, ',');
-        tagsTemp = tagsTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
+        tagsTemp = tagsTemp.replace(/[^a-zA-Z0-9 .,]/g, "");
         var tags = tagsTemp.split(',');
     }
 
@@ -256,7 +256,7 @@ router.post('/meme/:id/share', urlencoder, (req, res) => {
         var permittedUsersTemp = (req.body.permittedUsers).replace(/  +/g, ' ');
         permittedUsersTemp = permittedUsersTemp.replace(/, /g, ',');
         permittedUsersTemp = permittedUsersTemp.replace(/ ,/g, ',');
-        permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 ,]/g, "");
+        permittedUsersTemp = permittedUsersTemp.replace(/[^a-zA-Z0-9 .,]/g, "");
         var permittedUsers = permittedUsersTemp.split(',');
     }
 
