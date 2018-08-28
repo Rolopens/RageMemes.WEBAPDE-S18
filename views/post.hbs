@@ -336,8 +336,7 @@
                         </table>
                     </div>
                     
-                    <!--Comments-->
-                        {{#if post.comments}}                    
+                    <!--Comments-->                    
                         <div class="comments">
                             <h1 id="description">Comments</h1>                    
                         {{#if user}}
@@ -348,7 +347,8 @@
                             <button class="btn btn-default" type="submit" id="comment-button">Post</button>                                
                         </form>
                         </div>
-                        {{/if}}
+                        {{/if}}                        
+                        {{#if post.comments}}
                             <table class="commentsList" border="0">
                             {{#each post.comments}}
                                 <tr>
