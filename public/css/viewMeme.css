@@ -205,6 +205,12 @@ table {
     width:100px;
 }
 
+.avatar3 {
+    width:60px;
+    height:60px;
+    border-radius: 50%;
+}
+
 th {
     height:20px;
 }
@@ -249,7 +255,7 @@ th {
 }
 
 .comments h1{
-    font-size:20px;
+    font-size:22px;
 }
 
 .comments h2{
@@ -271,4 +277,12 @@ table .commentsList {
 
 .commentsList #tableAvatar {
     width:100px;
+}
+
+#like{
+    width:50px;
+}
+
+#likes{
+    font-size:15pt;
 }

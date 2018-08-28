@@ -289,8 +289,20 @@
                     <!--Main details (continued)-->
                     <img src="/post/photo/{{post.filename}}" class="image"> <!--fix link-->
                     <div class="details">
+                        {{#if user}}
+                            {{#if liked}}
+                                <div id="likes">
+                                    <a href="/post/meme/{{post._id}}/unlike"><img src="/res/like.png" style="display:inline-block;" class="moreOptions nav-link whitewash-text left-floater" class="d-inline-block" id="like" alt=""></a><div style="display:inline-block;"><h2 id="likes">{{post.likes}}</h2></div>
+                                </div>
+                            {{else}}
+                                <div id="likes">
+                                    <a href="/post/meme/{{post._id}}/like"><img src="/res/like.png" style="display:inline-block;" class="moreOptions nav-link whitewash-text left-floater" class="d-inline-block" id="like" alt=""></a><div style="display:inline-block;"><h2 id="likes">{{post.likes}}</h2></div>
+                                </div>
+                            {{/if}}
+                        {{else}}
+                            <img src="/res/like.png" style="display:inline-block;" class="moreOptions nav-link whitewash-text left-floater" class="d-inline-block" id="like" alt=""><div style="display:inline-block;"><h2 id="likes">{{post.likes}}</h2></div>
+                        {{/if}}
                         <h2 id="description">{{post.description}}</h2>
-                        
                         <!--Upload details-->
                         <table border="0">
                             <tr>
@@ -324,26 +336,27 @@
                         </table>
                     </div>
                     
-                    <!--Comments-->                    
-                    {{#if user}}
-                    <form id="addComment" class="form-format" action="/post/meme/{{post._id}}/comment" method="post">
-                        <label for="defaultForm-title" class="modal-label">Your two cents?</label><br>
-                        <input id="defaultForm-title" class="form-control validate" name="userComment" placeholder="Enter a comment...">
-                        <button class="btn btn-default" type="submit" id="comment-button">Post</button>                                
-                    </form>
-                    {{/if}}
-                    
-                    {{#if post.comments}}                    
-                    <div class="comments">
-                        <h1 id="description">Comments:</h1>
+                    <!--Comments-->
+                        {{#if post.comments}}                    
+                        <div class="comments">
+                            <h1 id="description">Comments</h1>                    
+                        {{#if user}}
+                        <div class="commentBox" style="margin-top:20px;">
+                        <form id="addComment" class="form-format" action="/post/meme/{{post._id}}/comment" method="post">
+<!--                            <h2><label for="defaultForm-title" class="modal-label">Your two cents?</label></h2>-->
+                            <input id="defaultForm-title" class="form-control validate" name="userComment" placeholder="Your two cents?">
+                            <button class="btn btn-default" type="submit" id="comment-button">Post</button>                                
+                        </form>
+                        </div>
+                        {{/if}}
                             <table class="commentsList" border="0">
                             {{#each post.comments}}
                                 <tr>
-                                    <td id="tableAvatar" valign="top" style="padding-top:5px;padding-bottom:5px" rowspan="2">
+                                    <td id="tableAvatar" valign="top" style="padding-top:5px;padding-bottom:5px;padding-left:15px;" rowspan="2">
                                         {{#if this.user.filename}}
-                                        <a href="/user/{{this.user.username}}"><img src="/post/photo/{{this.user.filename}}" class="avatar2"></a>
+                                        <a href="/user/{{this.user.username}}"><img src="/post/photo/{{this.user.filename}}" class="avatar3"></a>
                                         {{else}}
-                                        <a href="/user/{{this.user.username}}"><img src="/res/default.jpg" class="avatar2"></a>
+                                        <a href="/user/{{this.user.username}}"><img src="/res/default.jpg" class="avatar3"></a>
                                         {{/if}}
                                     </td>
                                     <td style="height:20px"><a href="/user/{{this.user.username}}" value="{{this.user.username}}">{{this.user.username}}</a> said on {{formatDate this.date}}...</td>

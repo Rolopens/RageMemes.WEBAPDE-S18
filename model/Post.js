@@ -18,7 +18,9 @@ var PostSchema = new Schema({
     date : { type: Date, default: Date.now },
     public : Boolean,
     permittedUsers : [String],
-    comments : [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}]
+    comments : [{type: mongoose.Schema.Types.ObjectId, ref: 'Comment'}],
+    likes : { type : Number, min : 0, default: 0 },
+    usersLiked : [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
 })
 
 var Post = mongoose.model("Post", PostSchema);
@@ -223,6 +225,46 @@ exports.getMyMemesPublicWithLimit = function(user2, limit){
     Post.find({user : user2}).limit(limit).sort({
             date : -1
         }).populate('user').then((post)=>{
+      console.log(post)
+      resolve(post)
+    }, (err)=>{
+      reject(err)
+    })
+  })
+}
+
+exports.likePost = function(postId, userId){
+  return new Promise(function(resolve, reject){
+    Post.findOneAndUpdate({
+        _id: postId
+    }, {
+        $inc: {
+            likes: 1
+        },
+        $push: {
+            usersLiked: userId
+        }
+    }).then((post)=>{
+      console.log(post)
+      resolve(post)
+    }, (err)=>{
+      reject(err)
+    })
+  })
+}
+
+exports.unlikePost = function(postId, userId){
+  return new Promise(function(resolve, reject){
+    Post.findOneAndUpdate({
+        _id: postId
+    }, {
+        $inc: {
+            likes: -1
+        },
+        $pull: {
+            usersLiked: userId
+        }
+    }).then((post)=>{
       console.log(post)
       resolve(post)
     }, (err)=>{

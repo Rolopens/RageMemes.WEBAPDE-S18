@@ -84,7 +84,7 @@ router.get('/meme/:id', (req, res) => {
             for(i=0; i < post.usersLiked.length; i++){
         console.log(post.usersLiked[i]);
         console.log(req.session.user._id);
-                if(post.usersLiked[i] === req.session.user._id){
+                if(post.usersLiked[i] == req.session.user._id){
                     liked = true;
                     break;
                  }
@@ -106,6 +106,7 @@ router.get('/meme/:id', (req, res) => {
             } else {
                 res.render("post.hbs", {
                     post,
+                    liked,
                     user: req.session.user
                 })
             }
@@ -115,6 +116,7 @@ router.get('/meme/:id', (req, res) => {
                 if (req.session.user != null && post.permittedUsers[i] === req.session.user.username){
                         res.render("post.hbs", {
                             post,
+                            liked,
                             user: req.session.user
                         }) 
                     break;
@@ -124,6 +126,7 @@ router.get('/meme/:id', (req, res) => {
             if (req.session.user != null && post.user.username === req.session.user.username) {
                 res.render("post.hbs", {
                     post,
+                    liked,
                     user: req.session.user,
                     equal: req.session.user
                 })
